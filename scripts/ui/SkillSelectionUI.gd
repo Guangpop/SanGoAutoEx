@@ -413,14 +413,35 @@ func _on_skip_button_pressed() -> void:
 
 # 執行自動推進邏輯（共用方法）
 func _execute_auto_advance() -> void:
+	# 防止重複推進檢查
+	var current_round = SkillSelectionManager.get_current_round()
+	var max_rounds = SkillSelectionManager.get_max_rounds()
+
+	LogManager.debug("SkillSelectionUI", "檢查推進條件", {
+		"current_round": current_round,
+		"max_rounds": max_rounds,
+		"can_advance": current_round < max_rounds
+	})
+
 	# 檢查是否需要推進到下一輪
-	if SkillSelectionManager.get_current_round() < SkillSelectionManager.get_max_rounds():
+	if current_round < max_rounds:
 		# 還有回合，推進到下一輪
-		SkillSelectionManager.advance_to_next_round()
-		LogManager.info("SkillSelectionUI", "自動推進到下一輪", {
-			"current_round": SkillSelectionManager.get_current_round(),
-			"max_rounds": SkillSelectionManager.get_max_rounds()
-		})
+		var advance_result = SkillSelectionManager.advance_to_next_round()
+
+		if advance_result.get("success", false):
+			LogManager.info("SkillSelectionUI", "自動推進成功", {
+				"current_round": advance_result.get("current_round", 0),
+				"completed": advance_result.get("completed", false)
+			})
+
+			# 只有在未完成時才觸發事件更新UI
+			if not advance_result.get("completed", false):
+				EventBus.skill_selection_started.emit()
+				LogManager.debug("SkillSelectionUI", "觸發技能選擇開始事件")
+		else:
+			LogManager.warn("SkillSelectionUI", "推進失敗", {
+				"reason": advance_result.get("reason", "unknown")
+			})
 	else:
 		# 已完成所有回合，結束技能選擇
 		SkillSelectionManager.finish_skill_selection()

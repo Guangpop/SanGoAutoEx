@@ -536,20 +536,28 @@ func _execute_skill_selection(skill_data: Dictionary) -> void:
 
 	LogManager.info("SkillSelectionManager", "技能選擇事件已發送", {
 		"event": "skill_selected",
-		"remaining_stars_broadcast": selection_state.remaining_stars
+		"remaining_stars_broadcast": selection_state.remaining_stars,
+		"note": "等待UI層控制回合推進"
 	})
 
-	# 進入下一回合
-	LogManager.debug("SkillSelectionManager", "進入下一回合流程")
-	advance_to_next_round()
+	# 移除自動推進 - 由UI層統一控制推進時機
 
-# 進入下一回合
-func advance_to_next_round() -> void:
+# 進入下一回合（返回推進結果）
+func advance_to_next_round() -> Dictionary:
 	var advance_start_time = Time.get_unix_time_from_system()
 	var old_round = selection_state.current_round
 
+	# 狀態檢查：防止重複推進
+	if selection_state.current_round >= selection_state.max_rounds:
+		LogManager.warn("SkillSelectionManager", "嘗試推進已完成的技能選擇", {
+			"current_round": selection_state.current_round,
+			"max_rounds": selection_state.max_rounds
+		})
+		return {"success": false, "reason": "already_completed", "current_round": selection_state.current_round}
+
 	LogManager.info("SkillSelectionManager", "進入下一回合", {
-		"current_round": old_round + 1,
+		"from_round": old_round,
+		"to_round": old_round + 1,
 		"advance_timestamp": advance_start_time,
 		"max_rounds": selection_state.max_rounds
 	})
@@ -579,28 +587,32 @@ func advance_to_next_round() -> void:
 			"total_skills_selected": selection_state.selected_skills.size()
 		})
 		finish_skill_selection()
+		return {"success": true, "completed": true, "current_round": selection_state.current_round}
 	else:
 		LogManager.info("SkillSelectionManager", "進入下一輪技能選擇", {
-			"next_round": selection_state.current_round + 1,
+			"current_round": selection_state.current_round,
 			"rounds_remaining": selection_state.max_rounds - selection_state.current_round
 		})
 		# 生成下一輪技能選項
 		generate_skill_options()
 
-		# 觸發技能選擇開始事件，通知UI更新到新一輪
-		EventBus.skill_selection_started.emit()
-		LogManager.info("SkillSelectionManager", "觸發技能選擇開始事件", {
-			"round": selection_state.current_round + 1,
-			"event": "skill_selection_started",
-			"new_skills_generated": true
+		# 移除自動事件觸發 - 由UI層控制
+		# EventBus.skill_selection_started.emit()
+		LogManager.info("SkillSelectionManager", "下一輪準備完成，等待UI層觸發事件", {
+			"round": selection_state.current_round,
+			"skills_generated": selection_state.available_skills.size(),
+			"note": "UI層需要調用 EventBus.skill_selection_started.emit()"
 		})
 
 	var advance_duration = Time.get_unix_time_from_system() - advance_start_time
 
 	LogManager.debug("SkillSelectionManager", "回合推進完成", {
 		"advance_duration": advance_duration,
-		"flow_continued": true
+		"current_round": selection_state.current_round,
+		"success": true
 	})
+
+	return {"success": true, "completed": false, "current_round": selection_state.current_round}
 
 # 應用技能效果到玩家屬性
 func _apply_skill_effects(skill_data: Dictionary) -> void:
