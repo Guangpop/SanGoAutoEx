@@ -1,0 +1,293 @@
+{
+  "game_balance": {
+    "version": "1.0",
+    "description": "三國天命放置遊戲平衡配置",
+
+    "player_progression": {
+      "max_level": 10,
+      "base_attributes": {
+        "武力": 20,
+        "智力": 20,
+        "統治": 20,
+        "政治": 20,
+        "魅力": 20,
+        "天命": 10
+      },
+      "level_experience_requirements": [
+        0, 100, 250, 450, 700, 1000, 1400, 1900, 2500, 3200, 4000
+      ],
+      "attribute_growth_per_level": {
+        "min_growth": 0,
+        "max_growth": 10,
+        "average_growth": 5
+      },
+      "star_conversion_rate": {
+        "stars_to_attributes": 10,
+        "description": "1星星 = 10屬性點"
+      }
+    },
+
+    "resource_economy": {
+      "base_city_production": {
+        "gold_per_turn": 100,
+        "troops_per_turn": 50,
+        "description": "每座城池基礎產出"
+      },
+      "production_modifiers": {
+        "politics_gold_bonus": 0.02,
+        "leadership_troop_bonus": 0.015,
+        "city_count_multiplier": 1.1,
+        "description": "政治影響金錢產出，統治影響兵力產出"
+      },
+      "maintenance_costs": {
+        "base_cost_per_city": 20,
+        "cost_scaling": 1.05,
+        "description": "城池維護成本隨數量遞增"
+      },
+      "starting_resources": {
+        "gold": 500,
+        "troops": 200,
+        "cities": 1
+      }
+    },
+
+    "combat_system": {
+      "damage_calculation": {
+        "base_damage_formula": "(武力 * 2) + (智力 * 1.5) + equipment_bonus",
+        "defense_formula": "(統治 * 1.8) + (政治 * 0.5) + equipment_bonus",
+        "skill_damage_modifier": 1.3,
+        "critical_hit_chance": 0.05,
+        "critical_damage_multiplier": 1.5
+      },
+      "battle_success_rates": {
+        "equal_power": 0.5,
+        "power_advantage_10": 0.6,
+        "power_advantage_25": 0.75,
+        "power_advantage_50": 0.9,
+        "power_advantage_100": 0.95
+      },
+      "troop_losses": {
+        "victory_loss_rate": 0.1,
+        "defeat_loss_rate": 0.3,
+        "siege_bonus_loss": 0.05
+      },
+      "general_recruitment": {
+        "base_success_rate": 0.3,
+        "charisma_modifier": 0.01,
+        "level_difference_penalty": 0.05,
+        "faction_bonus": 0.2
+      }
+    },
+
+    "city_conquest": {
+      "siege_difficulty": {
+        "base_defense_value": 100,
+        "garrison_bonus": 50,
+        "fortification_bonus": 25,
+        "politics_defense_modifier": 0.8
+      },
+      "adjacency_rules": {
+        "can_attack_adjacent_only": true,
+        "special_skills_extend_range": ["千里奇襲"],
+        "naval_cities": ["建業", "柴桑"],
+        "naval_bonus_requirement": "水軍統督"
+      },
+      "conquest_rewards": {
+        "base_gold_reward": 200,
+        "base_troop_reward": 100,
+        "level_scaling": 1.2,
+        "general_capture_chance": 0.4
+      }
+    },
+
+    "equipment_economy": {
+      "tier_pricing": {
+        "common": {
+          "base_price": 50,
+          "scaling_factor": 1.1
+        },
+        "rare": {
+          "base_price": 300,
+          "scaling_factor": 1.15
+        },
+        "epic": {
+          "base_price": 800,
+          "scaling_factor": 1.2
+        },
+        "legendary": {
+          "base_price": "event_only",
+          "scaling_factor": "n/a"
+        }
+      },
+      "unlock_thresholds": {
+        "rare_equipment": 3,
+        "epic_equipment": 5,
+        "legendary_shop": "never",
+        "description": "所需城池數量"
+      },
+      "enhancement_costs": {
+        "upgrade_base_cost": 100,
+        "upgrade_scaling": 1.5,
+        "max_upgrade_level": 5
+      }
+    },
+
+    "random_events": {
+      "event_frequency": {
+        "events_per_turn": 1.2,
+        "special_event_chance": 0.05,
+        "mystical_event_base_chance": 0.01
+      },
+      "tianming_impact": {
+        "positive_event_multiplier": 0.02,
+        "negative_event_reduction": 0.015,
+        "mystical_event_multiplier": 0.05,
+        "description": "每點天命的影響係數"
+      },
+      "event_cooldowns": {
+        "major_events": 3,
+        "legendary_rewards": 5,
+        "crisis_events": 2
+      }
+    },
+
+    "skill_system": {
+      "selection_rules": {
+        "total_stars": 10,
+        "selection_rounds": 3,
+        "skills_per_round": 3,
+        "reroll_cost": "not_available"
+      },
+      "skill_power_scaling": {
+        "star_1_power": 1.0,
+        "star_2_power": 1.8,
+        "star_3_power": 3.2,
+        "description": "技能威力隨星級增長"
+      },
+      "passive_skill_stacking": {
+        "same_type_bonus": 0.5,
+        "synergy_bonus": 0.3,
+        "diminishing_returns": 0.8
+      }
+    },
+
+    "idle_mechanics": {
+      "offline_progression": {
+        "max_offline_hours": 8,
+        "efficiency_rate": 0.7,
+        "resource_cap_multiplier": 2.0
+      },
+      "automation_unlocks": {
+        "auto_battle": 3,
+        "auto_recruit": 5,
+        "auto_upgrade": 7,
+        "description": "解鎖自動化功能的等級需求"
+      },
+      "prestige_system": {
+        "unlock_level": 10,
+        "prestige_bonuses": {
+          "star_bonus": 1,
+          "attribute_bonus": 5,
+          "special_skill_unlock": true
+        }
+      }
+    },
+
+    "difficulty_scaling": {
+      "enemy_power_growth": {
+        "base_scaling": 1.1,
+        "level_scaling": 1.05,
+        "city_count_scaling": 1.02
+      },
+      "ai_behavior": {
+        "aggressive_expansion": 0.3,
+        "defensive_stance": 0.5,
+        "diplomatic_attempts": 0.2
+      },
+      "challenge_modes": {
+        "hardcore": {
+          "damage_multiplier": 1.5,
+          "resource_penalty": 0.8,
+          "special_rewards": true
+        },
+        "blitz": {
+          "turn_time_limit": 300,
+          "speed_bonus": 2.0,
+          "stress_factor": 1.3
+        }
+      }
+    },
+
+    "endgame_content": {
+      "victory_conditions": {
+        "total_unification": {
+          "required_cities": 16,
+          "time_bonus": true,
+          "perfect_score": 100
+        },
+        "legendary_hero": {
+          "min_level": 10,
+          "min_generals": 20,
+          "legendary_equipment": 5
+        }
+      },
+      "post_game_content": {
+        "new_game_plus": true,
+        "achievement_system": true,
+        "leaderboards": true
+      }
+    },
+
+    "balance_formulas": {
+      "power_rating": {
+        "formula": "(武力 * 3) + (智力 * 2.5) + (統治 * 2) + (政治 * 1.5) + (魅力 * 1.5) + (天命 * 2) + equipment_power + skill_power",
+        "description": "綜合戰力評估公式"
+      },
+      "success_probability": {
+        "formula": "base_rate + (power_difference * 0.01) + skill_bonus + equipment_bonus + tianming_luck",
+        "min_success": 0.05,
+        "max_success": 0.95
+      },
+      "resource_generation": {
+        "gold_formula": "base_gold * (1 + politics * 0.02) * city_count * difficulty_modifier",
+        "troop_formula": "base_troops * (1 + leadership * 0.015) * city_count * training_bonus"
+      }
+    },
+
+    "testing_parameters": {
+      "recommended_playtime": {
+        "casual_victory": "8-12 hours",
+        "completionist": "20-30 hours",
+        "hardcore_mode": "15-25 hours"
+      },
+      "balance_checkpoints": {
+        "early_game": "levels 1-3, 1-3 cities",
+        "mid_game": "levels 4-7, 4-8 cities",
+        "late_game": "levels 8-10, 9-16 cities"
+      },
+      "difficulty_curve": {
+        "learning_phase": "smooth progression, forgiving mistakes",
+        "challenge_phase": "strategic decisions matter, resource management",
+        "mastery_phase": "optimization focus, perfect play rewards"
+      }
+    },
+
+    "monetization_balance": {
+      "premium_currency": {
+        "star_reroll_cost": 50,
+        "time_skip_cost": 30,
+        "resource_boost_cost": 25
+      },
+      "pay_to_convenience": {
+        "automation_unlocks": true,
+        "storage_expansion": true,
+        "cosmetic_upgrades": true
+      },
+      "fair_play_limits": {
+        "max_daily_purchases": 5,
+        "progression_gate_bypass": false,
+        "skill_advantage_cap": 20
+      }
+    }
+  }
+}

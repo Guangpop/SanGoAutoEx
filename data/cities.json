@@ -1,0 +1,513 @@
+{
+  "cities": [
+    {
+      "id": "chengdu",
+      "name": "成都",
+      "region": "益州",
+      "kingdom": "蜀",
+      "position": {"x": 200, "y": 350},
+      "tier": "capital",
+      "population": 150000,
+      "base_stats": {
+        "defense": 85,
+        "prosperity": 90,
+        "loyalty": 95,
+        "recruitment": 80
+      },
+      "resources": {
+        "gold_per_turn": 800,
+        "troops_per_turn": 150,
+        "food_per_turn": 200
+      },
+      "special_features": ["imperial_palace", "silk_trade", "mountain_fortress"],
+      "description": "蜀漢都城，劉備稱帝之地，天府之國的核心",
+      "unlock_conditions": {"default": true},
+      "conquest_difficulty": 95,
+      "garrison_strength": 2000,
+      "historical_events": [
+        {"name": "劉備稱帝", "year": 221, "bonus": {"loyalty": 10}},
+        {"name": "諸葛亮北伐", "year": 228, "bonus": {"recruitment": 15}}
+      ]
+    },
+    {
+      "id": "luoyang",
+      "name": "洛陽",
+      "region": "司隸",
+      "kingdom": "魏",
+      "position": {"x": 300, "y": 200},
+      "tier": "capital",
+      "population": 200000,
+      "base_stats": {
+        "defense": 90,
+        "prosperity": 95,
+        "loyalty": 80,
+        "recruitment": 85
+      },
+      "resources": {
+        "gold_per_turn": 1000,
+        "troops_per_turn": 180,
+        "food_per_turn": 150
+      },
+      "special_features": ["imperial_city", "central_market", "administrative_center"],
+      "description": "東漢都城，天下政治中心，兵家必爭之地",
+      "unlock_conditions": {"cities_conquered": 5},
+      "conquest_difficulty": 100,
+      "garrison_strength": 2500,
+      "historical_events": [
+        {"name": "董卓遷都", "year": 190, "bonus": {"defense": 20}},
+        {"name": "曹丕稱帝", "year": 220, "bonus": {"prosperity": 15}}
+      ]
+    },
+    {
+      "id": "jianye",
+      "name": "建業",
+      "region": "揚州",
+      "kingdom": "吳",
+      "position": {"x": 380, "y": 280},
+      "tier": "capital",
+      "population": 120000,
+      "base_stats": {
+        "defense": 80,
+        "prosperity": 85,
+        "loyalty": 90,
+        "recruitment": 75
+      },
+      "resources": {
+        "gold_per_turn": 700,
+        "troops_per_turn": 120,
+        "food_per_turn": 250
+      },
+      "special_features": ["naval_base", "river_trade", "shipyard"],
+      "description": "東吳都城，長江下游要衝，水師重鎮",
+      "unlock_conditions": {"cities_conquered": 3},
+      "conquest_difficulty": 85,
+      "garrison_strength": 1800,
+      "historical_events": [
+        {"name": "孫權稱帝", "year": 229, "bonus": {"loyalty": 12}},
+        {"name": "赤壁大戰", "year": 208, "bonus": {"naval_power": 25}}
+      ]
+    },
+    {
+      "id": "xiangyang",
+      "name": "襄陽",
+      "region": "荊州",
+      "kingdom": "neutral",
+      "position": {"x": 290, "y": 250},
+      "tier": "major",
+      "population": 80000,
+      "base_stats": {
+        "defense": 90,
+        "prosperity": 70,
+        "loyalty": 60,
+        "recruitment": 80
+      },
+      "resources": {
+        "gold_per_turn": 500,
+        "troops_per_turn": 100,
+        "food_per_turn": 120
+      },
+      "special_features": ["river_fortress", "strategic_crossroads", "military_academy"],
+      "description": "荊州重鎮，南北要衝，兵家必爭之地",
+      "unlock_conditions": {"level": 3},
+      "conquest_difficulty": 80,
+      "garrison_strength": 1500,
+      "historical_events": [
+        {"name": "劉表據荊州", "year": 190, "bonus": {"defense": 15}},
+        {"name": "關羽水淹七軍", "year": 219, "bonus": {"military_tactics": 20}}
+      ]
+    },
+    {
+      "id": "hanzhong",
+      "name": "漢中",
+      "region": "漢中郡",
+      "kingdom": "neutral",
+      "position": {"x": 250, "y": 320},
+      "tier": "major",
+      "population": 60000,
+      "base_stats": {
+        "defense": 95,
+        "prosperity": 60,
+        "loyalty": 70,
+        "recruitment": 75
+      },
+      "resources": {
+        "gold_per_turn": 400,
+        "troops_per_turn": 90,
+        "food_per_turn": 100
+      },
+      "special_features": ["mountain_pass", "natural_barrier", "grain_storage"],
+      "description": "秦巴之間，進可攻關中，退可守益州",
+      "unlock_conditions": {"level": 4},
+      "conquest_difficulty": 85,
+      "garrison_strength": 1200,
+      "historical_events": [
+        {"name": "劉備取漢中", "year": 219, "bonus": {"strategic_value": 30}},
+        {"name": "定軍山之戰", "year": 219, "bonus": {"defense": 20}}
+      ]
+    },
+    {
+      "id": "xuchang",
+      "name": "許昌",
+      "region": "豫州",
+      "kingdom": "魏",
+      "position": {"x": 320, "y": 220},
+      "tier": "major",
+      "population": 90000,
+      "base_stats": {
+        "defense": 75,
+        "prosperity": 80,
+        "loyalty": 85,
+        "recruitment": 90
+      },
+      "resources": {
+        "gold_per_turn": 600,
+        "troops_per_turn": 130,
+        "food_per_turn": 110
+      },
+      "special_features": ["military_center", "recruitment_hub", "weapon_forge"],
+      "description": "曹操基業之地，魏國軍事重鎮",
+      "unlock_conditions": {"level": 2},
+      "conquest_difficulty": 75,
+      "garrison_strength": 1600,
+      "historical_events": [
+        {"name": "曹操遷都", "year": 196, "bonus": {"recruitment": 25}},
+        {"name": "挾天子以令諸侯", "year": 196, "bonus": {"political_power": 20}}
+      ]
+    },
+    {
+      "id": "chang_an",
+      "name": "長安",
+      "region": "雍州",
+      "kingdom": "neutral",
+      "position": {"x": 220, "y": 180},
+      "tier": "major",
+      "population": 100000,
+      "base_stats": {
+        "defense": 85,
+        "prosperity": 75,
+        "loyalty": 65,
+        "recruitment": 80
+      },
+      "resources": {
+        "gold_per_turn": 550,
+        "troops_per_turn": 110,
+        "food_per_turn": 90
+      },
+      "special_features": ["ancient_capital", "silk_road", "horse_market"],
+      "description": "西漢古都，關中要地，通往西域之門",
+      "unlock_conditions": {"cities_conquered": 4},
+      "conquest_difficulty": 80,
+      "garrison_strength": 1400,
+      "historical_events": [
+        {"name": "董卓之亂", "year": 189, "bonus": {"chaos": -10}},
+        {"name": "馬超據關中", "year": 211, "bonus": {"cavalry": 25}}
+      ]
+    },
+    {
+      "id": "jiangling",
+      "name": "江陵",
+      "region": "荊州",
+      "kingdom": "neutral",
+      "position": {"x": 310, "y": 270},
+      "tier": "medium",
+      "population": 70000,
+      "base_stats": {
+        "defense": 70,
+        "prosperity": 75,
+        "loyalty": 65,
+        "recruitment": 70
+      },
+      "resources": {
+        "gold_per_turn": 450,
+        "troops_per_turn": 80,
+        "food_per_turn": 130
+      },
+      "special_features": ["river_port", "trade_center", "grain_hub"],
+      "description": "荊州治所，長江要津，商貿繁榮",
+      "unlock_conditions": {"level": 2},
+      "conquest_difficulty": 65,
+      "garrison_strength": 1000,
+      "historical_events": [
+        {"name": "劉備借荊州", "year": 208, "bonus": {"diplomacy": 15}},
+        {"name": "呂蒙白衣渡江", "year": 219, "bonus": {"strategy": 20}}
+      ]
+    },
+    {
+      "id": "wuchang",
+      "name": "武昌",
+      "region": "荊州",
+      "kingdom": "吳",
+      "position": {"x": 340, "y": 290},
+      "tier": "medium",
+      "population": 65000,
+      "base_stats": {
+        "defense": 75,
+        "prosperity": 70,
+        "loyalty": 80,
+        "recruitment": 75
+      },
+      "resources": {
+        "gold_per_turn": 400,
+        "troops_per_turn": 85,
+        "food_per_turn": 100
+      },
+      "special_features": ["iron_mines", "weapon_smithy", "river_defense"],
+      "description": "東吳重鎮，長江中游要地，兵器製造中心",
+      "unlock_conditions": {"level": 3},
+      "conquest_difficulty": 70,
+      "garrison_strength": 1100,
+      "historical_events": [
+        {"name": "孫權定都", "year": 221, "bonus": {"loyalty": 15}},
+        {"name": "石亭之戰", "year": 228, "bonus": {"defense": 18}}
+      ]
+    },
+    {
+      "id": "ye",
+      "name": "鄴城",
+      "region": "冀州",
+      "kingdom": "魏",
+      "position": {"x": 330, "y": 150},
+      "tier": "medium",
+      "population": 75000,
+      "base_stats": {
+        "defense": 80,
+        "prosperity": 75,
+        "loyalty": 85,
+        "recruitment": 85
+      },
+      "resources": {
+        "gold_per_turn": 500,
+        "troops_per_turn": 100,
+        "food_per_turn": 95
+      },
+      "special_features": ["bronze_sparrow_tower", "literary_center", "administrative_hub"],
+      "description": "魏國重鎮，文學繁榮，曹操銅雀台所在",
+      "unlock_conditions": {"level": 3},
+      "conquest_difficulty": 75,
+      "garrison_strength": 1300,
+      "historical_events": [
+        {"name": "銅雀台落成", "year": 210, "bonus": {"culture": 25}},
+        {"name": "建安文學", "year": 196, "bonus": {"intelligence": 15}}
+      ]
+    },
+    {
+      "id": "hefei",
+      "name": "合肥",
+      "region": "揚州",
+      "kingdom": "魏",
+      "position": {"x": 360, "y": 250},
+      "tier": "medium",
+      "population": 55000,
+      "base_stats": {
+        "defense": 85,
+        "prosperity": 65,
+        "loyalty": 75,
+        "recruitment": 80
+      },
+      "resources": {
+        "gold_per_turn": 350,
+        "troops_per_turn": 90,
+        "food_per_turn": 80
+      },
+      "special_features": ["border_fortress", "military_outpost", "early_warning"],
+      "description": "魏吳邊境要塞，多次大戰之地",
+      "unlock_conditions": {"level": 4},
+      "conquest_difficulty": 80,
+      "garrison_strength": 1200,
+      "historical_events": [
+        {"name": "張遼威震逍遙津", "year": 215, "bonus": {"martial_prowess": 30}},
+        {"name": "合肥三叛", "year": 234, "bonus": {"defense": 20}}
+      ]
+    },
+    {
+      "id": "jinyang",
+      "name": "晉陽",
+      "region": "并州",
+      "kingdom": "neutral",
+      "position": {"x": 280, "y": 120},
+      "tier": "medium",
+      "population": 50000,
+      "base_stats": {
+        "defense": 75,
+        "prosperity": 60,
+        "loyalty": 70,
+        "recruitment": 75
+      },
+      "resources": {
+        "gold_per_turn": 300,
+        "troops_per_turn": 70,
+        "food_per_turn": 70
+      },
+      "special_features": ["mountain_city", "coal_mines", "horse_breeding"],
+      "description": "并州重鎮，北方要地，產馬之鄉",
+      "unlock_conditions": {"level": 5},
+      "conquest_difficulty": 70,
+      "garrison_strength": 900,
+      "historical_events": [
+        {"name": "呂布據并州", "year": 189, "bonus": {"cavalry": 20}},
+        {"name": "高順陷陣營", "year": 198, "bonus": {"elite_troops": 25}}
+      ]
+    },
+    {
+      "id": "chaisang",
+      "name": "柴桑",
+      "region": "揚州",
+      "kingdom": "吳",
+      "position": {"x": 370, "y": 300},
+      "tier": "small",
+      "population": 40000,
+      "base_stats": {
+        "defense": 60,
+        "prosperity": 70,
+        "loyalty": 85,
+        "recruitment": 65
+      },
+      "resources": {
+        "gold_per_turn": 280,
+        "troops_per_turn": 60,
+        "food_per_turn": 90
+      },
+      "special_features": ["fishing_port", "naval_training", "river_patrol"],
+      "description": "東吳江防要地，周瑜都督府所在",
+      "unlock_conditions": {"level": 2},
+      "conquest_difficulty": 55,
+      "garrison_strength": 800,
+      "historical_events": [
+        {"name": "周瑜都督", "year": 208, "bonus": {"naval_command": 25}},
+        {"name": "赤壁之戰準備", "year": 208, "bonus": {"fire_tactics": 20}}
+      ]
+    },
+    {
+      "id": "xiakou",
+      "name": "夏口",
+      "region": "荊州",
+      "kingdom": "neutral",
+      "position": {"x": 320, "y": 280},
+      "tier": "small",
+      "population": 35000,
+      "base_stats": {
+        "defense": 65,
+        "prosperity": 60,
+        "loyalty": 60,
+        "recruitment": 65
+      },
+      "resources": {
+        "gold_per_turn": 250,
+        "troops_per_turn": 55,
+        "food_per_turn": 75
+      },
+      "special_features": ["river_confluence", "trade_post", "ferry_crossing"],
+      "description": "長江漢水交匯處，水陸要衝",
+      "unlock_conditions": {"level": 3},
+      "conquest_difficulty": 60,
+      "garrison_strength": 700,
+      "historical_events": [
+        {"name": "劉備駐夏口", "year": 208, "bonus": {"river_control": 15}},
+        {"name": "諸葛亮舌戰群儒", "year": 208, "bonus": {"diplomacy": 20}}
+      ]
+    },
+    {
+      "id": "wuwei",
+      "name": "武威",
+      "region": "涼州",
+      "kingdom": "neutral",
+      "position": {"x": 180, "y": 160},
+      "tier": "small",
+      "population": 30000,
+      "base_stats": {
+        "defense": 70,
+        "prosperity": 50,
+        "loyalty": 65,
+        "recruitment": 80
+      },
+      "resources": {
+        "gold_per_turn": 200,
+        "troops_per_turn": 65,
+        "food_per_turn": 50
+      },
+      "special_features": ["frontier_post", "nomad_trade", "horse_market"],
+      "description": "涼州重鎮，絲路要道，胡漢交融之地",
+      "unlock_conditions": {"level": 6},
+      "conquest_difficulty": 65,
+      "garrison_strength": 850,
+      "historical_events": [
+        {"name": "董卓起兵", "year": 189, "bonus": {"cavalry": 20}},
+        {"name": "馬騰據涼州", "year": 190, "bonus": {"western_allies": 15}}
+      ]
+    },
+    {
+      "id": "youbeiping",
+      "name": "右北平",
+      "region": "幽州",
+      "kingdom": "neutral",
+      "position": {"x": 350, "y": 100},
+      "tier": "small",
+      "population": 25000,
+      "base_stats": {
+        "defense": 80,
+        "prosperity": 45,
+        "loyalty": 70,
+        "recruitment": 75
+      },
+      "resources": {
+        "gold_per_turn": 180,
+        "troops_per_turn": 60,
+        "food_per_turn": 45
+      },
+      "special_features": ["border_fortress", "barbarian_raids", "frontier_trading"],
+      "description": "幽州邊郡，抵禦胡族，民風彪悍",
+      "unlock_conditions": {"level": 7},
+      "conquest_difficulty": 70,
+      "garrison_strength": 750,
+      "historical_events": [
+        {"name": "公孫瓚據幽州", "year": 191, "bonus": {"border_defense": 25}},
+        {"name": "白馬義從", "year": 191, "bonus": {"light_cavalry": 30}}
+      ]
+    }
+  ],
+  "conquest_system": {
+    "base_requirements": {
+      "min_troops": 500,
+      "min_gold": 1000,
+      "siege_duration_days": 7
+    },
+    "difficulty_modifiers": {
+      "easy": {"troop_modifier": 0.8, "gold_cost_modifier": 0.7, "duration_modifier": 0.6},
+      "normal": {"troop_modifier": 1.0, "gold_cost_modifier": 1.0, "duration_modifier": 1.0},
+      "hard": {"troop_modifier": 1.3, "gold_cost_modifier": 1.5, "duration_modifier": 1.4},
+      "legendary": {"troop_modifier": 1.8, "gold_cost_modifier": 2.0, "duration_modifier": 2.0}
+    },
+    "siege_mechanics": {
+      "daily_attrition": 0.02,
+      "supply_cost_per_day": 50,
+      "morale_decay_rate": 0.01,
+      "weather_impact": 0.15
+    },
+    "victory_rewards": {
+      "tier_multipliers": {
+        "small": 1.0,
+        "medium": 1.5,
+        "major": 2.0,
+        "capital": 3.0
+      },
+      "base_rewards": {
+        "gold": 2000,
+        "experience": 500,
+        "reputation": 100,
+        "equipment_chance": 0.3
+      }
+    }
+  },
+  "regional_bonuses": {
+    "益州": {"food_production": 1.2, "defense_bonus": 1.1, "description": "天府之國，物產豐富"},
+    "司隸": {"political_power": 1.3, "recruitment_bonus": 1.1, "description": "政治中心，人才薈萃"},
+    "揚州": {"trade_income": 1.25, "naval_power": 1.3, "description": "江南富庶，水師強勁"},
+    "荊州": {"strategic_value": 1.4, "river_control": 1.2, "description": "四戰之地，兵家必爭"},
+    "雍州": {"cavalry_bonus": 1.2, "western_trade": 1.15, "description": "關中要地，產馬之鄉"},
+    "冀州": {"agricultural_output": 1.15, "population_growth": 1.1, "description": "北方糧倉，人口眾多"},
+    "豫州": {"central_position": 1.2, "logistics_bonus": 1.15, "description": "中原腹地，四通八達"},
+    "并州": {"mining_output": 1.3, "mountain_defense": 1.2, "description": "山地要塞，礦產豐富"},
+    "涼州": {"frontier_bonus": 1.25, "horse_trade": 1.4, "description": "邊陲要地，馬匹優良"},
+    "幽州": {"border_defense": 1.3, "barbarian_relations": 1.2, "description": "北方屏障，胡漢交融"}
+  }
+}

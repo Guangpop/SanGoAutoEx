@@ -1,0 +1,840 @@
+{
+  "generals": [
+    {
+      "id": "caocao",
+      "name": "曹操",
+      "title": "魏武帝",
+      "faction": "魏",
+      "attributes": {
+        "武力": 75,
+        "智力": 95,
+        "統治": 98,
+        "政治": 96,
+        "魅力": 85,
+        "天命": 88
+      },
+      "rarity": "legendary",
+      "recruitment_difficulty": "very_hard",
+      "special_abilities": ["奸雄", "挾天子以令諸侯"],
+      "starting_city": "許昌",
+      "background": "一代奸雄，統一北方的霸主。"
+    },
+    {
+      "id": "liubei",
+      "name": "劉備",
+      "title": "昭烈帝",
+      "faction": "蜀",
+      "attributes": {
+        "武力": 70,
+        "智力": 80,
+        "統治": 90,
+        "政治": 88,
+        "魅力": 96,
+        "天命": 85
+      },
+      "rarity": "legendary",
+      "recruitment_difficulty": "very_hard",
+      "special_abilities": ["仁德", "漢室宗親"],
+      "starting_city": "成都",
+      "background": "漢室宗親，以仁德聞名於世。"
+    },
+    {
+      "id": "sunquan",
+      "name": "孫權",
+      "title": "大帝",
+      "faction": "吳",
+      "attributes": {
+        "武力": 68,
+        "智力": 85,
+        "統治": 92,
+        "政治": 90,
+        "魅力": 88,
+        "天命": 82
+      },
+      "rarity": "legendary",
+      "recruitment_difficulty": "very_hard",
+      "special_abilities": ["江東之主", "善任人才"],
+      "starting_city": "建業",
+      "background": "江東之主，承父兄基業統一南方。"
+    },
+    {
+      "id": "zhugeliang",
+      "name": "諸葛亮",
+      "title": "武鄉侯",
+      "faction": "蜀",
+      "attributes": {
+        "武力": 55,
+        "智力": 100,
+        "統治": 95,
+        "政治": 98,
+        "魅力": 92,
+        "天命": 90
+      },
+      "rarity": "legendary",
+      "recruitment_difficulty": "very_hard",
+      "special_abilities": ["隆中對", "鞠躬盡瘁"],
+      "starting_city": "成都",
+      "background": "臥龍先生，千古一相。"
+    },
+    {
+      "id": "guanyu",
+      "name": "關羽",
+      "title": "武聖",
+      "faction": "蜀",
+      "attributes": {
+        "武力": 97,
+        "智力": 76,
+        "統治": 85,
+        "政治": 65,
+        "魅力": 90,
+        "天命": 88
+      },
+      "rarity": "legendary",
+      "recruitment_difficulty": "hard",
+      "special_abilities": ["義薄雲天", "過五關斬六將"],
+      "starting_city": "長沙",
+      "background": "義薄雲天的武聖，劉備義弟。"
+    },
+    {
+      "id": "zhangfei",
+      "name": "張飛",
+      "title": "桓侯",
+      "faction": "蜀",
+      "attributes": {
+        "武力": 95,
+        "智力": 45,
+        "統治": 70,
+        "政治": 30,
+        "魅力": 75,
+        "天命": 70
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "hard",
+      "special_abilities": ["豹頭環眼", "聲震當陽"],
+      "starting_city": "永安",
+      "background": "猛張飛，勇冠三軍的虎將。"
+    },
+    {
+      "id": "zhaoyun",
+      "name": "趙雲",
+      "title": "順平侯",
+      "faction": "蜀",
+      "attributes": {
+        "武力": 93,
+        "智力": 78,
+        "統治": 82,
+        "政治": 75,
+        "魅力": 88,
+        "天命": 85
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["常勝將軍", "七進七出"],
+      "starting_city": "成都",
+      "background": "常勝將軍，忠勇雙全。"
+    },
+    {
+      "id": "machao",
+      "name": "馬超",
+      "title": "威侯",
+      "faction": "蜀",
+      "attributes": {
+        "武力": 94,
+        "智力": 65,
+        "統治": 75,
+        "政治": 55,
+        "魅力": 85,
+        "天命": 75
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["錦馬超", "西涼勇士"],
+      "starting_city": "漢中",
+      "background": "錦馬超，西涼猛將。"
+    },
+    {
+      "id": "huangzhong",
+      "name": "黃忠",
+      "title": "剛侯",
+      "faction": "蜀",
+      "attributes": {
+        "武力": 90,
+        "智力": 70,
+        "統治": 75,
+        "政治": 60,
+        "魅力": 80,
+        "天命": 75
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["老當益壯", "百步穿楊"],
+      "starting_city": "長沙",
+      "background": "老當益壯的神射手。"
+    },
+    {
+      "id": "simayi",
+      "name": "司馬懿",
+      "title": "宣帝",
+      "faction": "魏",
+      "attributes": {
+        "武力": 60,
+        "智力": 96,
+        "統治": 94,
+        "政治": 95,
+        "魅力": 75,
+        "天命": 92
+      },
+      "rarity": "legendary",
+      "recruitment_difficulty": "very_hard",
+      "special_abilities": ["冢虎", "忍辱負重"],
+      "starting_city": "鄴城",
+      "background": "冢虎司馬，最終奪取天下。"
+    },
+    {
+      "id": "zhangliao",
+      "name": "張遼",
+      "title": "征東將軍",
+      "faction": "魏",
+      "attributes": {
+        "武力": 88,
+        "智力": 78,
+        "統治": 85,
+        "政治": 72,
+        "魅力": 82,
+        "天命": 80
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["威震逍遙津", "五子良將"],
+      "starting_city": "合肥",
+      "background": "威震逍遙津的五子良將之首。"
+    },
+    {
+      "id": "xuchu",
+      "name": "許褚",
+      "title": "虎痴",
+      "faction": "魏",
+      "attributes": {
+        "武力": 92,
+        "智力": 45,
+        "統治": 70,
+        "政治": 35,
+        "魅力": 70,
+        "天命": 70
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["虎痴", "忠心護主"],
+      "starting_city": "許昌",
+      "background": "曹操的貼身護衛，虎痴許褚。"
+    },
+    {
+      "id": "dianwei",
+      "name": "典韋",
+      "title": "古之惡來",
+      "faction": "魏",
+      "attributes": {
+        "武力": 96,
+        "智力": 40,
+        "統治": 65,
+        "政治": 30,
+        "魅力": 75,
+        "天命": 65
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["古之惡來", "捨生護主"],
+      "starting_city": "許昌",
+      "background": "古之惡來，曹操忠實護衛。"
+    },
+    {
+      "id": "xuhuang",
+      "name": "徐晃",
+      "title": "右將軍",
+      "faction": "魏",
+      "attributes": {
+        "武力": 85,
+        "智力": 80,
+        "統治": 82,
+        "政治": 75,
+        "魅力": 78,
+        "天命": 75
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["五子良將", "攻無不克"],
+      "starting_city": "晉陽",
+      "background": "五子良將，攻無不克的良將。"
+    },
+    {
+      "id": "zhouyu",
+      "name": "周瑜",
+      "title": "大都督",
+      "faction": "吳",
+      "attributes": {
+        "武力": 78,
+        "智力": 95,
+        "統治": 88,
+        "政治": 85,
+        "魅力": 94,
+        "天命": 82
+      },
+      "rarity": "legendary",
+      "recruitment_difficulty": "hard",
+      "special_abilities": ["美周郎", "火燒赤壁"],
+      "starting_city": "柴桑",
+      "background": "美周郎，江東英才。"
+    },
+    {
+      "id": "lusu",
+      "name": "魯肅",
+      "title": "偏將軍",
+      "faction": "吳",
+      "attributes": {
+        "武力": 60,
+        "智力": 88,
+        "統治": 85,
+        "政治": 90,
+        "魅力": 85,
+        "天命": 80
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["聯劉抗曹", "外交天才"],
+      "starting_city": "建業",
+      "background": "東吳外交家，聯劉抗曹的策劃者。"
+    },
+    {
+      "id": "ganning",
+      "name": "甘寧",
+      "title": "興霸",
+      "faction": "吳",
+      "attributes": {
+        "武力": 89,
+        "智力": 70,
+        "統治": 75,
+        "政治": 55,
+        "魅力": 80,
+        "天命": 75
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["江賊出身", "勇猛善戰"],
+      "starting_city": "建業",
+      "background": "興霸甘寧，江賊出身的勇將。"
+    },
+    {
+      "id": "taishici",
+      "name": "太史慈",
+      "title": "建昌都尉",
+      "faction": "吳",
+      "attributes": {
+        "武力": 87,
+        "智力": 75,
+        "統治": 80,
+        "政治": 70,
+        "魅力": 82,
+        "天命": 78
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["神射手", "忠義之士"],
+      "starting_city": "會稽",
+      "background": "神射手太史慈，忠義之士。"
+    },
+    {
+      "id": "lvbu",
+      "name": "呂布",
+      "title": "飛將",
+      "faction": "無",
+      "attributes": {
+        "武力": 100,
+        "智力": 45,
+        "統治": 60,
+        "政治": 35,
+        "魅力": 80,
+        "天命": 55
+      },
+      "rarity": "legendary",
+      "recruitment_difficulty": "very_hard",
+      "special_abilities": ["人中呂布", "反覆無常"],
+      "starting_city": "長安",
+      "background": "人中呂布，馬中赤兔，天下第一武將。"
+    },
+    {
+      "id": "dongzhuo",
+      "name": "董卓",
+      "title": "相國",
+      "faction": "無",
+      "attributes": {
+        "武力": 65,
+        "智力": 70,
+        "統治": 75,
+        "政治": 40,
+        "魅力": 25,
+        "天命": 30
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "very_hard",
+      "special_abilities": ["暴政", "挾持天子"],
+      "starting_city": "洛陽",
+      "background": "董太師，亂政禍國的權臣。"
+    },
+    {
+      "id": "yuanshao",
+      "name": "袁紹",
+      "title": "大將軍",
+      "faction": "無",
+      "attributes": {
+        "武力": 55,
+        "智力": 65,
+        "統治": 80,
+        "政治": 75,
+        "魅力": 85,
+        "天命": 60
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "hard",
+      "special_abilities": ["四世三公", "優柔寡斷"],
+      "starting_city": "鄴城",
+      "background": "四世三公的袁氏，北方諸侯盟主。"
+    },
+    {
+      "id": "liubiao",
+      "name": "劉表",
+      "title": "荊州牧",
+      "faction": "無",
+      "attributes": {
+        "武力": 50,
+        "智力": 78,
+        "統治": 85,
+        "政治": 88,
+        "魅力": 80,
+        "天命": 70
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["荊州牧", "保境安民"],
+      "starting_city": "長沙",
+      "background": "荊州牧劉表，保境安民的仁政者。"
+    },
+    {
+      "id": "gongsunzan",
+      "name": "公孫瓚",
+      "title": "平原相",
+      "faction": "無",
+      "attributes": {
+        "武力": 80,
+        "智力": 70,
+        "統治": 75,
+        "政治": 65,
+        "魅力": 70,
+        "天命": 65
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["白馬義從", "北地豪強"],
+      "starting_city": "薊城",
+      "background": "白馬將軍，北地豪強公孫瓚。"
+    },
+    {
+      "id": "pangtong",
+      "name": "龐統",
+      "title": "鳳雛",
+      "faction": "蜀",
+      "attributes": {
+        "武力": 35,
+        "智力": 95,
+        "統治": 80,
+        "政治": 90,
+        "魅力": 75,
+        "天命": 85
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "hard",
+      "special_abilities": ["鳳雛", "連環計"],
+      "starting_city": "成都",
+      "background": "鳳雛龐統，與臥龍齊名的謀士。"
+    },
+    {
+      "id": "fazheng",
+      "name": "法正",
+      "title": "尚書令",
+      "faction": "蜀",
+      "attributes": {
+        "武力": 40,
+        "智力": 90,
+        "統治": 75,
+        "政治": 85,
+        "魅力": 70,
+        "天命": 80
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["善謀", "報恩雪恨"],
+      "starting_city": "漢中",
+      "background": "法孝直，劉備入蜀的關鍵謀士。"
+    },
+    {
+      "id": "jiangwei",
+      "name": "姜維",
+      "title": "大將軍",
+      "faction": "蜀",
+      "attributes": {
+        "武力": 85,
+        "智力": 88,
+        "統治": 82,
+        "政治": 75,
+        "魅力": 78,
+        "天命": 75
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["諸葛亮傳人", "九伐中原"],
+      "starting_city": "街亭",
+      "background": "諸葛亮的傳人，蜀漢最後的名將。"
+    },
+    {
+      "id": "weihan",
+      "name": "魏延",
+      "title": "征西大將軍",
+      "faction": "蜀",
+      "attributes": {
+        "武力": 88,
+        "智力": 75,
+        "統治": 80,
+        "政治": 60,
+        "魅力": 65,
+        "天命": 70
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["反骨", "勇猛善戰"],
+      "starting_city": "漢中",
+      "background": "魏延，有反骨的勇將。"
+    },
+    {
+      "id": "caoren",
+      "name": "曹仁",
+      "title": "大司馬",
+      "faction": "魏",
+      "attributes": {
+        "武力": 83,
+        "智力": 75,
+        "統治": 88,
+        "政治": 78,
+        "魅力": 80,
+        "天命": 78
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["宗室重將", "守城專家"],
+      "starting_city": "許昌",
+      "background": "曹氏宗室，守城專家曹仁。"
+    },
+    {
+      "id": "xiahouyuan",
+      "name": "夏侯淵",
+      "title": "征西將軍",
+      "faction": "魏",
+      "attributes": {
+        "武力": 88,
+        "智力": 70,
+        "統治": 82,
+        "政治": 65,
+        "魅力": 75,
+        "天命": 72
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["神速", "宗室猛將"],
+      "starting_city": "長安",
+      "background": "夏侯淵，以神速著稱的猛將。"
+    },
+    {
+      "id": "xiahoudun",
+      "name": "夏侯惇",
+      "title": "大將軍",
+      "faction": "魏",
+      "attributes": {
+        "武力": 85,
+        "智力": 72,
+        "統治": 85,
+        "政治": 78,
+        "魅力": 82,
+        "天命": 80
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["獨眼龍", "曹操心腹"],
+      "starting_city": "許昌",
+      "background": "獨眼將軍，曹操最信任的宗將。"
+    },
+    {
+      "id": "yuejin",
+      "name": "樂進",
+      "title": "右將軍",
+      "faction": "魏",
+      "attributes": {
+        "武力": 82,
+        "智力": 75,
+        "統治": 80,
+        "政治": 70,
+        "魅力": 75,
+        "天命": 75
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["五子良將", "先登勇士"],
+      "starting_city": "合肥",
+      "background": "五子良將之一，先登勇士樂進。"
+    },
+    {
+      "id": "yujin",
+      "name": "于禁",
+      "title": "左將軍",
+      "faction": "魏",
+      "attributes": {
+        "武力": 78,
+        "智力": 80,
+        "統治": 88,
+        "政治": 82,
+        "魅力": 70,
+        "天命": 65
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["五子良將", "治軍嚴明"],
+      "starting_city": "鄴城",
+      "background": "五子良將，治軍嚴明的于禁。"
+    },
+    {
+      "id": "zhanghe",
+      "name": "張郃",
+      "title": "車騎將軍",
+      "faction": "魏",
+      "attributes": {
+        "武力": 85,
+        "智力": 82,
+        "統治": 85,
+        "政治": 75,
+        "魅力": 78,
+        "天命": 78
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["五子良將", "善用地形"],
+      "starting_city": "街亭",
+      "background": "五子良將，善用地形的張郃。"
+    },
+    {
+      "id": "guojia",
+      "name": "郭嘉",
+      "title": "軍師祭酒",
+      "faction": "魏",
+      "attributes": {
+        "武力": 25,
+        "智力": 98,
+        "統治": 75,
+        "政治": 90,
+        "魅力": 85,
+        "天命": 90
+      },
+      "rarity": "legendary",
+      "recruitment_difficulty": "very_hard",
+      "special_abilities": ["鬼才", "算無遺策"],
+      "starting_city": "許昌",
+      "background": "鬼才郭嘉，曹操最倚重的謀士。"
+    },
+    {
+      "id": "huanggai",
+      "name": "黃蓋",
+      "title": "偏將軍",
+      "faction": "吳",
+      "attributes": {
+        "武力": 82,
+        "智力": 78,
+        "統治": 85,
+        "政治": 75,
+        "魅力": 85,
+        "天命": 80
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["苦肉計", "老將風範"],
+      "starting_city": "柴桑",
+      "background": "黃蓋，赤壁之戰的功臣。"
+    },
+    {
+      "id": "chengpu",
+      "name": "程普",
+      "title": "蕩寇將軍",
+      "faction": "吳",
+      "attributes": {
+        "武力": 80,
+        "智力": 75,
+        "統治": 88,
+        "政治": 80,
+        "魅力": 82,
+        "天命": 78
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["江東宿將", "老成持重"],
+      "starting_city": "建業",
+      "background": "江東宿將，老成持重的程普。"
+    },
+    {
+      "id": "luxun",
+      "name": "陸遜",
+      "title": "大都督",
+      "faction": "吳",
+      "attributes": {
+        "武力": 70,
+        "智力": 94,
+        "統治": 90,
+        "政治": 88,
+        "魅力": 85,
+        "天命": 85
+      },
+      "rarity": "legendary",
+      "recruitment_difficulty": "hard",
+      "special_abilities": ["火燒連營", "儒將風範"],
+      "starting_city": "建業",
+      "background": "陸遜，火燒劉備七百里連營。"
+    },
+    {
+      "id": "zhuge_liang",
+      "name": "諸葛瑾",
+      "title": "大將軍",
+      "faction": "吳",
+      "attributes": {
+        "武力": 45,
+        "智力": 88,
+        "統治": 85,
+        "政治": 92,
+        "魅力": 88,
+        "天命": 82
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["外交才能", "諸葛亮兄"],
+      "starting_city": "建業",
+      "background": "諸葛瑾，諸葛亮之兄，東吳外交家。"
+    },
+    {
+      "id": "lvmeng",
+      "name": "呂蒙",
+      "title": "南郡太守",
+      "faction": "吳",
+      "attributes": {
+        "武力": 78,
+        "智力": 85,
+        "統治": 82,
+        "政治": 80,
+        "魅力": 75,
+        "天命": 80
+      },
+      "rarity": "epic",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["白衣渡江", "士別三日"],
+      "starting_city": "建業",
+      "background": "呂蒙，白衣渡江奪取荊州。"
+    },
+    {
+      "id": "zhangjiao",
+      "name": "張角",
+      "title": "天公將軍",
+      "faction": "黃巾",
+      "attributes": {
+        "武力": 55,
+        "智力": 88,
+        "統治": 90,
+        "政治": 75,
+        "魅力": 92,
+        "天命": 85
+      },
+      "rarity": "legendary",
+      "recruitment_difficulty": "very_hard",
+      "special_abilities": ["太平道", "黃巾起義"],
+      "starting_city": "鄴城",
+      "background": "太平道主，黃巾起義的領袖。"
+    },
+    {
+      "id": "zhangliang",
+      "name": "張梁",
+      "title": "人公將軍",
+      "faction": "黃巾",
+      "attributes": {
+        "武力": 75,
+        "智力": 70,
+        "統治": 78,
+        "政治": 60,
+        "魅力": 80,
+        "天命": 75
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "hard",
+      "special_abilities": ["人公將軍", "張角三弟"],
+      "starting_city": "薊城",
+      "background": "張角三弟，黃巾起義的骨幹。"
+    },
+    {
+      "id": "zhangbao",
+      "name": "張寶",
+      "title": "地公將軍",
+      "faction": "黃巾",
+      "attributes": {
+        "武力": 70,
+        "智力": 75,
+        "統治": 80,
+        "政治": 65,
+        "魅力": 78,
+        "天命": 78
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "hard",
+      "special_abilities": ["地公將軍", "張角二弟"],
+      "starting_city": "晉陽",
+      "background": "張角二弟，黃巾起義的重要領袖。"
+    },
+    {
+      "id": "yanwen",
+      "name": "顏良",
+      "title": "大將",
+      "faction": "袁",
+      "attributes": {
+        "武力": 89,
+        "智力": 60,
+        "統治": 72,
+        "政治": 55,
+        "魅力": 70,
+        "天命": 65
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["河北猛將", "袁紹愛將"],
+      "starting_city": "鄴城",
+      "background": "河北猛將，袁紹帳下第一勇士。"
+    },
+    {
+      "id": "wenchou",
+      "name": "文醜",
+      "title": "大將",
+      "faction": "袁",
+      "attributes": {
+        "武力": 87,
+        "智力": 58,
+        "統治": 70,
+        "政治": 50,
+        "魅力": 68,
+        "天命": 63
+      },
+      "rarity": "rare",
+      "recruitment_difficulty": "medium",
+      "special_abilities": ["河北猛將", "與顏良齊名"],
+      "starting_city": "鄴城",
+      "background": "河北猛將，與顏良並稱。"
+    }
+  ]
+}

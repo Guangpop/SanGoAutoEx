@@ -1,0 +1,220 @@
+[gd_scene load_steps=2 format=3 uid="uid://bw7n8k2q3m5p8"]
+
+[ext_resource type="Script" path="res://scripts/ui/SkillSelectionUI.gd" id="1_x4k2m"]
+
+[node name="SkillSelectionUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_x4k2m")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.1, 0.1, 0.15, 0.95)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 40.0
+offset_right = -20.0
+offset_bottom = -40.0
+
+[node name="HeaderContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+
+[node name="TitleLabel" type="Label" parent="VBoxContainer/HeaderContainer"]
+layout_mode = 2
+text = "技能選擇"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="SubtitleLabel" type="Label" parent="VBoxContainer/HeaderContainer"]
+layout_mode = 2
+text = "選擇你的天命技能，塑造你的三國霸業"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ProgressContainer" type="HBoxContainer" parent="VBoxContainer/HeaderContainer"]
+layout_mode = 2
+
+[node name="RoundLabel" type="Label" parent="VBoxContainer/HeaderContainer/ProgressContainer"]
+layout_mode = 2
+text = "第 1/3 回合"
+
+[node name="Spacer" type="Control" parent="VBoxContainer/HeaderContainer/ProgressContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="StarsLabel" type="Label" parent="VBoxContainer/HeaderContainer/ProgressContainer"]
+layout_mode = 2
+text = "⭐ 10"
+
+[node name="SkillsContainer" type="VBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SkillsLabel" type="Label" parent="VBoxContainer/SkillsContainer"]
+layout_mode = 2
+text = "選擇一項技能："
+horizontal_alignment = 1
+
+[node name="SkillCardContainer" type="VBoxContainer" parent="VBoxContainer/SkillsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="SkillCard1" type="Panel" parent="VBoxContainer/SkillsContainer/SkillCardContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+
+[node name="SkillCard1Content" type="VBoxContainer" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 10.0
+offset_right = -15.0
+offset_bottom = -10.0
+
+[node name="SkillCard1Header" type="HBoxContainer" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard1/SkillCard1Content"]
+layout_mode = 2
+
+[node name="SkillCard1Name" type="Label" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard1/SkillCard1Content/SkillCard1Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "技能名稱"
+
+[node name="SkillCard1Cost" type="Label" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard1/SkillCard1Content/SkillCard1Header"]
+layout_mode = 2
+text = "⭐ 1"
+
+[node name="SkillCard1Description" type="Label" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard1/SkillCard1Content"]
+layout_mode = 2
+text = "技能描述"
+autowrap_mode = 3
+
+[node name="SkillCard1Effects" type="Label" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard1/SkillCard1Content"]
+layout_mode = 2
+text = "效果：武力 +5"
+
+[node name="SkillCard1Button" type="Button" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard1"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+flat = true
+
+[node name="SkillCard2" type="Panel" parent="VBoxContainer/SkillsContainer/SkillCardContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+
+[node name="SkillCard2Content" type="VBoxContainer" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 10.0
+offset_right = -15.0
+offset_bottom = -10.0
+
+[node name="SkillCard2Header" type="HBoxContainer" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard2/SkillCard2Content"]
+layout_mode = 2
+
+[node name="SkillCard2Name" type="Label" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard2/SkillCard2Content/SkillCard2Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "技能名稱"
+
+[node name="SkillCard2Cost" type="Label" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard2/SkillCard2Content/SkillCard2Header"]
+layout_mode = 2
+text = "⭐ 2"
+
+[node name="SkillCard2Description" type="Label" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard2/SkillCard2Content"]
+layout_mode = 2
+text = "技能描述"
+autowrap_mode = 3
+
+[node name="SkillCard2Effects" type="Label" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard2/SkillCard2Content"]
+layout_mode = 2
+text = "效果：智力 +8"
+
+[node name="SkillCard2Button" type="Button" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard2"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+flat = true
+
+[node name="SkillCard3" type="Panel" parent="VBoxContainer/SkillsContainer/SkillCardContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+
+[node name="SkillCard3Content" type="VBoxContainer" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 15.0
+offset_top = 10.0
+offset_right = -15.0
+offset_bottom = -10.0
+
+[node name="SkillCard3Header" type="HBoxContainer" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard3/SkillCard3Content"]
+layout_mode = 2
+
+[node name="SkillCard3Name" type="Label" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard3/SkillCard3Content/SkillCard3Header"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "技能名稱"
+
+[node name="SkillCard3Cost" type="Label" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard3/SkillCard3Content/SkillCard3Header"]
+layout_mode = 2
+text = "⭐ 3"
+
+[node name="SkillCard3Description" type="Label" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard3/SkillCard3Content"]
+layout_mode = 2
+text = "技能描述"
+autowrap_mode = 3
+
+[node name="SkillCard3Effects" type="Label" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard3/SkillCard3Content"]
+layout_mode = 2
+text = "效果：全屬性 +3"
+
+[node name="SkillCard3Button" type="Button" parent="VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard3"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+flat = true
+
+[node name="BottomContainer" type="HBoxContainer" parent="VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 60)
+
+[node name="SkipButton" type="Button" parent="VBoxContainer/BottomContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "跳過"
+
+[node name="SelectedSkillsLabel" type="Label" parent="VBoxContainer/BottomContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "已選技能：0"
+horizontal_alignment = 1
+
+[node name="ContinueButton" type="Button" parent="VBoxContainer/BottomContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "完成選擇"
+disabled = true

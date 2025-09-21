@@ -1,0 +1,200 @@
+[gd_scene load_steps=3 format=3 uid="uid://bxk8j2wcyk4ml"]
+
+[ext_resource type="Script" path="res://scripts/ui/BattleUI.gd" id="1_battle_ui"]
+[ext_resource type="Theme" path="res://assets/ui/main_theme.tres" id="2_main_theme"]
+
+[node name="BattleUI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_main_theme")
+script = ExtResource("1_battle_ui")
+
+[node name="BattleOverlay" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.7)
+
+[node name="BattleContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -200.0
+offset_top = -300.0
+offset_right = 200.0
+offset_bottom = 300.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BattleTitle" type="Label" parent="BattleContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 50)
+theme_override_font_sizes/font_size = 24
+text = "⚔️ 戰鬥進行中"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BattleInfo" type="VBoxContainer" parent="BattleContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+
+[node name="CityInfo" type="Label" parent="BattleContainer/BattleInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "攻打城池: 洛陽"
+horizontal_alignment = 1
+
+[node name="VSLabel" type="Label" parent="BattleContainer/BattleInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 20
+text = "VS"
+horizontal_alignment = 1
+
+[node name="ForcesComparison" type="HBoxContainer" parent="BattleContainer/BattleInfo"]
+layout_mode = 2
+
+[node name="AttackerInfo" type="VBoxContainer" parent="BattleContainer/BattleInfo/ForcesComparison"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AttackerLabel" type="Label" parent="BattleContainer/BattleInfo/ForcesComparison/AttackerInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "攻方"
+horizontal_alignment = 1
+
+[node name="AttackerTroops" type="Label" parent="BattleContainer/BattleInfo/ForcesComparison/AttackerInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "⚔️ 1000"
+horizontal_alignment = 1
+
+[node name="AttackerGeneral" type="Label" parent="BattleContainer/BattleInfo/ForcesComparison/AttackerInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "劉備"
+horizontal_alignment = 1
+
+[node name="DefenderInfo" type="VBoxContainer" parent="BattleContainer/BattleInfo/ForcesComparison"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DefenderLabel" type="Label" parent="BattleContainer/BattleInfo/ForcesComparison/DefenderInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "守方"
+horizontal_alignment = 1
+
+[node name="DefenderTroops" type="Label" parent="BattleContainer/BattleInfo/ForcesComparison/DefenderInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "🛡️ 800"
+horizontal_alignment = 1
+
+[node name="DefenderGeneral" type="Label" parent="BattleContainer/BattleInfo/ForcesComparison/DefenderInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "董卓"
+horizontal_alignment = 1
+
+[node name="BattleProgress" type="VBoxContainer" parent="BattleContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ProgressBar" type="ProgressBar" parent="BattleContainer/BattleProgress"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 30)
+max = 100.0
+step = 1.0
+value = 0.0
+show_percentage = false
+
+[node name="ProgressLabel" type="Label" parent="BattleContainer/BattleProgress"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "戰鬥準備中..."
+horizontal_alignment = 1
+
+[node name="BattleAnimation" type="Control" parent="BattleContainer/BattleProgress"]
+layout_mode = 2
+size_flags_vertical = 3
+custom_minimum_size = Vector2(0, 150)
+
+[node name="AttackerSprite" type="Label" parent="BattleContainer/BattleProgress/BattleAnimation"]
+layout_mode = 1
+anchors_preset = 4
+anchor_top = 0.5
+anchor_bottom = 0.5
+offset_left = 20.0
+offset_top = -20.0
+offset_right = 60.0
+offset_bottom = 20.0
+theme_override_font_sizes/font_size = 32
+text = "⚔️"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DefenderSprite" type="Label" parent="BattleContainer/BattleProgress/BattleAnimation"]
+layout_mode = 1
+anchors_preset = 6
+anchor_left = 1.0
+anchor_top = 0.5
+anchor_right = 1.0
+anchor_bottom = 0.5
+offset_left = -60.0
+offset_top = -20.0
+offset_right = -20.0
+offset_bottom = 20.0
+theme_override_font_sizes/font_size = 32
+text = "🛡️"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BattleEffects" type="Label" parent="BattleContainer/BattleProgress/BattleAnimation"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -20.0
+offset_top = -20.0
+offset_right = 20.0
+offset_bottom = 20.0
+theme_override_font_sizes/font_size = 24
+text = "💥"
+horizontal_alignment = 1
+vertical_alignment = 1
+modulate = Color(1, 1, 1, 0)
+
+[node name="BattleLog" type="ScrollContainer" parent="BattleContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+
+[node name="LogContent" type="VBoxContainer" parent="BattleContainer/BattleLog"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ActionButtons" type="HBoxContainer" parent="BattleContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 60)
+
+[node name="SpeedButton" type="Button" parent="BattleContainer/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 48)
+text = "⏩ 2x速度"
+
+[node name="SkipButton" type="Button" parent="BattleContainer/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 48)
+text = "⏭️ 跳過動畫"

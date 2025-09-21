@@ -1,0 +1,680 @@
+{
+  "skills": [
+    {
+      "id": "tianxuan_zhiren",
+      "name": "天選之人",
+      "description": "上天注定的霸主之才，全屬性提升並大幅增加天命。",
+      "star_cost": 3,
+      "category": "天命技能",
+      "rarity": "legendary",
+      "effects": {
+        "武力": 2,
+        "智力": 2,
+        "統治": 2,
+        "政治": 2,
+        "魅力": 2,
+        "天命": 10
+      },
+      "passive_effects": {
+        "critical_chance": 5,
+        "event_bonus": 15
+      }
+    },
+    {
+      "id": "huogong",
+      "name": "火攻",
+      "description": "以火為兵，對敵軍造成額外傷害，受智力影響。",
+      "star_cost": 2,
+      "category": "戰鬥技能",
+      "rarity": "rare",
+      "effects": {
+        "武力": 3,
+        "智力": 5
+      },
+      "battle_effects": {
+        "fire_damage_bonus": 25,
+        "area_damage": true
+      }
+    },
+    {
+      "id": "jianshou_buchu",
+      "name": "堅守不出",
+      "description": "擅長防守戰術，防禦時承受傷害減半。",
+      "star_cost": 1,
+      "category": "防禦技能",
+      "rarity": "common",
+      "effects": {
+        "統治": 4,
+        "政治": 2
+      },
+      "passive_effects": {
+        "defense_bonus": 50,
+        "siege_resistance": 30
+      }
+    },
+    {
+      "id": "bingxian_rushen",
+      "name": "兵仙如神",
+      "description": "用兵如神，大幅提升武力和智力。",
+      "star_cost": 3,
+      "category": "戰鬥技能",
+      "rarity": "legendary",
+      "effects": {
+        "武力": 8,
+        "智力": 8,
+        "統治": 3
+      },
+      "battle_effects": {
+        "strategy_bonus": 20,
+        "formation_mastery": true
+      }
+    },
+    {
+      "id": "minxin_suoxi",
+      "name": "民心所歸",
+      "description": "深得民心，提升魅力和政治，增加將領投奔機率。",
+      "star_cost": 2,
+      "category": "政治技能",
+      "rarity": "rare",
+      "effects": {
+        "政治": 6,
+        "魅力": 6
+      },
+      "passive_effects": {
+        "recruitment_bonus": 40,
+        "city_loyalty": 25
+      }
+    },
+    {
+      "id": "longzhong_duice",
+      "name": "隆中對策",
+      "description": "卓越的戰略眼光，智力和政治大幅提升。",
+      "star_cost": 3,
+      "category": "智略技能",
+      "rarity": "legendary",
+      "effects": {
+        "智力": 10,
+        "政治": 6,
+        "天命": 3
+      },
+      "passive_effects": {
+        "strategic_vision": 30,
+        "diplomacy_bonus": 20
+      }
+    },
+    {
+      "id": "wanfu_modang",
+      "name": "萬夫莫當",
+      "description": "勇武無雙，武力大幅提升，戰鬥時有機會一擊必殺。",
+      "star_cost": 2,
+      "category": "戰鬥技能",
+      "rarity": "rare",
+      "effects": {
+        "武力": 8,
+        "統治": 2
+      },
+      "battle_effects": {
+        "critical_chance": 15,
+        "instant_kill_chance": 5
+      }
+    },
+    {
+      "id": "caizheng_dachen",
+      "name": "財政大臣",
+      "description": "精通財政管理，大幅增加城池金錢產出。",
+      "star_cost": 2,
+      "category": "經濟技能",
+      "rarity": "rare",
+      "effects": {
+        "政治": 7,
+        "智力": 3
+      },
+      "passive_effects": {
+        "gold_production": 50,
+        "tax_efficiency": 30
+      }
+    },
+    {
+      "id": "qibing_tujin",
+      "name": "奇兵突進",
+      "description": "善用奇兵戰術，攻城時有額外優勢。",
+      "star_cost": 1,
+      "category": "戰術技能",
+      "rarity": "common",
+      "effects": {
+        "武力": 3,
+        "智力": 3
+      },
+      "battle_effects": {
+        "siege_bonus": 35,
+        "surprise_attack": 20
+      }
+    },
+    {
+      "id": "tiandi_weiren",
+      "name": "天地為仁",
+      "description": "仁德之心，魅力和天命提升，獲得特殊事件優勢。",
+      "star_cost": 2,
+      "category": "德行技能",
+      "rarity": "rare",
+      "effects": {
+        "魅力": 5,
+        "政治": 3,
+        "天命": 5
+      },
+      "passive_effects": {
+        "virtue_events": 25,
+        "people_support": 30
+      }
+    },
+    {
+      "id": "shuijun_tongdu",
+      "name": "水軍統督",
+      "description": "精通水戰，在水域作戰時獲得巨大優勢。",
+      "star_cost": 2,
+      "category": "特殊技能",
+      "rarity": "rare",
+      "effects": {
+        "武力": 4,
+        "統治": 5,
+        "智力": 3
+      },
+      "battle_effects": {
+        "naval_mastery": 60,
+        "water_terrain": true
+      }
+    },
+    {
+      "id": "jingzhong_baoguo",
+      "name": "精忠報國",
+      "description": "忠義無雙，統治和魅力提升，部下忠誠度提高。",
+      "star_cost": 1,
+      "category": "德行技能",
+      "rarity": "common",
+      "effects": {
+        "統治": 4,
+        "魅力": 3,
+        "天命": 2
+      },
+      "passive_effects": {
+        "loyalty_bonus": 40,
+        "betrayal_resistance": 50
+      }
+    },
+    {
+      "id": "gudao_relang",
+      "name": "孤膽熱狼",
+      "description": "單騎作戰能力突出，在劣勢時發揮更強戰力。",
+      "star_cost": 1,
+      "category": "戰鬥技能",
+      "rarity": "common",
+      "effects": {
+        "武力": 5,
+        "統治": 1
+      },
+      "battle_effects": {
+        "underdog_bonus": 40,
+        "solo_combat": 25
+      }
+    },
+    {
+      "id": "shengchan_dafa",
+      "name": "生產大法",
+      "description": "提升各種資源的生產效率。",
+      "star_cost": 1,
+      "category": "經濟技能",
+      "rarity": "common",
+      "effects": {
+        "政治": 4,
+        "統治": 2
+      },
+      "passive_effects": {
+        "resource_production": 35,
+        "population_growth": 20
+      }
+    },
+    {
+      "id": "tianwen_dizhi",
+      "name": "天文地志",
+      "description": "通曉天文地理，增加行軍和戰術優勢。",
+      "star_cost": 2,
+      "category": "智略技能",
+      "rarity": "rare",
+      "effects": {
+        "智力": 6,
+        "天命": 4
+      },
+      "battle_effects": {
+        "terrain_bonus": 30,
+        "weather_control": 15
+      }
+    },
+    {
+      "id": "lianbing_bushi",
+      "name": "練兵不息",
+      "description": "持續訓練軍隊，提升兵力質量和數量。",
+      "star_cost": 2,
+      "category": "軍事技能",
+      "rarity": "rare",
+      "effects": {
+        "統治": 6,
+        "武力": 4
+      },
+      "passive_effects": {
+        "troop_quality": 40,
+        "training_efficiency": 35
+      }
+    },
+    {
+      "id": "shangu_zhice",
+      "name": "善姑之策",
+      "description": "女性特有的智慧和直覺，提升政治和智力。",
+      "star_cost": 1,
+      "category": "智略技能",
+      "rarity": "common",
+      "effects": {
+        "智力": 4,
+        "政治": 3,
+        "魅力": 2
+      },
+      "passive_effects": {
+        "intuition_bonus": 25,
+        "social_network": 30
+      }
+    },
+    {
+      "id": "xiongba_tianxia",
+      "name": "雄霸天下",
+      "description": "霸主之氣，全屬性小幅提升，威嚇敵人。",
+      "star_cost": 3,
+      "category": "霸主技能",
+      "rarity": "legendary",
+      "effects": {
+        "武力": 5,
+        "智力": 4,
+        "統治": 6,
+        "政治": 4,
+        "魅力": 5,
+        "天命": 6
+      },
+      "battle_effects": {
+        "intimidation": 30,
+        "leadership_aura": 25
+      }
+    },
+    {
+      "id": "qingqi_tujin",
+      "name": "輕騎突進",
+      "description": "騎兵戰術專家，機動性和衝擊力提升。",
+      "star_cost": 1,
+      "category": "戰術技能",
+      "rarity": "common",
+      "effects": {
+        "武力": 4,
+        "統治": 2
+      },
+      "battle_effects": {
+        "cavalry_bonus": 45,
+        "mobility": 30
+      }
+    },
+    {
+      "id": "zhengming_zhengyan",
+      "name": "正名正言",
+      "description": "名正言順，政治和魅力提升，降低治理成本。",
+      "star_cost": 1,
+      "category": "政治技能",
+      "rarity": "common",
+      "effects": {
+        "政治": 5,
+        "魅力": 3
+      },
+      "passive_effects": {
+        "legitimacy": 35,
+        "governing_cost": -25
+      }
+    },
+    {
+      "id": "sheji_qibing",
+      "name": "設計奇兵",
+      "description": "精通機關術，製造攻城器械和陷阱。",
+      "star_cost": 2,
+      "category": "工程技能",
+      "rarity": "rare",
+      "effects": {
+        "智力": 7,
+        "統治": 3
+      },
+      "battle_effects": {
+        "siege_weapons": 50,
+        "trap_mastery": 25
+      }
+    },
+    {
+      "id": "yiliao_jiubing",
+      "name": "醫療救兵",
+      "description": "醫術高明，減少戰鬥傷亡，提升軍隊恢復速度。",
+      "star_cost": 1,
+      "category": "醫療技能",
+      "rarity": "common",
+      "effects": {
+        "智力": 3,
+        "統治": 3,
+        "魅力": 2
+      },
+      "passive_effects": {
+        "casualty_reduction": 30,
+        "recovery_speed": 50
+      }
+    },
+    {
+      "id": "shangdao_zhihui",
+      "name": "商道智慧",
+      "description": "精通商業，增加貿易收入和外交選項。",
+      "star_cost": 1,
+      "category": "經濟技能",
+      "rarity": "common",
+      "effects": {
+        "政治": 3,
+        "智力": 2,
+        "魅力": 3
+      },
+      "passive_effects": {
+        "trade_income": 40,
+        "diplomatic_options": 20
+      }
+    },
+    {
+      "id": "bingfa_shenshi",
+      "name": "兵法神師",
+      "description": "深諳兵法，戰鬥中能發揮各種戰術優勢。",
+      "star_cost": 3,
+      "category": "戰術技能",
+      "rarity": "legendary",
+      "effects": {
+        "武力": 6,
+        "智力": 8,
+        "統治": 6
+      },
+      "battle_effects": {
+        "tactical_mastery": 35,
+        "formation_bonus": 30,
+        "counter_strategy": 25
+      }
+    },
+    {
+      "id": "kuanglan_zhili",
+      "name": "狂瀾之力",
+      "description": "在絕境中爆發驚人戰力，血量越低攻擊力越高。",
+      "star_cost": 2,
+      "category": "戰鬥技能",
+      "rarity": "rare",
+      "effects": {
+        "武力": 6,
+        "統治": 4
+      },
+      "battle_effects": {
+        "berserker_mode": 60,
+        "desperation_bonus": 40
+      }
+    },
+    {
+      "id": "renhe_zhili",
+      "name": "人和之力",
+      "description": "善於團結人心，提升部下戰鬥力和忠誠度。",
+      "star_cost": 2,
+      "category": "統御技能",
+      "rarity": "rare",
+      "effects": {
+        "統治": 7,
+        "魅力": 5
+      },
+      "passive_effects": {
+        "unit_morale": 40,
+        "teamwork_bonus": 30
+      }
+    },
+    {
+      "id": "qimen_dunjia",
+      "name": "奇門遁甲",
+      "description": "神秘的道術，大幅增加天命和智力。",
+      "star_cost": 3,
+      "category": "神秘技能",
+      "rarity": "legendary",
+      "effects": {
+        "智力": 7,
+        "天命": 8,
+        "魅力": 3
+      },
+      "passive_effects": {
+        "fortune_manipulation": 50,
+        "mystic_events": 40
+      }
+    },
+    {
+      "id": "shuilu_bingfa",
+      "name": "水陸兵法",
+      "description": "水陸兩用戰術，在各種地形都有優勢。",
+      "star_cost": 2,
+      "category": "戰術技能",
+      "rarity": "rare",
+      "effects": {
+        "武力": 5,
+        "智力": 4,
+        "統治": 3
+      },
+      "battle_effects": {
+        "terrain_adaptation": 40,
+        "amphibious_warfare": 35
+      }
+    },
+    {
+      "id": "minsheng_weiben",
+      "name": "民生為本",
+      "description": "重視民生，城池發展速度和穩定性提升。",
+      "star_cost": 1,
+      "category": "治理技能",
+      "rarity": "common",
+      "effects": {
+        "政治": 5,
+        "魅力": 3
+      },
+      "passive_effects": {
+        "city_development": 45,
+        "rebellion_resistance": 35
+      }
+    },
+    {
+      "id": "qianli_qixing",
+      "name": "千里奇襲",
+      "description": "長距離奇襲專家，可攻擊非相鄰城池。",
+      "star_cost": 2,
+      "category": "特殊技能",
+      "rarity": "rare",
+      "effects": {
+        "武力": 4,
+        "統治": 3,
+        "智力": 4
+      },
+      "battle_effects": {
+        "extended_range": true,
+        "surprise_bonus": 50
+      }
+    },
+    {
+      "id": "wenwu_shuangquan",
+      "name": "文武雙全",
+      "description": "文武兼備的全才，武力和智力平衡發展。",
+      "star_cost": 2,
+      "category": "均衡技能",
+      "rarity": "rare",
+      "effects": {
+        "武力": 5,
+        "智力": 5,
+        "政治": 3,
+        "魅力": 2
+      },
+      "passive_effects": {
+        "versatility": 25,
+        "skill_synergy": 20
+      }
+    },
+    {
+      "id": "tiandi_tongchou",
+      "name": "天地同愁",
+      "description": "悲天憫人，在逆境中獲得額外力量。",
+      "star_cost": 1,
+      "category": "精神技能",
+      "rarity": "common",
+      "effects": {
+        "魅力": 4,
+        "天命": 3,
+        "政治": 2
+      },
+      "passive_effects": {
+        "adversity_bonus": 35,
+        "humanitarian_events": 30
+      }
+    },
+    {
+      "id": "jingji_touzi",
+      "name": "經濟投資",
+      "description": "善於投資理財，金錢增長速度大幅提升。",
+      "star_cost": 1,
+      "category": "經濟技能",
+      "rarity": "common",
+      "effects": {
+        "政治": 4,
+        "智力": 3
+      },
+      "passive_effects": {
+        "investment_return": 60,
+        "economic_growth": 40
+      }
+    },
+    {
+      "id": "longmen_feiyue",
+      "name": "龍門飛躍",
+      "description": "突破自我極限，所有屬性獲得成長加成。",
+      "star_cost": 3,
+      "category": "成長技能",
+      "rarity": "legendary",
+      "effects": {
+        "武力": 3,
+        "智力": 3,
+        "統治": 3,
+        "政治": 3,
+        "魅力": 3,
+        "天命": 5
+      },
+      "passive_effects": {
+        "exp_multiplier": 50,
+        "breakthrough_chance": 25
+      }
+    },
+    {
+      "id": "jiangshan_sheji",
+      "name": "江山社稷",
+      "description": "以天下為己任，統治和政治大幅提升。",
+      "star_cost": 2,
+      "category": "治國技能",
+      "rarity": "rare",
+      "effects": {
+        "統治": 7,
+        "政治": 6,
+        "天命": 2
+      },
+      "passive_effects": {
+        "empire_management": 40,
+        "grand_strategy": 30
+      }
+    },
+    {
+      "id": "xunlei_budong",
+      "name": "迅雷不動",
+      "description": "快如閃電的攻擊速度，先手機率大幅提升。",
+      "star_cost": 1,
+      "category": "速度技能",
+      "rarity": "common",
+      "effects": {
+        "武力": 3,
+        "智力": 2
+      },
+      "battle_effects": {
+        "initiative_bonus": 60,
+        "speed_advantage": 40
+      }
+    },
+    {
+      "id": "tiancheng_zhanguo",
+      "name": "天成戰國",
+      "description": "天生的戰國霸主，在大規模戰爭中發揮極強實力。",
+      "star_cost": 3,
+      "category": "霸主技能",
+      "rarity": "legendary",
+      "effects": {
+        "武力": 7,
+        "智力": 5,
+        "統治": 8,
+        "政治": 5,
+        "魅力": 6,
+        "天命": 4
+      },
+      "battle_effects": {
+        "large_scale_warfare": 50,
+        "empire_builder": 35
+      }
+    },
+    {
+      "id": "zhanlue_dashi",
+      "name": "戰略大師",
+      "description": "戰略規劃專家，長期發展獲得巨大優勢。",
+      "star_cost": 2,
+      "category": "戰略技能",
+      "rarity": "rare",
+      "effects": {
+        "智力": 8,
+        "政治": 4,
+        "統治": 3
+      },
+      "passive_effects": {
+        "long_term_planning": 45,
+        "strategic_resources": 30
+      }
+    },
+    {
+      "id": "yingxiong_bengqi",
+      "name": "英雄本氣",
+      "description": "英雄氣概，在關鍵時刻爆發驚人潛力。",
+      "star_cost": 2,
+      "category": "英雄技能",
+      "rarity": "rare",
+      "effects": {
+        "武力": 6,
+        "魅力": 5,
+        "天命": 4
+      },
+      "battle_effects": {
+        "heroic_moment": 55,
+        "inspiration_aura": 30
+      }
+    },
+    {
+      "id": "wuzheng_erren",
+      "name": "無爭而仁",
+      "description": "以德服人，減少戰爭損失，提升和平統一機會。",
+      "star_cost": 1,
+      "category": "和平技能",
+      "rarity": "common",
+      "effects": {
+        "魅力": 5,
+        "政治": 4,
+        "天命": 3
+      },
+      "passive_effects": {
+        "peaceful_annexation": 40,
+        "diplomatic_victory": 25
+      }
+    }
+  ]
+}

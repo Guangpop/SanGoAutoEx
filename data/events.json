@@ -1,0 +1,888 @@
+{
+  "events": [
+    {
+      "id": "tianjiang_shenbing",
+      "name": "天降神兵",
+      "description": "天空突然降下一道神光，一件傳說武器憑空出現。",
+      "category": "positive",
+      "base_probability": 3,
+      "tianming_modifier": 2.5,
+      "requirements": {
+        "min_level": 1,
+        "max_level": 10
+      },
+      "effects": {
+        "reward_type": "legendary_equipment",
+        "reward_quantity": 1
+      },
+      "flavor_text": "此乃天命所歸，神兵助陣！"
+    },
+    {
+      "id": "xiancai_touben",
+      "name": "賢才投奔",
+      "description": "一位隱居的賢才聽聞您的仁德，前來投靠。",
+      "category": "positive",
+      "base_probability": 8,
+      "tianming_modifier": 1.8,
+      "requirements": {
+        "min_charisma": 60
+      },
+      "effects": {
+        "reward_type": "random_general",
+        "reward_rarity": "rare_or_epic"
+      },
+      "flavor_text": "賢才慕名而來，如虎添翼！"
+    },
+    {
+      "id": "zaoshou_gongji",
+      "name": "遭受攻擊",
+      "description": "敵軍趁虛而入，對您的城池發動突襲。",
+      "category": "negative",
+      "base_probability": 12,
+      "tianming_modifier": -1.5,
+      "requirements": {
+        "min_cities": 2
+      },
+      "effects": {
+        "effect_type": "lose_random_city",
+        "success_resistance": "politics_based"
+      },
+      "flavor_text": "兵凶戰危，須防不測！"
+    },
+    {
+      "id": "huangjin_qiyi",
+      "name": "黃巾起義",
+      "description": "黃巾餘黨在境內煽動起義，社會動盪不安。",
+      "category": "negative",
+      "base_probability": 10,
+      "tianming_modifier": -1.2,
+      "requirements": {
+        "min_cities": 3
+      },
+      "effects": {
+        "effect_type": "spawn_enemy_army",
+        "enemy_strength": "medium",
+        "duration": 3
+      },
+      "flavor_text": "蒼天已死，黃天當立！亂世再起！"
+    },
+    {
+      "id": "tianxia_taiping",
+      "name": "天下太平",
+      "description": "您的仁政感化民心，轄區內太平盛世。",
+      "category": "positive",
+      "base_probability": 6,
+      "tianming_modifier": 1.6,
+      "requirements": {
+        "min_politics": 80,
+        "min_cities": 4
+      },
+      "effects": {
+        "effect_type": "resource_bonus",
+        "gold_bonus": 500,
+        "population_growth": 20
+      },
+      "flavor_text": "仁者無敵，德澤天下！"
+    },
+    {
+      "id": "qishui_manyan",
+      "name": "瘟疫蔓延",
+      "description": "境內爆發瘟疫，人口銳減，軍心不穩。",
+      "category": "negative",
+      "base_probability": 8,
+      "tianming_modifier": -1.3,
+      "requirements": {
+        "season": ["summer", "autumn"]
+      },
+      "effects": {
+        "effect_type": "population_loss",
+        "troop_reduction": 15,
+        "economic_impact": -200
+      },
+      "flavor_text": "瘟神作祟，生靈塗炭。"
+    },
+    {
+      "id": "shanglu_fanrong",
+      "name": "商路繁榮",
+      "description": "新的貿易路線開通，商業蓬勃發展。",
+      "category": "positive",
+      "base_probability": 12,
+      "tianming_modifier": 1.2,
+      "requirements": {
+        "min_politics": 50
+      },
+      "effects": {
+        "effect_type": "economic_boost",
+        "gold_income": 150,
+        "trade_relations": 10
+      },
+      "flavor_text": "商旅不絕，府庫充盈。"
+    },
+    {
+      "id": "dixian_baozai",
+      "name": "地陷寶災",
+      "description": "地震過後，意外發現古代寶藏。",
+      "category": "positive",
+      "base_probability": 5,
+      "tianming_modifier": 2.0,
+      "requirements": {
+        "min_level": 3
+      },
+      "effects": {
+        "effect_type": "treasure_found",
+        "gold_reward": 800,
+        "equipment_chance": 30
+      },
+      "flavor_text": "天災之後必有天福！"
+    },
+    {
+      "id": "dixian_zaihuan",
+      "name": "地震災患",
+      "description": "大地震襲擊轄區，城池受損，民不聊生。",
+      "category": "negative",
+      "base_probability": 7,
+      "tianming_modifier": -1.8,
+      "requirements": {},
+      "effects": {
+        "effect_type": "infrastructure_damage",
+        "repair_cost": 400,
+        "population_loss": 10
+      },
+      "flavor_text": "天地震怒，民生艱難。"
+    },
+    {
+      "id": "shenmi_daoshi",
+      "name": "神秘道士",
+      "description": "一位神秘道士出現，傳授您奇門遁甲之術。",
+      "category": "positive",
+      "base_probability": 4,
+      "tianming_modifier": 3.0,
+      "requirements": {
+        "min_intelligence": 70
+      },
+      "effects": {
+        "effect_type": "ability_boost",
+        "intelligence": 5,
+        "tianming": 8
+      },
+      "flavor_text": "道法自然，玄機無窮！"
+    },
+    {
+      "id": "junliang_duanque",
+      "name": "軍糧短缺",
+      "description": "連年戰亂導致糧食短缺，軍心浮動。",
+      "category": "negative",
+      "base_probability": 15,
+      "tianming_modifier": -1.0,
+      "requirements": {
+        "continuous_battles": 3
+      },
+      "effects": {
+        "effect_type": "morale_impact",
+        "troop_morale": -20,
+        "desertion_rate": 5
+      },
+      "flavor_text": "兵馬未動，糧草先行。此乃用兵大忌！"
+    },
+    {
+      "id": "fengdiao_yushun",
+      "name": "風調雨順",
+      "description": "今年風調雨順，五穀豐登，百姓安樂。",
+      "category": "positive",
+      "base_probability": 18,
+      "tianming_modifier": 1.4,
+      "requirements": {},
+      "effects": {
+        "effect_type": "agricultural_bonus",
+        "population_growth": 15,
+        "tax_income": 200
+      },
+      "flavor_text": "風調雨順，國泰民安。"
+    },
+    {
+      "id": "waijiao_shichen",
+      "name": "外交使臣",
+      "description": "鄰國派遣使臣前來，提議結盟共抗強敵。",
+      "category": "neutral",
+      "base_probability": 10,
+      "tianming_modifier": 1.1,
+      "requirements": {
+        "min_charisma": 60,
+        "enemy_pressure": true
+      },
+      "choices": [
+        {
+          "option": "接受結盟",
+          "effects": {
+            "diplomatic_bonus": 20,
+            "military_support": "temporary"
+          }
+        },
+        {
+          "option": "婉拒提議",
+          "effects": {
+            "independence_bonus": 10,
+            "relations_neutral": true
+          }
+        }
+      ],
+      "flavor_text": "遠交近攻，縱橫捭闔之道。"
+    },
+    {
+      "id": "mingjiang_tiaoxi",
+      "name": "名將挑戰",
+      "description": "一位江湖名將前來挑戰，以武會友。",
+      "category": "neutral",
+      "base_probability": 8,
+      "tianming_modifier": 1.2,
+      "requirements": {
+        "min_martial": 70
+      },
+      "choices": [
+        {
+          "option": "接受挑戰",
+          "success_condition": "martial_based",
+          "success_effects": {
+            "reputation": 15,
+            "martial": 3
+          },
+          "failure_effects": {
+            "reputation": -5,
+            "wound": "minor"
+          }
+        },
+        {
+          "option": "謙讓避戰",
+          "effects": {
+            "reputation": -2,
+            "peaceful_bonus": 5
+          }
+        }
+      ],
+      "flavor_text": "武者之道，切磋為本。"
+    },
+    {
+      "id": "guwu_faxian",
+      "name": "古物發現",
+      "description": "考古發現珍貴古物，引起各方關注。",
+      "category": "neutral",
+      "base_probability": 6,
+      "tianming_modifier": 1.8,
+      "requirements": {},
+      "choices": [
+        {
+          "option": "公開展示",
+          "effects": {
+            "culture_bonus": 20,
+            "reputation": 10,
+            "visitor_income": 100
+          }
+        },
+        {
+          "option": "秘密收藏",
+          "effects": {
+            "intelligence": 2,
+            "secret_bonus": 15
+          }
+        },
+        {
+          "option": "賣給商人",
+          "effects": {
+            "gold": 600,
+            "reputation": -3
+          }
+        }
+      ],
+      "flavor_text": "古物有靈，見證歷史滄桑。"
+    },
+    {
+      "id": "shijia_hongyan",
+      "name": "世家鴻宴",
+      "description": "當地世家大族舉辦盛宴，邀請您參加。",
+      "category": "neutral",
+      "base_probability": 12,
+      "tianming_modifier": 1.0,
+      "requirements": {
+        "min_politics": 50
+      },
+      "choices": [
+        {
+          "option": "盛裝出席",
+          "effects": {
+            "local_support": 15,
+            "gold": -100,
+            "charisma": 2
+          }
+        },
+        {
+          "option": "簡樸出席",
+          "effects": {
+            "humble_reputation": 10,
+            "gold": -50
+          }
+        },
+        {
+          "option": "派代表參加",
+          "effects": {
+            "diplomatic_skill": 5,
+            "personal_time": "saved"
+          }
+        }
+      ],
+      "flavor_text": "禮尚往來，人情世故。"
+    },
+    {
+      "id": "liangshi_qingkuang",
+      "name": "糧食緊況",
+      "description": "境內糧食緊缺，百姓嗷嗷待哺。",
+      "category": "negative",
+      "base_probability": 14,
+      "tianming_modifier": -1.1,
+      "requirements": {},
+      "effects": {
+        "effect_type": "food_crisis",
+        "population_unrest": 20,
+        "tax_efficiency": -15
+      },
+      "flavor_text": "民以食為天，此乃生死攸關！"
+    },
+    {
+      "id": "xingshang_tuanque",
+      "name": "商團求援",
+      "description": "商團遭遇盜匪，請求您派兵護送。",
+      "category": "neutral",
+      "base_probability": 16,
+      "tianming_modifier": 0.8,
+      "requirements": {},
+      "choices": [
+        {
+          "option": "派兵護送",
+          "effects": {
+            "trade_relations": 20,
+            "gold_reward": 200,
+            "troop_risk": "low"
+          }
+        },
+        {
+          "option": "建議改道",
+          "effects": {
+            "diplomatic_bonus": 5,
+            "trade_relations": -5
+          }
+        },
+        {
+          "option": "置之不理",
+          "effects": {
+            "reputation": -8,
+            "trade_income": -50
+          }
+        }
+      ],
+      "flavor_text": "商旅安全，貿易興隆之基。"
+    },
+    {
+      "id": "mingyi_zhenbing",
+      "name": "名醫診病",
+      "description": "著名醫師路過，願為您的部下療傷。",
+      "category": "positive",
+      "base_probability": 9,
+      "tianming_modifier": 1.3,
+      "requirements": {
+        "injured_generals": true
+      },
+      "effects": {
+        "effect_type": "healing",
+        "general_recovery": "full",
+        "troop_health": 20
+      },
+      "flavor_text": "神醫妙手，起死回生！"
+    },
+    {
+      "id": "qingbao_wangluo",
+      "name": "情報網絡",
+      "description": "建立起完善的情報網絡，掌握敵軍動向。",
+      "category": "positive",
+      "base_probability": 7,
+      "tianming_modifier": 1.2,
+      "requirements": {
+        "min_intelligence": 80
+      },
+      "effects": {
+        "effect_type": "intelligence_network",
+        "battle_advantage": 15,
+        "event_preview": true
+      },
+      "flavor_text": "知己知彼，百戰不殆。"
+    },
+    {
+      "id": "ziran_zaihai",
+      "name": "自然災害",
+      "description": "洪水、乾旱等自然災害襲擊境內。",
+      "category": "negative",
+      "base_probability": 11,
+      "tianming_modifier": -1.4,
+      "requirements": {},
+      "effects": {
+        "effect_type": "natural_disaster",
+        "infrastructure_damage": 25,
+        "refugee_crisis": true
+      },
+      "flavor_text": "天災無情，民生多艱。"
+    },
+    {
+      "id": "wenhua_jiaoliu",
+      "name": "文化交流",
+      "description": "與其他文化進行交流，學習新的知識。",
+      "category": "positive",
+      "base_probability": 8,
+      "tianming_modifier": 1.1,
+      "requirements": {
+        "min_charisma": 60
+      },
+      "effects": {
+        "effect_type": "cultural_exchange",
+        "intelligence": 3,
+        "politics": 2,
+        "new_technologies": 1
+      },
+      "flavor_text": "文化交融，智慧共進。"
+    },
+    {
+      "id": "jundui_bingbian",
+      "name": "軍隊兵變",
+      "description": "部分軍隊因不滿而發生兵變。",
+      "category": "negative",
+      "base_probability": 6,
+      "tianming_modifier": -2.0,
+      "requirements": {
+        "low_morale": true,
+        "min_troops": 1000
+      },
+      "effects": {
+        "effect_type": "military_revolt",
+        "troop_loss": 20,
+        "leadership_challenge": true
+      },
+      "flavor_text": "兵變如火，須速平息！"
+    },
+    {
+      "id": "xiuyang_shenxi",
+      "name": "修養身息",
+      "description": "在繁忙政務中找到片刻寧靜，修養身心。",
+      "category": "positive",
+      "base_probability": 15,
+      "tianming_modifier": 1.0,
+      "requirements": {},
+      "effects": {
+        "effect_type": "rest_recovery",
+        "health_bonus": 10,
+        "stress_relief": 15,
+        "wisdom": 1
+      },
+      "flavor_text": "勞逸結合，養生之道。"
+    },
+    {
+      "id": "falv_gaige",
+      "name": "法律改革",
+      "description": "推行新的法律制度，整頓社會秩序。",
+      "category": "neutral",
+      "base_probability": 5,
+      "tianming_modifier": 0.9,
+      "requirements": {
+        "min_politics": 85
+      },
+      "choices": [
+        {
+          "option": "嚴刑峻法",
+          "effects": {
+            "crime_reduction": 30,
+            "popular_support": -10,
+            "order_bonus": 20
+          }
+        },
+        {
+          "option": "仁政寬宥",
+          "effects": {
+            "popular_support": 20,
+            "crime_reduction": 10,
+            "charisma": 3
+          }
+        }
+      ],
+      "flavor_text": "法者，治國之器也。"
+    },
+    {
+      "id": "keji_tupo",
+      "name": "科技突破",
+      "description": "工匠們在某項技術上取得重大突破。",
+      "category": "positive",
+      "base_probability": 4,
+      "tianming_modifier": 1.6,
+      "requirements": {
+        "min_intelligence": 75
+      },
+      "effects": {
+        "effect_type": "technology_advance",
+        "production_efficiency": 25,
+        "military_upgrade": "available"
+      },
+      "flavor_text": "科技興邦，創新制勝！"
+    },
+    {
+      "id": "liukou_qinrao",
+      "name": "流寇侵擾",
+      "description": "流竄的盜匪侵擾境內，搶劫村莊。",
+      "category": "negative",
+      "base_probability": 18,
+      "tianming_modifier": -0.8,
+      "requirements": {},
+      "effects": {
+        "effect_type": "bandit_raid",
+        "gold_loss": 150,
+        "population_fear": 10
+      },
+      "flavor_text": "流寇如蝗，民不聊生。"
+    },
+    {
+      "id": "youxia_zhiyi",
+      "name": "遊俠之義",
+      "description": "江湖遊俠主動協助維護治安。",
+      "category": "positive",
+      "base_probability": 10,
+      "tianming_modifier": 1.2,
+      "requirements": {
+        "min_charisma": 70
+      },
+      "effects": {
+        "effect_type": "vigilante_help",
+        "crime_reduction": 20,
+        "reputation": 8
+      },
+      "flavor_text": "俠之大者，為國為民。"
+    },
+    {
+      "id": "caizheng_kuikong",
+      "name": "財政虧空",
+      "description": "過度開支導致財政出現嚴重虧空。",
+      "category": "negative",
+      "base_probability": 8,
+      "tianming_modifier": -1.2,
+      "requirements": {
+        "high_spending": true
+      },
+      "effects": {
+        "effect_type": "financial_crisis",
+        "gold": -500,
+        "tax_pressure": 15
+      },
+      "flavor_text": "入不敷出，財政告急！"
+    },
+    {
+      "id": "nongye_fengdeng",
+      "name": "農業豐登",
+      "description": "農業技術改進帶來大豐收。",
+      "category": "positive",
+      "base_probability": 12,
+      "tianming_modifier": 1.3,
+      "requirements": {},
+      "effects": {
+        "effect_type": "harvest_bonus",
+        "food_surplus": 30,
+        "population_happiness": 15
+      },
+      "flavor_text": "五穀豐登，倉廩實而知禮節。"
+    },
+    {
+      "id": "jingluo_maiman",
+      "name": "經絡買賣",
+      "description": "建立新的貿易經絡，擴大商業網絡。",
+      "category": "positive",
+      "base_probability": 9,
+      "tianming_modifier": 1.1,
+      "requirements": {
+        "min_politics": 60
+      },
+      "effects": {
+        "effect_type": "trade_expansion",
+        "trade_income": 180,
+        "diplomatic_connections": 5
+      },
+      "flavor_text": "商通四海，財源廣進。"
+    },
+    {
+      "id": "renxin_sishan",
+      "name": "人心思善",
+      "description": "您的德政感化民心，民風向善。",
+      "category": "positive",
+      "base_probability": 7,
+      "tianming_modifier": 1.5,
+      "requirements": {
+        "min_charisma": 80,
+        "good_governance": true
+      },
+      "effects": {
+        "effect_type": "moral_improvement",
+        "crime_reduction": 25,
+        "social_harmony": 20
+      },
+      "flavor_text": "德化天下，人心向善。"
+    },
+    {
+      "id": "qihou_yichang",
+      "name": "氣候異常",
+      "description": "反常的氣候變化影響農業生產。",
+      "category": "negative",
+      "base_probability": 13,
+      "tianming_modifier": -1.0,
+      "requirements": {},
+      "effects": {
+        "effect_type": "climate_change",
+        "agricultural_penalty": 20,
+        "health_issues": 10
+      },
+      "flavor_text": "天時不測，農事受阻。"
+    },
+    {
+      "id": "xuezhe_laifang",
+      "name": "學者來訪",
+      "description": "著名學者前來拜訪，分享學問見解。",
+      "category": "positive",
+      "base_probability": 6,
+      "tianming_modifier": 1.2,
+      "requirements": {
+        "min_intelligence": 70
+      },
+      "effects": {
+        "effect_type": "scholarly_visit",
+        "intelligence": 4,
+        "culture_bonus": 15
+      },
+      "flavor_text": "博學之士來訪，如獲至寶。"
+    },
+    {
+      "id": "jingji_pochan",
+      "name": "經濟破產",
+      "description": "經濟政策失誤導致嚴重經濟危機。",
+      "category": "negative",
+      "base_probability": 3,
+      "tianming_modifier": -2.5,
+      "requirements": {
+        "poor_economic_policy": true
+      },
+      "effects": {
+        "effect_type": "economic_collapse",
+        "gold": -800,
+        "tax_income": -50,
+        "unrest": 25
+      },
+      "flavor_text": "經濟崩潰，民不聊生！"
+    },
+    {
+      "id": "junshi_yanxi",
+      "name": "軍事演習",
+      "description": "組織大規模軍事演習，提升軍隊素質。",
+      "category": "positive",
+      "base_probability": 8,
+      "tianming_modifier": 1.0,
+      "requirements": {
+        "min_leadership": 70,
+        "min_troops": 500
+      },
+      "effects": {
+        "effect_type": "military_training",
+        "troop_quality": 15,
+        "battle_readiness": 20
+      },
+      "flavor_text": "練兵千日，用兵一時。"
+    },
+    {
+      "id": "wenyi_fuxing",
+      "name": "文藝復興",
+      "description": "境內興起文藝復興運動，文化繁榮。",
+      "category": "positive",
+      "base_probability": 4,
+      "tianming_modifier": 1.4,
+      "requirements": {
+        "min_charisma": 75,
+        "peaceful_period": 5
+      },
+      "effects": {
+        "effect_type": "cultural_renaissance",
+        "culture_bonus": 30,
+        "tourism_income": 100
+      },
+      "flavor_text": "文運昌盛，百花齊放。"
+    },
+    {
+      "id": "shuizai_fanlan",
+      "name": "水災氾濫",
+      "description": "連日暴雨導致河流氾濫，淹沒農田。",
+      "category": "negative",
+      "base_probability": 10,
+      "tianming_modifier": -1.3,
+      "requirements": {},
+      "effects": {
+        "effect_type": "flood_disaster",
+        "agricultural_loss": 30,
+        "infrastructure_damage": 15
+      },
+      "flavor_text": "洪水滔天，農田盡沒。"
+    },
+    {
+      "id": "lingxiu_jiaoyi",
+      "name": "領袖交誼",
+      "description": "與其他領袖建立私人友誼。",
+      "category": "positive",
+      "base_probability": 5,
+      "tianming_modifier": 1.3,
+      "requirements": {
+        "min_charisma": 85
+      },
+      "effects": {
+        "effect_type": "diplomatic_friendship",
+        "alliance_chance": 25,
+        "trade_benefits": 15
+      },
+      "flavor_text": "領袖之交，情同手足。"
+    },
+    {
+      "id": "jishu_shizong",
+      "name": "技術失蹤",
+      "description": "重要的技術資料意外遺失。",
+      "category": "negative",
+      "base_probability": 4,
+      "tianming_modifier": -1.8,
+      "requirements": {
+        "advanced_technology": true
+      },
+      "effects": {
+        "effect_type": "technology_loss",
+        "production_penalty": 15,
+        "research_setback": 20
+      },
+      "flavor_text": "技術失傳，進步受阻。"
+    },
+    {
+      "id": "yingxiong_jiuhui",
+      "name": "英雄聚會",
+      "description": "各路英雄齊聚一堂，論劍談道。",
+      "category": "positive",
+      "base_probability": 3,
+      "tianming_modifier": 2.2,
+      "requirements": {
+        "min_reputation": 80
+      },
+      "effects": {
+        "effect_type": "hero_gathering",
+        "recruitment_chance": 40,
+        "martial": 2,
+        "charisma": 3
+      },
+      "flavor_text": "英雄聚會，風雲際會！"
+    },
+    {
+      "id": "mimi_tongdao",
+      "name": "秘密通道",
+      "description": "發現連接各城池的秘密通道。",
+      "category": "positive",
+      "base_probability": 2,
+      "tianming_modifier": 2.5,
+      "requirements": {
+        "min_cities": 5
+      },
+      "effects": {
+        "effect_type": "secret_passage",
+        "movement_bonus": 50,
+        "strategic_advantage": 25
+      },
+      "flavor_text": "秘道縱橫，兵貴神速！"
+    },
+    {
+      "id": "tiandi_ganzhi",
+      "name": "天地感知",
+      "description": "您感受到天地間的神秘力量。",
+      "category": "mystical",
+      "base_probability": 1,
+      "tianming_modifier": 4.0,
+      "requirements": {
+        "min_tianming": 90
+      },
+      "effects": {
+        "effect_type": "cosmic_awareness",
+        "tianming": 10,
+        "all_attributes": 2,
+        "prophecy_ability": true
+      },
+      "flavor_text": "天人合一，洞察天機！"
+    },
+    {
+      "id": "xingchen_zhuli",
+      "name": "星辰助力",
+      "description": "星象顯示吉兆，諸事皆宜。",
+      "category": "mystical",
+      "base_probability": 2,
+      "tianming_modifier": 3.5,
+      "requirements": {
+        "min_tianming": 80
+      },
+      "effects": {
+        "effect_type": "stellar_blessing",
+        "luck_bonus": 30,
+        "success_rate": 20
+      },
+      "flavor_text": "星辰護佑，萬事如意！"
+    },
+    {
+      "id": "tianyi_kaishi",
+      "name": "天意開示",
+      "description": "神秘的天意為您指明方向。",
+      "category": "mystical",
+      "base_probability": 1,
+      "tianming_modifier": 5.0,
+      "requirements": {
+        "min_tianming": 95
+      },
+      "effects": {
+        "effect_type": "divine_guidance",
+        "perfect_strategy": true,
+        "tianming": 5
+      },
+      "flavor_text": "天意昭然，前路光明！"
+    },
+    {
+      "id": "shanren_zhidao",
+      "name": "山人指道",
+      "description": "隱居山人為您指點迷津。",
+      "category": "mystical",
+      "base_probability": 3,
+      "tianming_modifier": 2.8,
+      "requirements": {
+        "min_intelligence": 85
+      },
+      "effects": {
+        "effect_type": "sage_guidance",
+        "wisdom": 5,
+        "strategic_insight": 25
+      },
+      "flavor_text": "高人指點，茅塞頓開！"
+    },
+    {
+      "id": "longmai_fuxing",
+      "name": "龍脈復興",
+      "description": "古老龍脈重新甦醒，帶來神秘力量。",
+      "category": "mystical",
+      "base_probability": 1,
+      "tianming_modifier": 6.0,
+      "requirements": {
+        "ancient_bloodline": true,
+        "min_tianming": 85
+      },
+      "effects": {
+        "effect_type": "dragon_awakening",
+        "all_attributes": 5,
+        "legendary_aura": true
+      },
+      "flavor_text": "龍脈甦醒，真龍天子！"
+    }
+  ]
+}

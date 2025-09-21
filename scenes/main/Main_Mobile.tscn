@@ -1,0 +1,192 @@
+[gd_scene load_steps=8 format=3 uid="uid://b5a8j4wcyk3kl"]
+
+[ext_resource type="Script" path="res://scripts/ui/MainMobile.gd" id="1_8nfc5"]
+[ext_resource type="Script" path="res://scripts/ui/MapArea.gd" id="2_map_area"]
+[ext_resource type="Script" path="res://scripts/ui/GeneralsTab.gd" id="3_generals_tab"]
+[ext_resource type="Script" path="res://scripts/ui/NationTab.gd" id="4_nation_tab"]
+[ext_resource type="Theme" path="res://assets/ui/main_theme.tres" id="5_main_theme"]
+[ext_resource type="PackedScene" path="res://scenes/ui/BattleUI.tscn" id="6_battle_ui"]
+[ext_resource type="Script" path="res://scripts/ui/BattleUI.gd" id="7_battle_ui_script"]
+
+[node name="MainMobile" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("5_main_theme")
+script = ExtResource("1_8nfc5")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="TopBar" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 180)
+
+[node name="TopBarContainer" type="VBoxContainer" parent="VBoxContainer/TopBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 10.0
+offset_top = 10.0
+offset_right = -10.0
+offset_bottom = -10.0
+
+[node name="PlayerInfo" type="HBoxContainer" parent="VBoxContainer/TopBar/TopBarContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 44)
+
+[node name="Avatar" type="Label" parent="VBoxContainer/TopBar/TopBarContainer/PlayerInfo"]
+layout_mode = 2
+custom_minimum_size = Vector2(40, 40)
+theme_override_font_sizes/font_size = 24
+text = "👤"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BasicInfo" type="VBoxContainer" parent="VBoxContainer/TopBar/TopBarContainer/PlayerInfo"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="NameLevel" type="Label" parent="VBoxContainer/TopBar/TopBarContainer/PlayerInfo/BasicInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "玩家名稱 Lv.1"
+
+[node name="TurnYear" type="Label" parent="VBoxContainer/TopBar/TopBarContainer/PlayerInfo/BasicInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "回合 1 | 184年"
+
+[node name="AbilityStats" type="VBoxContainer" parent="VBoxContainer/TopBar/TopBarContainer"]
+layout_mode = 2
+
+[node name="AbilityRow1" type="HBoxContainer" parent="VBoxContainer/TopBar/TopBarContainer/AbilityStats"]
+layout_mode = 2
+
+[node name="Wuli" type="Label" parent="VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "武力: 20"
+horizontal_alignment = 1
+
+[node name="Zhili" type="Label" parent="VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "智力: 20"
+horizontal_alignment = 1
+
+[node name="Tongzhi" type="Label" parent="VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow1"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "統治: 20"
+horizontal_alignment = 1
+
+[node name="AbilityRow2" type="HBoxContainer" parent="VBoxContainer/TopBar/TopBarContainer/AbilityStats"]
+layout_mode = 2
+
+[node name="Zhengzhi" type="Label" parent="VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "政治: 20"
+horizontal_alignment = 1
+
+[node name="Meili" type="Label" parent="VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "魅力: 20"
+horizontal_alignment = 1
+
+[node name="Tianming" type="Label" parent="VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow2"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "天命: 10"
+horizontal_alignment = 1
+
+[node name="Resources" type="HBoxContainer" parent="VBoxContainer/TopBar/TopBarContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 30)
+
+[node name="Gold" type="Label" parent="VBoxContainer/TopBar/TopBarContainer/Resources"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "💰 500"
+horizontal_alignment = 1
+
+[node name="Troops" type="Label" parent="VBoxContainer/TopBar/TopBarContainer/Resources"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "⚔️ 200"
+horizontal_alignment = 1
+
+[node name="Cities" type="Label" parent="VBoxContainer/TopBar/TopBarContainer/Resources"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 16
+text = "🏰 1"
+horizontal_alignment = 1
+
+[node name="GameMainArea" type="HSplitContainer" parent="VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="MapArea" type="SubViewport" parent="VBoxContainer/GameMainArea"]
+layout_mode = 2
+
+[node name="MapRoot" type="Node2D" parent="VBoxContainer/GameMainArea/MapArea"]
+script = ExtResource("2_map_area")
+
+[node name="GameEvent" type="ScrollContainer" parent="VBoxContainer/GameMainArea"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(350, 0)
+
+[node name="EventContent" type="VBoxContainer" parent="VBoxContainer/GameMainArea/GameEvent"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BottomBar" type="Control" parent="VBoxContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+
+[node name="TabContainer" type="TabContainer" parent="VBoxContainer/BottomBar"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="武將" type="Control" parent="VBoxContainer/BottomBar/TabContainer"]
+layout_mode = 2
+script = ExtResource("3_generals_tab")
+
+[node name="武技" type="Control" parent="VBoxContainer/BottomBar/TabContainer"]
+layout_mode = 2
+
+[node name="政略" type="Control" parent="VBoxContainer/BottomBar/TabContainer"]
+layout_mode = 2
+
+[node name="國家" type="Control" parent="VBoxContainer/BottomBar/TabContainer"]
+layout_mode = 2
+script = ExtResource("4_nation_tab")
+
+[node name="裝備" type="Control" parent="VBoxContainer/BottomBar/TabContainer"]
+layout_mode = 2
+
+[node name="更多" type="Control" parent="VBoxContainer/BottomBar/TabContainer"]
+layout_mode = 2
+
+[node name="BattleUI" parent="." instance=ExtResource("6_battle_ui")]

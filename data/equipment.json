@@ -1,0 +1,868 @@
+{
+  "equipment": [
+    {
+      "id": "qinglong_yanyuedao",
+      "name": "青龍偃月刀",
+      "description": "關聖帝君的神兵利器，重八十二斤，刀鋒如龍。",
+      "category": "weapon",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "武力": 20,
+        "統治": 5,
+        "魅力": 8
+      },
+      "special_effects": {
+        "dragon_slash": 25,
+        "intimidation_aura": 15,
+        "loyalty_boost": 20
+      },
+      "historical_owner": "關羽",
+      "flavor_text": "青龍偃月，所向披靡！"
+    },
+    {
+      "id": "chituma",
+      "name": "赤兔馬",
+      "description": "人中呂布，馬中赤兔，日行千里的神駒。",
+      "category": "mount",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "武力": 8,
+        "統治": 5
+      },
+      "special_effects": {
+        "first_strike_chance": 10,
+        "movement_speed": 50,
+        "escape_bonus": 30
+      },
+      "historical_owner": "呂布",
+      "flavor_text": "千里駒，風驟雨！"
+    },
+    {
+      "id": "qinggang_jian",
+      "name": "青罡劍",
+      "description": "以青罡石鍛造的寶劍，既銳利又蘊含智慧。",
+      "category": "weapon",
+      "tier": "rare",
+      "rarity": "rare",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 3,
+        "min_gold": 800
+      },
+      "attributes": {
+        "武力": 5,
+        "智力": 10,
+        "魅力": 3
+      },
+      "special_effects": {
+        "skill_power": 15,
+        "critical_thinking": 10
+      },
+      "flavor_text": "青罡煉劍，智勇雙全。"
+    },
+    {
+      "id": "mu_jian",
+      "name": "木劍",
+      "description": "簡單的木製練習劍，初學者的選擇。",
+      "category": "weapon",
+      "tier": "common",
+      "rarity": "common",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 1,
+        "min_gold": 50
+      },
+      "attributes": {
+        "武力": 1
+      },
+      "special_effects": {},
+      "flavor_text": "千里之行，始於足下。"
+    },
+    {
+      "id": "fang_tian_hua_ji",
+      "name": "方天畫戟",
+      "description": "呂布的專屬神兵，集戟、矛、刀於一身。",
+      "category": "weapon",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "武力": 18,
+        "智力": 3,
+        "統治": 6
+      },
+      "special_effects": {
+        "weapon_mastery": 30,
+        "area_attack": 20,
+        "unstoppable_force": 25
+      },
+      "historical_owner": "呂布",
+      "flavor_text": "方天畫戟，無人能敵！"
+    },
+    {
+      "id": "zhangba_she_mao",
+      "name": "丈八蛇矛",
+      "description": "張飛的標志性武器，如毒蛇般兇猛。",
+      "category": "weapon",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "武力": 16,
+        "統治": 8,
+        "魅力": 2
+      },
+      "special_effects": {
+        "berserker_rage": 25,
+        "intimidating_roar": 20,
+        "fierce_assault": 30
+      },
+      "historical_owner": "張飛",
+      "flavor_text": "丈八蛇矛，勇冠三軍！"
+    },
+    {
+      "id": "qixing_baodao",
+      "name": "七星寶刀",
+      "description": "曹操的愛刀，刀身嵌有七顆寶石。",
+      "category": "weapon",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "武力": 12,
+        "智力": 8,
+        "政治": 10,
+        "魅力": 6
+      },
+      "special_effects": {
+        "leadership_bonus": 20,
+        "strategic_insight": 15,
+        "diplomatic_edge": 10
+      },
+      "historical_owner": "曹操",
+      "flavor_text": "七星閃耀，王者之刃！"
+    },
+    {
+      "id": "yin_long_qiang",
+      "name": "銀龍槍",
+      "description": "趙雲的長槍，如銀龍翻騰，攻守兼備。",
+      "category": "weapon",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "武力": 14,
+        "統治": 6,
+        "魅力": 8
+      },
+      "special_effects": {
+        "perfect_defense": 25,
+        "agile_strike": 20,
+        "loyalty_inspiration": 15
+      },
+      "historical_owner": "趙雲",
+      "flavor_text": "銀槍如龍，百戰百勝！"
+    },
+    {
+      "id": "qingzhi_jian",
+      "name": "青釭劍",
+      "description": "曹操的雙劍之一，削鐵如泥。",
+      "category": "weapon",
+      "tier": "epic",
+      "rarity": "epic",
+      "acquisition": "event_only",
+      "attributes": {
+        "武力": 10,
+        "智力": 6,
+        "政治": 4
+      },
+      "special_effects": {
+        "armor_penetration": 20,
+        "swift_strike": 15
+      },
+      "historical_owner": "曹操",
+      "flavor_text": "青釭利劍，鋒芒畢露。"
+    },
+    {
+      "id": "yitian_jian",
+      "name": "倚天劍",
+      "description": "曹操的雙劍之一，與青釭劍成對。",
+      "category": "weapon",
+      "tier": "epic",
+      "rarity": "epic",
+      "acquisition": "event_only",
+      "attributes": {
+        "武力": 10,
+        "智力": 6,
+        "魅力": 4
+      },
+      "special_effects": {
+        "dual_wield_bonus": 25,
+        "elegant_combat": 15
+      },
+      "historical_owner": "曹操",
+      "flavor_text": "倚天長劍，王者風範。"
+    },
+    {
+      "id": "zhuge_liang_fan",
+      "name": "諸葛亮羽扇",
+      "description": "臥龍先生的羽扇，運籌帷幄的象徵。",
+      "category": "accessory",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "智力": 15,
+        "政治": 12,
+        "魅力": 8,
+        "天命": 5
+      },
+      "special_effects": {
+        "strategic_genius": 30,
+        "weather_control": 20,
+        "advisor_bonus": 25
+      },
+      "historical_owner": "諸葛亮",
+      "flavor_text": "羽扇綸巾，運籌帷幄！"
+    },
+    {
+      "id": "longque_dao",
+      "name": "龍雀大刀",
+      "description": "關羽早期使用的重刀，威力不凡。",
+      "category": "weapon",
+      "tier": "epic",
+      "rarity": "epic",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 5,
+        "min_gold": 1200
+      },
+      "attributes": {
+        "武力": 12,
+        "統治": 4,
+        "魅力": 3
+      },
+      "special_effects": {
+        "heavy_strike": 20,
+        "intimidation": 10
+      },
+      "flavor_text": "龍雀翻飛，所向無敵。"
+    },
+    {
+      "id": "tie_ji",
+      "name": "鐵戟",
+      "description": "堅固的鐵製戟，攻守兼備的武器。",
+      "category": "weapon",
+      "tier": "rare",
+      "rarity": "rare",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 3,
+        "min_gold": 600
+      },
+      "attributes": {
+        "武力": 7,
+        "統治": 3
+      },
+      "special_effects": {
+        "versatile_combat": 15,
+        "defensive_bonus": 10
+      },
+      "flavor_text": "鐵戟在手，攻守皆宜。"
+    },
+    {
+      "id": "qingfeng_jian",
+      "name": "清風劍",
+      "description": "輕盈如風的劍，適合敏捷作戰。",
+      "category": "weapon",
+      "tier": "rare",
+      "rarity": "rare",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 2,
+        "min_gold": 400
+      },
+      "attributes": {
+        "武力": 6,
+        "魅力": 4
+      },
+      "special_effects": {
+        "speed_boost": 15,
+        "elegant_style": 10
+      },
+      "flavor_text": "清風徐來，劍影如電。"
+    },
+    {
+      "id": "jing_gang_jia",
+      "name": "精鋼甲",
+      "description": "精良的鋼製盔甲，防護力極佳。",
+      "category": "armor",
+      "tier": "rare",
+      "rarity": "rare",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 4,
+        "min_gold": 800
+      },
+      "attributes": {
+        "統治": 8,
+        "武力": 2
+      },
+      "special_effects": {
+        "damage_reduction": 20,
+        "durability": 25
+      },
+      "flavor_text": "精鋼護體，刀槍不入。"
+    },
+    {
+      "id": "bu_jia",
+      "name": "布甲",
+      "description": "簡單的布製盔甲，聊勝於無。",
+      "category": "armor",
+      "tier": "common",
+      "rarity": "common",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 1,
+        "min_gold": 30
+      },
+      "attributes": {
+        "統治": 1
+      },
+      "special_effects": {
+        "basic_protection": 5
+      },
+      "flavor_text": "有甲在身，心安一分。"
+    },
+    {
+      "id": "feiyun_ma",
+      "name": "飛雲馬",
+      "description": "行走如飛的良馬，大大提升機動性。",
+      "category": "mount",
+      "tier": "epic",
+      "rarity": "epic",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 6,
+        "min_gold": 1500
+      },
+      "attributes": {
+        "武力": 5,
+        "統治": 3,
+        "魅力": 4
+      },
+      "special_effects": {
+        "movement_bonus": 30,
+        "charge_attack": 20
+      },
+      "flavor_text": "飛雲踏月，千里奔馳。"
+    },
+    {
+      "id": "zhan_ma",
+      "name": "戰馬",
+      "description": "訓練有素的戰馬，提升戰鬥能力。",
+      "category": "mount",
+      "tier": "rare",
+      "rarity": "rare",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 3,
+        "min_gold": 500
+      },
+      "attributes": {
+        "武力": 4,
+        "統治": 2
+      },
+      "special_effects": {
+        "cavalry_bonus": 15,
+        "mobility": 20
+      },
+      "flavor_text": "戰馬嘶鳴，勇氣倍增。"
+    },
+    {
+      "id": "bing_shu",
+      "name": "兵書",
+      "description": "記載兵法戰略的典籍，提升智力。",
+      "category": "accessory",
+      "tier": "rare",
+      "rarity": "rare",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 2,
+        "min_gold": 300
+      },
+      "attributes": {
+        "智力": 6,
+        "統治": 3
+      },
+      "special_effects": {
+        "tactical_knowledge": 15,
+        "strategy_bonus": 10
+      },
+      "flavor_text": "兵書在手，謀略無窮。"
+    },
+    {
+      "id": "yu_xi",
+      "name": "玉璽",
+      "description": "象徵權威的玉璽，提升政治影響力。",
+      "category": "accessory",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "政治": 15,
+        "魅力": 10,
+        "統治": 8,
+        "天命": 5
+      },
+      "special_effects": {
+        "imperial_authority": 30,
+        "legitimacy_bonus": 25,
+        "diplomatic_power": 20
+      },
+      "flavor_text": "玉璽在握，天命歸心！"
+    },
+    {
+      "id": "hushi_fu",
+      "name": "護身符",
+      "description": "神秘的護身符，增加天命和運氣。",
+      "category": "accessory",
+      "tier": "rare",
+      "rarity": "rare",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 3,
+        "min_gold": 450
+      },
+      "attributes": {
+        "天命": 6,
+        "魅力": 2
+      },
+      "special_effects": {
+        "luck_bonus": 15,
+        "protection": 10
+      },
+      "flavor_text": "護身符在，逢凶化吉。"
+    },
+    {
+      "id": "yin_jian",
+      "name": "銀劍",
+      "description": "銀質打造的劍，比鐵劍更加鋒利。",
+      "category": "weapon",
+      "tier": "common",
+      "rarity": "common",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 2,
+        "min_gold": 150
+      },
+      "attributes": {
+        "武力": 3,
+        "魅力": 1
+      },
+      "special_effects": {
+        "silver_gleam": 5
+      },
+      "flavor_text": "銀光閃閃，小有威勢。"
+    },
+    {
+      "id": "jing_ying_dun",
+      "name": "精鋼盾",
+      "description": "堅固的精鋼盾牌，防禦力優秀。",
+      "category": "shield",
+      "tier": "rare",
+      "rarity": "rare",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 3,
+        "min_gold": 350
+      },
+      "attributes": {
+        "統治": 6,
+        "武力": 1
+      },
+      "special_effects": {
+        "block_chance": 20,
+        "defensive_stance": 15
+      },
+      "flavor_text": "盾如磐石，守護無憂。"
+    },
+    {
+      "id": "mu_dun",
+      "name": "木盾",
+      "description": "簡單的木製盾牌，基礎防護。",
+      "category": "shield",
+      "tier": "common",
+      "rarity": "common",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 1,
+        "min_gold": 40
+      },
+      "attributes": {
+        "統治": 2
+      },
+      "special_effects": {
+        "basic_block": 8
+      },
+      "flavor_text": "木盾雖輕，聊作防禦。"
+    },
+    {
+      "id": "longlin_jia",
+      "name": "龍鱗甲",
+      "description": "傳說中龍鱗製成的神甲，防護力驚人。",
+      "category": "armor",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "統治": 15,
+        "武力": 5,
+        "天命": 3
+      },
+      "special_effects": {
+        "dragon_protection": 35,
+        "magic_resistance": 25,
+        "intimidating_presence": 20
+      },
+      "flavor_text": "龍鱗護體，萬法不侵！"
+    },
+    {
+      "id": "fengshen_gong",
+      "name": "風神弓",
+      "description": "風神賜予的神弓，射程極遠。",
+      "category": "weapon",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "武力": 14,
+        "智力": 6,
+        "統治": 4
+      },
+      "special_effects": {
+        "wind_arrow": 30,
+        "long_range": 40,
+        "weather_immunity": 15
+      },
+      "flavor_text": "風神之弓，百步穿楊！"
+    },
+    {
+      "id": "shan_ying_gong",
+      "name": "山鷹弓",
+      "description": "模仿山鷹俯衝製作的弓，威力不俗。",
+      "category": "weapon",
+      "tier": "epic",
+      "rarity": "epic",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 5,
+        "min_gold": 900
+      },
+      "attributes": {
+        "武力": 9,
+        "智力": 4
+      },
+      "special_effects": {
+        "eagle_sight": 20,
+        "precise_shot": 25
+      },
+      "flavor_text": "如鷹俯衝，精準致命。"
+    },
+    {
+      "id": "tie_gong",
+      "name": "鐵弓",
+      "description": "普通的鐵製弓，適合遠程攻擊。",
+      "category": "weapon",
+      "tier": "common",
+      "rarity": "common",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 2,
+        "min_gold": 120
+      },
+      "attributes": {
+        "武力": 4,
+        "智力": 1
+      },
+      "special_effects": {
+        "ranged_attack": 10
+      },
+      "flavor_text": "鐵弓在手，遠程作戰。"
+    },
+    {
+      "id": "bing_ling_zhu",
+      "name": "冰靈珠",
+      "description": "蘊含冰系魔法的寶珠，降低敵人速度。",
+      "category": "accessory",
+      "tier": "epic",
+      "rarity": "epic",
+      "acquisition": "event_only",
+      "attributes": {
+        "智力": 8,
+        "天命": 4
+      },
+      "special_effects": {
+        "ice_magic": 25,
+        "slow_enemy": 20,
+        "cool_head": 15
+      },
+      "flavor_text": "冰靈之力，冷靜致勝。"
+    },
+    {
+      "id": "huo_yan_zhu",
+      "name": "火焰珠",
+      "description": "蘊含火系魔法的寶珠，增加攻擊威力。",
+      "category": "accessory",
+      "tier": "epic",
+      "rarity": "epic",
+      "acquisition": "event_only",
+      "attributes": {
+        "武力": 6,
+        "智力": 8
+      },
+      "special_effects": {
+        "fire_magic": 25,
+        "burning_strike": 20,
+        "passionate_spirit": 15
+      },
+      "flavor_text": "火焰之怒，燃燒一切！"
+    },
+    {
+      "id": "ying_xiong_ling",
+      "name": "英雄令",
+      "description": "英雄身份的象徵，提升魅力和威望。",
+      "category": "accessory",
+      "tier": "rare",
+      "rarity": "rare",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 4,
+        "min_gold": 600
+      },
+      "attributes": {
+        "魅力": 8,
+        "政治": 3,
+        "統治": 2
+      },
+      "special_effects": {
+        "heroic_presence": 20,
+        "recruitment_bonus": 15
+      },
+      "flavor_text": "英雄令在，天下歸心。"
+    },
+    {
+      "id": "zhi_hui_shu",
+      "name": "智慧書",
+      "description": "記載古代智慧的典籍，大幅提升智力。",
+      "category": "accessory",
+      "tier": "epic",
+      "rarity": "epic",
+      "acquisition": "event_only",
+      "attributes": {
+        "智力": 12,
+        "政治": 6,
+        "天命": 2
+      },
+      "special_effects": {
+        "ancient_wisdom": 25,
+        "learning_speed": 30,
+        "insight": 20
+      },
+      "flavor_text": "智慧如海，學而時習。"
+    },
+    {
+      "id": "jiang_jun_yin",
+      "name": "將軍印",
+      "description": "將軍的官印，象徵軍事權威。",
+      "category": "accessory",
+      "tier": "rare",
+      "rarity": "rare",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 3,
+        "min_gold": 400
+      },
+      "attributes": {
+        "統治": 7,
+        "武力": 2,
+        "政治": 3
+      },
+      "special_effects": {
+        "military_authority": 20,
+        "troop_morale": 15
+      },
+      "flavor_text": "將軍印在，軍令如山。"
+    },
+    {
+      "id": "sheng_yao_jie",
+      "name": "聲譽戒",
+      "description": "提升聲譽的神奇戒指。",
+      "category": "accessory",
+      "tier": "rare",
+      "rarity": "rare",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 2,
+        "min_gold": 350
+      },
+      "attributes": {
+        "魅力": 6,
+        "政治": 4
+      },
+      "special_effects": {
+        "reputation_boost": 20,
+        "social_influence": 15
+      },
+      "flavor_text": "聲名遠播，德澤天下。"
+    },
+    {
+      "id": "kuai_ma_bian",
+      "name": "快馬鞭",
+      "description": "驅策戰馬的精良馬鞭，提升機動性。",
+      "category": "accessory",
+      "tier": "common",
+      "rarity": "common",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 2,
+        "min_gold": 80
+      },
+      "attributes": {
+        "武力": 2,
+        "統治": 1
+      },
+      "special_effects": {
+        "speed_increase": 10,
+        "mount_synergy": 15
+      },
+      "flavor_text": "快馬加鞭，爭分奪秒。"
+    },
+    {
+      "id": "bing_fu",
+      "name": "兵符",
+      "description": "調動軍隊的兵符，提升統治力。",
+      "category": "accessory",
+      "tier": "common",
+      "rarity": "common",
+      "acquisition": "purchasable",
+      "unlock_requirement": {
+        "min_cities": 1,
+        "min_gold": 100
+      },
+      "attributes": {
+        "統治": 3,
+        "政治": 1
+      },
+      "special_effects": {
+        "troop_coordination": 10
+      },
+      "flavor_text": "兵符在手，調兵遣將。"
+    },
+    {
+      "id": "tiandi_bao_jing",
+      "name": "天地寶鏡",
+      "description": "能夠窺探天機的神奇寶鏡。",
+      "category": "accessory",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "智力": 10,
+        "天命": 12,
+        "魅力": 5
+      },
+      "special_effects": {
+        "divine_insight": 40,
+        "future_sight": 30,
+        "cosmic_awareness": 25
+      },
+      "flavor_text": "天地寶鏡，洞察乾坤！"
+    },
+    {
+      "id": "wuying_dao",
+      "name": "無影刀",
+      "description": "傳說中的無影刀，攻擊時難以察覺。",
+      "category": "weapon",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "武力": 15,
+        "智力": 5,
+        "魅力": 3
+      },
+      "special_effects": {
+        "invisible_strike": 35,
+        "surprise_attack": 30,
+        "stealth_mode": 25
+      },
+      "flavor_text": "無影無蹤，出其不意！"
+    },
+    {
+      "id": "feng_huo_lun",
+      "name": "風火輪",
+      "description": "神話中的風火輪，大幅提升移動能力。",
+      "category": "mount",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "武力": 8,
+        "智力": 6,
+        "統治": 4,
+        "天命": 6
+      },
+      "special_effects": {
+        "wind_fire_speed": 60,
+        "aerial_movement": 40,
+        "elemental_power": 25
+      },
+      "flavor_text": "風火輪轉，飛天遁地！"
+    },
+    {
+      "id": "xuanwu_dun",
+      "name": "玄武盾",
+      "description": "玄武神獸的護盾，防禦力無與倫比。",
+      "category": "shield",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "統治": 18,
+        "智力": 5,
+        "天命": 4
+      },
+      "special_effects": {
+        "absolute_defense": 40,
+        "counter_attack": 25,
+        "turtle_shell": 35
+      },
+      "flavor_text": "玄武護體，堅不可摧！"
+    },
+    {
+      "id": "phoenix_yu",
+      "name": "鳳凰羽",
+      "description": "神鳥鳳凰的羽毛，帶來重生力量。",
+      "category": "accessory",
+      "tier": "legendary",
+      "rarity": "legendary",
+      "acquisition": "event_only",
+      "attributes": {
+        "魅力": 12,
+        "天命": 10,
+        "智力": 6
+      },
+      "special_effects": {
+        "rebirth_power": 50,
+        "phoenix_blessing": 30,
+        "immortal_spirit": 25
+      },
+      "flavor_text": "鳳凰羽翼，涅槃重生！"
+    }
+  ]
+}
