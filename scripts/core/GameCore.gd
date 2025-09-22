@@ -38,6 +38,9 @@ var _systems_initialized: bool = false
 var _game_started: bool = false
 var _initialization_errors: Array[String] = []
 
+# UI管理系統
+var _ui_manager = null
+
 # 主遊戲循環計時器
 var _game_timer: Timer
 var _turn_duration: float = 5.0  # 5秒一回合 (放置遊戲節奏)
@@ -1059,3 +1062,66 @@ func serialize_game_state() -> Dictionary:
 		"game_state": GameStateManager.get_current_state(),
 		"timestamp": Time.get_unix_time_from_system()
 	}
+
+# =============================================================================
+# UIManager 註冊和管理
+# =============================================================================
+
+## 註冊UIManager到GameCore
+func register_ui_manager(ui_manager) -> void:
+	if not ui_manager:
+		LogManager.error("GameCore", "嘗試註冊空的UIManager")
+		return
+
+	_ui_manager = ui_manager
+	LogManager.info("GameCore", "UIManager已註冊到GameCore", {
+		"ui_manager_ready": _ui_manager != null
+	})
+
+	# 驗證UIManager健康狀況
+	_validate_ui_manager()
+
+## 獲取UIManager (全域存取點)
+func get_ui_manager():
+	if not _ui_manager:
+		LogManager.warning("GameCore", "UIManager尚未註冊或不可用")
+	return _ui_manager
+
+## 驗證UIManager健康狀況
+func _validate_ui_manager() -> void:
+	if not _ui_manager:
+		return
+
+	var health_status = _ui_manager.get_component_health()
+	var issues = _ui_manager.diagnose_ui_issues()
+
+	LogManager.info("GameCore", "UIManager健康檢查", {
+		"component_health": health_status,
+		"issues_count": issues.size(),
+		"issues": issues
+	})
+
+	# 如果有問題，嘗試修復
+	if not issues.is_empty():
+		LogManager.info("GameCore", "檢測到UI問題，嘗試自動修復")
+		var repair_success = _ui_manager.attempt_ui_repair()
+		if repair_success:
+			LogManager.info("GameCore", "UI問題修復成功")
+		else:
+			LogManager.error("GameCore", "UI問題修復失敗")
+
+## 檢查UI系統是否就緒
+func is_ui_system_ready() -> bool:
+	if not _ui_manager:
+		return false
+
+	var issues = _ui_manager.diagnose_ui_issues()
+	return issues.is_empty()
+
+## 強制刷新UI系統
+func refresh_ui_system() -> bool:
+	if not _ui_manager:
+		LogManager.error("GameCore", "無法刷新UI - UIManager不存在")
+		return false
+
+	return _ui_manager.attempt_ui_repair()

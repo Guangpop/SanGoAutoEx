@@ -51,10 +51,15 @@ Core Layer:        EventBus | GameStateManager | GameCore | LogManager
 - `LogManager.gd`: Professional logging with file location tracking to `/logs`
 
 ### Mobile-Optimized UI Structure
-- **TopBar (180px)**: Player info, abilities (武力/智力/統治/政治/魅力/天命), resources
-- **GameMainArea**: HSplitContainer with MapArea (Node2D cities) + GameEvent (ScrollContainer)
+- **TopBar (110px)**: Player info, abilities (武力/智力/統治/政治/魅力/天命), resources (collapsible)
+- **GameMainArea**: Control container with full-width MapArea (Node2D cities) + GameEvent overlay panel (50% width)
 - **BottomBar (120px)**: TabContainer for 武將/武技/政略/國家/裝備/更多
 - **BattleScene**: Overlay Node2D for combat animations
+
+#### GameMainArea Layout Details
+- **MapArea**: SubViewport with full-width background (z_index = 0)
+- **GameEvent**: Overlay ScrollContainer panel positioned at 50% screen width (z_index = 1)
+- **Layered Design**: GameEvent overlays on top of MapArea, not side-by-side split
 
 ### Game Data Structure
 The game requires extensive JSON data files for:

@@ -13,7 +13,13 @@ enum EventType {
 	NORMAL,		# 普通事件 (藍色)
 	BATTLE,		# 戰鬥事件 (紅色)
 	SPECIAL,	# 特殊事件 (金色)
-	SYSTEM		# 系統事件 (灰色)
+	SYSTEM,		# 系統事件 (灰色)
+	WARNING,	# 警告事件 (橙色)
+	ERROR,		# 錯誤事件 (深紅色)
+	SUCCESS,	# 成功事件 (綠色)
+	DIPLOMACY,	# 外交事件 (紫色)
+	ECONOMY,	# 經濟事件 (黃色)
+	TECHNOLOGY	# 科技事件 (青色)
 }
 
 # 事件類型顏色配置
@@ -21,12 +27,19 @@ var event_colors = {
 	EventType.NORMAL: Color.LIGHT_BLUE,
 	EventType.BATTLE: Color.LIGHT_CORAL,
 	EventType.SPECIAL: Color.GOLD,
-	EventType.SYSTEM: Color.LIGHT_GRAY
+	EventType.SYSTEM: Color.LIGHT_GRAY,
+	EventType.WARNING: Color.ORANGE,
+	EventType.ERROR: Color.CRIMSON,
+	EventType.SUCCESS: Color.LIME_GREEN,
+	EventType.DIPLOMACY: Color.VIOLET,
+	EventType.ECONOMY: Color.YELLOW,
+	EventType.TECHNOLOGY: Color.CYAN
 }
 
 # UI引用
 var event_container: VBoxContainer = null
 var scroll_container: ScrollContainer = null
+var main_mobile: Control = null
 
 # 配置
 var max_events: int = 100
@@ -64,7 +77,7 @@ func _ready() -> void:
 # 連接到UI組件
 func _connect_to_ui() -> void:
 	# 尋找MainMobile場景中的EventContent
-	var main_mobile = get_tree().get_first_node_in_group("main_mobile")
+	main_mobile = get_tree().get_first_node_in_group("main_mobile")
 	if not main_mobile:
 		# 嘗試通過路徑查找
 		var root = get_tree().current_scene
@@ -72,21 +85,46 @@ func _connect_to_ui() -> void:
 			main_mobile = root
 
 	if main_mobile:
-		event_container = main_mobile.get_node_or_null("VBoxContainer/GameMainArea/GameEvent/EventContent")
-		scroll_container = main_mobile.get_node_or_null("VBoxContainer/GameMainArea/GameEvent")
+		# 使用UIManager接口而不是直接節點路徑
+		var ui_manager = main_mobile.get_ui_manager() if main_mobile.has_method("get_ui_manager") else null
 
-		if event_container:
-			LogManager.info("GameEventManager", "UI連接成功", {
-				"event_container_found": true,
-				"scroll_container_found": scroll_container != null
-			})
+		if ui_manager:
+			event_container = ui_manager.get_event_container()
+			scroll_container = main_mobile.get_node_or_null("SafeAreaContainer/VBoxContainer/GameMainArea/GameEventOverlay/GameEvent")
 
-			# 添加初始歡迎訊息
-			_add_welcome_message()
+			if event_container:
+				LogManager.info("GameEventManager", "UI連接成功 (通過UIManager)", {
+					"event_container_found": true,
+					"scroll_container_found": scroll_container != null,
+					"ui_manager_available": true
+				})
+
+				# 添加初始歡迎訊息
+				_add_welcome_message()
+			else:
+				LogManager.warn("GameEventManager", "UIManager未能提供EventContent容器", {
+					"main_mobile_found": true,
+					"ui_manager_found": true,
+					"event_container_result": null
+				})
 		else:
-			LogManager.warn("GameEventManager", "未找到EventContent容器", {
-				"main_mobile_found": true,
-				"container_path": "VBoxContainer/GameMainArea/GameEvent/EventContent"
+			# 降級到舊的直接路徑方式 (臨時相容性)
+			event_container = main_mobile.get_node_or_null("SafeAreaContainer/VBoxContainer/GameMainArea/GameEventOverlay/GameEvent/EventContent")
+			scroll_container = main_mobile.get_node_or_null("SafeAreaContainer/VBoxContainer/GameMainArea/GameEventOverlay/GameEvent")
+
+			if event_container:
+				LogManager.info("GameEventManager", "UI連接成功 (降級模式)", {
+					"event_container_found": true,
+					"scroll_container_found": scroll_container != null,
+					"ui_manager_available": false
+				})
+
+				# 添加初始歡迎訊息
+				_add_welcome_message()
+			else:
+				LogManager.warn("GameEventManager", "未找到EventContent容器", {
+					"main_mobile_found": true,
+					"container_path": "SafeAreaContainer/VBoxContainer/GameMainArea/GameEventOverlay/GameEvent/EventContent"
 			})
 	else:
 		LogManager.warn("GameEventManager", "未找到MainMobile場景")
@@ -148,10 +186,45 @@ func _connect_event_handlers() -> void:
 
 # 公共方法：添加事件
 func add_event(message: String, event_type: EventType = EventType.NORMAL, additional_data: Dictionary = {}) -> void:
-	if not is_initialized or not event_container:
+	if not is_initialized:
 		LogManager.warn("GameEventManager", "嘗試添加事件但系統未初始化", {
 			"message": message,
 			"event_type": event_type
+		})
+		return
+
+	# 嘗試使用UIManager接口
+	var ui_manager = null
+	if main_mobile and main_mobile.has_method("get_ui_manager"):
+		ui_manager = main_mobile.get_ui_manager()
+
+	if ui_manager and ui_manager.has_method("add_game_event"):
+		# 使用UIManager統一接口
+		var event_data = {
+			"message": message,
+			"type": _convert_event_type_to_string(event_type),
+			"metadata": additional_data
+		}
+
+		var success = ui_manager.add_game_event(event_data)
+		if success:
+			event_count += 1
+			LogManager.debug("GameEventManager", "事件已添加 (通過UIManager)", {
+				"message": message,
+				"event_type": EventType.keys()[event_type],
+				"event_count": event_count
+			})
+		else:
+			LogManager.error("GameEventManager", "UIManager添加事件失敗", {"event_data": event_data})
+	else:
+		# 降級到舊方式 (直接操作容器)
+		_add_event_legacy(message, event_type, additional_data)
+
+## 降級方法 - 舊的直接容器操作
+func _add_event_legacy(message: String, event_type: EventType, additional_data: Dictionary) -> void:
+	if not event_container:
+		LogManager.warn("GameEventManager", "EventContainer不可用，無法添加事件", {
+			"message": message
 		})
 		return
 
@@ -185,11 +258,24 @@ func add_event(message: String, event_type: EventType = EventType.NORMAL, additi
 		await get_tree().process_frame
 		scroll_container.scroll_vertical = scroll_container.get_v_scroll_bar().max_value
 
-	LogManager.debug("GameEventManager", "事件已添加", {
+	LogManager.debug("GameEventManager", "事件已添加 (降級模式)", {
 		"message": message,
 		"event_type": EventType.keys()[event_type],
 		"event_count": event_count
 	})
+
+## 轉換事件類型為字串
+func _convert_event_type_to_string(event_type: EventType) -> String:
+	match event_type:
+		EventType.NORMAL: return "info"
+		EventType.WARNING: return "warning"
+		EventType.ERROR: return "error"
+		EventType.SUCCESS: return "success"
+		EventType.BATTLE: return "battle"
+		EventType.DIPLOMACY: return "diplomacy"
+		EventType.ECONOMY: return "economy"
+		EventType.TECHNOLOGY: return "technology"
+		_: return "info"
 
 # 清理舊事件
 func _cleanup_old_events() -> void:

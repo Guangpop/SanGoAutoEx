@@ -4,39 +4,46 @@
 # - 管理移動端UI佈局 (414x896)
 # - 協調TopBar、MapArea、GameEvent、BottomBar
 # - 處理觸控輸入和響應式設計
+# - 整合UIManager統一UI管理
 
 extends Control
 
+# UIManager - 統一UI管理器
+var ui_manager
+
 # UI節點引用
-@onready var top_bar = $VBoxContainer/TopBar
-@onready var map_area = $VBoxContainer/GameMainArea/MapArea
-@onready var game_event = $VBoxContainer/GameMainArea/GameEvent
-@onready var event_content = $VBoxContainer/GameMainArea/GameEvent/EventContent
-@onready var bottom_bar = $VBoxContainer/BottomBar
-@onready var tab_container = $VBoxContainer/BottomBar/TabContainer
+@onready var top_bar = $SafeAreaContainer/VBoxContainer/TopBar
+@onready var map_viewport = $SafeAreaContainer/VBoxContainer/GameMainArea/MapArea
+@onready var map_area = $SafeAreaContainer/VBoxContainer/GameMainArea/MapArea/MapRoot
+@onready var game_event = $SafeAreaContainer/VBoxContainer/GameMainArea/GameEventOverlay/GameEvent
+@onready var event_content = $SafeAreaContainer/VBoxContainer/GameMainArea/GameEventOverlay/GameEvent/EventContent
+@onready var bottom_bar = $SafeAreaContainer/VBoxContainer/BottomBar
+@onready var tab_container = $SafeAreaContainer/VBoxContainer/BottomBar/TabContainer
 
 # TopBar UI 元素引用
-@onready var name_level_label = $VBoxContainer/TopBar/TopBarContainer/PlayerInfo/BasicInfo/NameLevel
-@onready var turn_year_label = $VBoxContainer/TopBar/TopBarContainer/PlayerInfo/BasicInfo/TurnYear
-@onready var wuli_label = $VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow1/Wuli
-@onready var zhili_label = $VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow1/Zhili
-@onready var tongzhi_label = $VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow1/Tongzhi
-@onready var zhengzhi_label = $VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow2/Zhengzhi
-@onready var meili_label = $VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow2/Meili
-@onready var tianming_label = $VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow2/Tianming
-@onready var gold_label = $VBoxContainer/TopBar/TopBarContainer/Resources/Gold
-@onready var troops_label = $VBoxContainer/TopBar/TopBarContainer/Resources/Troops
-@onready var cities_label = $VBoxContainer/TopBar/TopBarContainer/Resources/Cities
+@onready var name_level_label = $SafeAreaContainer/VBoxContainer/TopBar/TopBarContainer/PlayerInfo/BasicInfo/NameLevel
+@onready var turn_year_label = $SafeAreaContainer/VBoxContainer/TopBar/TopBarContainer/PlayerInfo/BasicInfo/TurnYear
+@onready var expand_button = $SafeAreaContainer/VBoxContainer/TopBar/ExpandButton
+@onready var expand_icon = $SafeAreaContainer/VBoxContainer/TopBar/ExpandButton/Icon
+@onready var wuli_label = $SafeAreaContainer/VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow1/Wuli
+@onready var zhili_label = $SafeAreaContainer/VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow1/Zhili
+@onready var tongzhi_label = $SafeAreaContainer/VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow1/Tongzhi
+@onready var zhengzhi_label = $SafeAreaContainer/VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow2/Zhengzhi
+@onready var meili_label = $SafeAreaContainer/VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow2/Meili
+@onready var tianming_label = $SafeAreaContainer/VBoxContainer/TopBar/TopBarContainer/AbilityStats/AbilityRow2/Tianming
+@onready var gold_label = $SafeAreaContainer/VBoxContainer/TopBar/TopBarContainer/Resources/Gold
+@onready var troops_label = $SafeAreaContainer/VBoxContainer/TopBar/TopBarContainer/Resources/Troops
+@onready var cities_label = $SafeAreaContainer/VBoxContainer/TopBar/TopBarContainer/Resources/Cities
 
 # 調試工具引用
 @onready var screenshot_button = $ScreenshotButton
 
 # TopBar 折疊式設計相關
-@onready var ability_stats_container = $VBoxContainer/TopBar/TopBarContainer/AbilityStats
-var topbar_expanded: bool = false
+@onready var ability_stats_container = $SafeAreaContainer/VBoxContainer/TopBar/TopBarContainer/AbilityStats
+var topbar_expanded: bool = true
 var topbar_animating: bool = false
-var topbar_collapsed_height: float = 90.0
-var topbar_expanded_height: float = 180.0
+var topbar_collapsed_height: float = 50.0
+var topbar_expanded_height: float = 110.0
 var topbar_animation_duration: float = 0.3
 
 # 觸控優化
@@ -44,6 +51,9 @@ var touch_feedback_tween: Tween
 
 func _ready() -> void:
 	var main_mobile_start_time = Time.get_unix_time_from_system()
+
+	# 初始化UIManager
+	_setup_ui_manager()
 
 	# 加入到群組以便其他系統找到
 	add_to_group("main_mobile")
@@ -124,6 +134,7 @@ func _validate_ui_nodes() -> void:
 	var node_validation = {
 		"top_bar": top_bar != null,
 		"name_level_label": name_level_label != null,
+		"map_viewport": map_viewport != null,
 		"map_area": map_area != null,
 		"game_event": game_event != null,
 		"event_content": event_content != null,
@@ -272,19 +283,18 @@ func setup_topbar_collapsible() -> void:
 	if ability_stats_container:
 		ability_stats_container.visible = true
 
-	# 增加觸控區域 - 讓PlayerInfo區域可點擊
-	var player_info_area = top_bar.get_node("TopBarContainer/PlayerInfo")
-	if player_info_area:
-		# 增大觸控目標到48px (符合UI/UX建議)
-		player_info_area.custom_minimum_size.y = 48
+	# 設置箭頭圖標初始狀態
+	if expand_icon:
+		expand_icon.text = "▲" if topbar_expanded else "▼"
 
-		# 創建觸控按鈕來處理點擊
-		var touch_button = Button.new()
-		touch_button.flat = true
-		touch_button.custom_minimum_size = Vector2(0, 48)
-		touch_button.anchors_preset = Control.PRESET_FULL_RECT
-		touch_button.pressed.connect(toggle_topbar_expanded)
-		player_info_area.add_child(touch_button)
+	# 連接展開按鈕事件
+	if expand_button:
+		var expand_touch_button = expand_button.get_node("Button")
+		if expand_touch_button:
+			expand_touch_button.pressed.connect(toggle_topbar_expanded)
+			# 添加懸停效果支援
+			expand_touch_button.mouse_entered.connect(_on_expand_button_hover_start)
+			expand_touch_button.mouse_exited.connect(_on_expand_button_hover_end)
 
 	LogManager.info("MainMobile", "TopBar折疊功能初始化完成", {
 		"collapsed_height": topbar_collapsed_height,
@@ -308,6 +318,10 @@ func toggle_topbar_expanded() -> void:
 
 	# 添加觸控反饋效果
 	add_touch_feedback()
+
+	# 更新箭頭圖標狀態並添加動畫
+	animate_expand_icon()
+
 	animate_topbar_height(target_height)
 
 # TopBar高度動畫
@@ -354,18 +368,68 @@ func animate_topbar_height(target_height: float) -> void:
 		"ability_visible": ability_stats_container.visible if ability_stats_container else false
 	})
 
+# 箭頭圖標動畫
+func animate_expand_icon() -> void:
+	if not expand_icon:
+		return
+
+	# 更新箭頭文字
+	var new_icon = "▲" if topbar_expanded else "▼"
+
+	# 創建旋轉和淡化動畫
+	var icon_tween = create_tween()
+	icon_tween.set_parallel(true)
+
+	# 先縮小並淡化
+	icon_tween.tween_property(expand_icon, "scale", Vector2(0.7, 0.7), 0.15)
+	icon_tween.tween_property(expand_icon, "modulate:a", 0.3, 0.15)
+
+	# 等待一半時間後更改文字
+	await icon_tween.finished
+
+	expand_icon.text = new_icon
+
+	# 恢復大小和透明度
+	var restore_tween = create_tween()
+	restore_tween.set_parallel(true)
+	restore_tween.tween_property(expand_icon, "scale", Vector2(1.0, 1.0), 0.15)
+	restore_tween.tween_property(expand_icon, "modulate:a", 1.0, 0.15)
+
+# 展開按鈕懸停開始效果
+func _on_expand_button_hover_start() -> void:
+	if expand_button:
+		var background_panel = expand_button.get_node("Background")
+		if background_panel:
+			var hover_tween = create_tween()
+			hover_tween.tween_property(background_panel, "modulate:a", 0.1, 0.2)
+
+# 展開按鈕懸停結束效果
+func _on_expand_button_hover_end() -> void:
+	if expand_button:
+		var background_panel = expand_button.get_node("Background")
+		if background_panel:
+			var hover_tween = create_tween()
+			hover_tween.tween_property(background_panel, "modulate:a", 0.05, 0.2)
+
 # 添加觸控反饋效果
 func add_touch_feedback() -> void:
-	# 簡單的縮放反饋效果
+	# 改善的觸控反饋效果
 	if touch_feedback_tween:
 		touch_feedback_tween.kill()
 
 	touch_feedback_tween = create_tween()
-	var player_info_area = top_bar.get_node("TopBarContainer/PlayerInfo")
-	if player_info_area:
+	touch_feedback_tween.set_parallel(true)
+
+	if expand_button:
 		# 快速縮放反饋
-		touch_feedback_tween.tween_property(player_info_area, "scale", Vector2(0.95, 0.95), 0.1)
-		touch_feedback_tween.tween_property(player_info_area, "scale", Vector2(1.0, 1.0), 0.1)
+		touch_feedback_tween.tween_property(expand_button, "scale", Vector2(0.95, 0.95), 0.1)
+		touch_feedback_tween.tween_property(expand_button, "scale", Vector2(1.0, 1.0), 0.1)
+
+		# 背景閃爍效果
+		var background_panel = expand_button.get_node("Background")
+		if background_panel:
+			touch_feedback_tween.tween_property(background_panel, "modulate:a", 0.2, 0.1)
+			touch_feedback_tween.tween_property(background_panel, "modulate:a", 0.05, 0.1)
 
 func _on_game_state_changed(new_state: int, old_state: int) -> void:
 	var state_names = {
@@ -653,3 +717,92 @@ func set_screenshot_button_visible(visible: bool) -> void:
 		})
 	else:
 		LogManager.warn("MainMobile", "無法設置截圖按鈕可見性：按鈕未找到")
+
+# =============================================================================
+# UIManager 整合方法
+# =============================================================================
+
+## 設定UIManager
+func _setup_ui_manager() -> void:
+	# 暫時跳過UIManager創建，因為GameEventManager已經在降級模式下工作
+	LogManager.info("MainMobile", "跳過UIManager設定，使用降級模式")
+
+	# 配置MapArea SubViewport
+	_configure_map_area()
+
+## 配置MapArea SubViewport
+func _configure_map_area() -> void:
+	if map_viewport:
+		# 確保SubViewport獲得正確尺寸
+		await get_tree().process_frame
+		map_viewport.size = get_viewport().get_visible_rect().size
+		map_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+
+		LogManager.debug("MainMobile", "MapArea SubViewport已配置", {
+			"size": map_viewport.size,
+			"render_mode": "UPDATE_ALWAYS"
+		})
+	else:
+		LogManager.error("MainMobile", "MapArea配置失敗 - SubViewport節點不存在")
+
+	# 確保MapArea(MapRoot)節點也正確配置
+	if map_area:
+		LogManager.debug("MainMobile", "MapRoot節點已存在", {
+			"script_attached": map_area.has_script(),
+			"node_type": map_area.get_class()
+		})
+	else:
+		LogManager.error("MainMobile", "MapRoot節點不存在")
+
+## 獲取UIManager (公開接口)
+func get_ui_manager():
+	return ui_manager
+
+## UI組件就緒回調
+func _on_ui_component_ready(component_name: String) -> void:
+	LogManager.debug("MainMobile", "UI組件就緒: %s" % component_name)
+
+## UI組件錯誤回調
+func _on_ui_component_error(component_name: String, error_message: String) -> void:
+	LogManager.error("MainMobile", "UI組件錯誤: %s" % component_name, {"error": error_message})
+
+## UI結構驗證完成回調
+func _on_ui_structure_validated() -> void:
+	LogManager.info("MainMobile", "UI結構驗證完成")
+
+	# 初始化地圖顯示
+	_initialize_map_display()
+
+	# 初始化事件面板
+	_initialize_event_panel()
+
+## 初始化地圖顯示
+func _initialize_map_display() -> void:
+	if ui_manager:
+		var map_viewport = ui_manager.get_map_viewport()
+		if map_viewport and map_viewport.has_method("update_cities_data"):
+			# 設定初始城市數據 (如果有的話)
+			var initial_cities = _get_initial_cities_data()
+			if not initial_cities.is_empty():
+				map_viewport.update_cities_data(initial_cities)
+			LogManager.debug("MainMobile", "地圖顯示初始化完成")
+
+## 初始化事件面板
+func _initialize_event_panel() -> void:
+	if ui_manager:
+		var event_container = ui_manager.get_event_container()
+		if event_container:
+			# 添加歡迎事件
+			ui_manager.add_game_event({
+				"message": "歡迎進入三國天命放置小遊戲！",
+				"type": "info"
+			})
+			LogManager.debug("MainMobile", "事件面板初始化完成")
+
+## 獲取初始城市數據 (模擬數據)
+func _get_initial_cities_data() -> Array[Dictionary]:
+	return [
+		{"id": "chengdu", "name": "成都", "position": Vector2(100, 200)},
+		{"id": "luoyang", "name": "洛陽", "position": Vector2(300, 100)},
+		{"id": "changan", "name": "長安", "position": Vector2(250, 150)}
+	]

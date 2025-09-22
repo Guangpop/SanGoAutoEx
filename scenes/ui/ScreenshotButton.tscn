@@ -4,13 +4,13 @@
 
 [node name="ScreenshotButton" type="Control"]
 layout_mode = 3
-anchors_preset = 1
-anchor_left = 1.0
-anchor_right = 1.0
-offset_left = -68.0
-offset_top = 20.0
-offset_right = -20.0
-offset_bottom = 68.0
+anchors_preset = 0
+anchor_left = 0.0
+anchor_right = 0.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = 56.0
+offset_bottom = 56.0
 script = ExtResource("1_screenshot")
 
 [node name="Background" type="Panel" parent="."]
