@@ -1,0 +1,261 @@
+[gd_scene load_steps=3 format=3 uid="uid://bm8k9j2wcyk5ml"]
+
+[ext_resource type="Script" path="res://scripts/ui/BattleOverlay.gd" id="1_battle_overlay"]
+[ext_resource type="Theme" path="res://assets/ui/main_theme.tres" id="2_main_theme"]
+
+[node name="BattleOverlay" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("2_main_theme")
+script = ExtResource("1_battle_overlay")
+
+[node name="BattleBackground" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0, 0, 0.85)
+
+[node name="BattleMainContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="BattleHeader" type="VBoxContainer" parent="BattleMainContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 120)
+
+[node name="BattleTitle" type="HBoxContainer" parent="BattleMainContainer/BattleHeader"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 60)
+
+[node name="AttackerInfo" type="VBoxContainer" parent="BattleMainContainer/BattleHeader/BattleTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AttackerName" type="Label" parent="BattleMainContainer/BattleHeader/BattleTitle/AttackerInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "主公"
+horizontal_alignment = 1
+
+[node name="AttackerPower" type="Label" parent="BattleMainContainer/BattleHeader/BattleTitle/AttackerInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "戰力: 1000"
+horizontal_alignment = 1
+modulate = Color(0.7, 1, 0.7, 1)
+
+[node name="VSIndicator" type="Label" parent="BattleMainContainer/BattleHeader/BattleTitle"]
+layout_mode = 2
+custom_minimum_size = Vector2(80, 0)
+theme_override_font_sizes/font_size = 24
+text = "VS"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DefenderInfo" type="VBoxContainer" parent="BattleMainContainer/BattleHeader/BattleTitle"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DefenderName" type="Label" parent="BattleMainContainer/BattleHeader/BattleTitle/DefenderInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "守將"
+horizontal_alignment = 1
+
+[node name="DefenderPower" type="Label" parent="BattleMainContainer/BattleHeader/BattleTitle/DefenderInfo"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "戰力: 800"
+horizontal_alignment = 1
+modulate = Color(1, 0.7, 0.7, 1)
+
+[node name="BattleProgress" type="ProgressBar" parent="BattleMainContainer/BattleHeader"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 40)
+max = 100.0
+step = 1.0
+value = 0.0
+show_percentage = false
+
+[node name="ProgressLabel" type="Label" parent="BattleMainContainer/BattleHeader"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 16
+text = "戰鬥準備中..."
+horizontal_alignment = 1
+
+[node name="BattleCombatArea" type="Control" parent="BattleMainContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+custom_minimum_size = Vector2(0, 400)
+
+[node name="GeneralsDisplay" type="HBoxContainer" parent="BattleMainContainer/BattleCombatArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="AttackerGeneral" type="VBoxContainer" parent="BattleMainContainer/BattleCombatArea/GeneralsDisplay"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="AttackerAvatar" type="Label" parent="BattleMainContainer/BattleCombatArea/GeneralsDisplay/AttackerGeneral"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 80)
+theme_override_font_sizes/font_size = 48
+text = "⚔️"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="AttackerHP" type="ProgressBar" parent="BattleMainContainer/BattleCombatArea/GeneralsDisplay/AttackerGeneral"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+max = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="AttackerHPLabel" type="Label" parent="BattleMainContainer/BattleCombatArea/GeneralsDisplay/AttackerGeneral"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "HP: 1000/1000"
+horizontal_alignment = 1
+modulate = Color(0.8, 0.8, 0.8, 1)
+
+[node name="CombatEffects" type="Control" parent="BattleMainContainer/BattleCombatArea/GeneralsDisplay"]
+layout_mode = 2
+size_flags_horizontal = 0
+custom_minimum_size = Vector2(120, 0)
+
+[node name="EffectLabel" type="Label" parent="BattleMainContainer/BattleCombatArea/GeneralsDisplay/CombatEffects"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -30.0
+offset_top = -30.0
+offset_right = 30.0
+offset_bottom = 30.0
+theme_override_font_sizes/font_size = 36
+text = "💥"
+horizontal_alignment = 1
+vertical_alignment = 1
+modulate = Color(1, 1, 1, 0)
+
+[node name="DefenderGeneral" type="VBoxContainer" parent="BattleMainContainer/BattleCombatArea/GeneralsDisplay"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="DefenderAvatar" type="Label" parent="BattleMainContainer/BattleCombatArea/GeneralsDisplay/DefenderGeneral"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 80)
+theme_override_font_sizes/font_size = 48
+text = "🛡️"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="DefenderHP" type="ProgressBar" parent="BattleMainContainer/BattleCombatArea/GeneralsDisplay/DefenderGeneral"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 20)
+max = 100.0
+value = 100.0
+show_percentage = false
+
+[node name="DefenderHPLabel" type="Label" parent="BattleMainContainer/BattleCombatArea/GeneralsDisplay/DefenderGeneral"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 14
+text = "HP: 800/800"
+horizontal_alignment = 1
+modulate = Color(0.8, 0.8, 0.8, 1)
+
+[node name="DamageNumbers" type="Control" parent="BattleMainContainer/BattleCombatArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="SkillEffects" type="Control" parent="BattleMainContainer/BattleCombatArea"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="BattleLog" type="VBoxContainer" parent="BattleMainContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 150)
+
+[node name="LogHeader" type="Label" parent="BattleMainContainer/BattleLog"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 30)
+theme_override_font_sizes/font_size = 16
+text = "戰鬥記錄"
+horizontal_alignment = 1
+
+[node name="LogScrollContainer" type="ScrollContainer" parent="BattleMainContainer/BattleLog"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="LogContent" type="VBoxContainer" parent="BattleMainContainer/BattleLog/LogScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="BattleControls" type="HBoxContainer" parent="BattleMainContainer"]
+layout_mode = 2
+custom_minimum_size = Vector2(0, 100)
+
+[node name="SpeedControls" type="HBoxContainer" parent="BattleMainContainer/BattleControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="Speed1x" type="Button" parent="BattleMainContainer/BattleControls/SpeedControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 44)
+text = "1x"
+
+[node name="Speed2x" type="Button" parent="BattleMainContainer/BattleControls/SpeedControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 44)
+text = "2x"
+
+[node name="Speed4x" type="Button" parent="BattleMainContainer/BattleControls/SpeedControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 44)
+text = "4x"
+
+[node name="SpeedMax" type="Button" parent="BattleMainContainer/BattleControls/SpeedControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 44)
+text = "MAX"
+
+[node name="ActionButtons" type="HBoxContainer" parent="BattleMainContainer/BattleControls"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="SkipButton" type="Button" parent="BattleMainContainer/BattleControls/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 44)
+text = "⏭️ 跳過"
+
+[node name="CloseButton" type="Button" parent="BattleMainContainer/BattleControls/ActionButtons"]
+layout_mode = 2
+size_flags_horizontal = 3
+custom_minimum_size = Vector2(0, 44)
+text = "❌ 關閉"

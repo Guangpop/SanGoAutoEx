@@ -61,14 +61,14 @@ func _exit_tree() -> void:
 
 # 確保logs目錄存在
 func ensure_log_directory() -> void:
-	var dir = DirAccess.open("user://")
+	var dir = DirAccess.open("res://")
 	if not dir.dir_exists("logs"):
 		dir.make_dir("logs")
 
 # 初始化日誌文件
 func initialize_log_file() -> void:
 	var timestamp = Time.get_datetime_string_from_system().replace(":", "-").replace(" ", "_")
-	_current_log_path = "user://logs/game_%s.log" % timestamp
+	_current_log_path = "res://logs/game_%s.log" % timestamp
 
 	_log_file = FileAccess.open(_current_log_path, FileAccess.WRITE)
 	if _log_file:
@@ -86,7 +86,7 @@ func initialize_log_file() -> void:
 
 # 清理舊的日誌文件
 func cleanup_old_logs() -> void:
-	var dir = DirAccess.open("user://logs/")
+	var dir = DirAccess.open("res://logs/")
 	if not dir:
 		return
 
@@ -148,6 +148,10 @@ func format_log_message(level: LogLevel, category: String, message: String, cont
 
 # 寫入日誌到文件和控制台
 func write_log(level: LogLevel, category: String, message: String, context: Dictionary = {}) -> void:
+	# 只有在DEBUG模式下才記錄日誌
+	if not OS.is_debug_build():
+		return
+
 	# 檢查日誌級別
 	if level < _min_log_level:
 		return
@@ -215,7 +219,7 @@ func get_log_stats() -> Dictionary:
 		stats.file_size = _log_file.get_position()
 
 	# 計算日誌文件總數
-	var dir = DirAccess.open("user://logs/")
+	var dir = DirAccess.open("res://logs/")
 	if dir:
 		dir.list_dir_begin()
 		var file_name = dir.get_next()

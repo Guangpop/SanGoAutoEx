@@ -19,6 +19,13 @@ var is_auto_enabled: bool = false
 var is_paused: bool = false
 var is_system_initialized: bool = false
 
+# 放置遊戲核心計時器
+var auto_battle_timer: Timer
+var battle_frequency: float = 5.0  # 默認5秒一場戰鬥
+var battles_completed: int = 0
+var consecutive_victories: int = 0
+var consecutive_defeats: int = 0
+
 # 配置和數據
 var automation_config: Dictionary = {}
 var player_data: Dictionary = {}
@@ -37,16 +44,29 @@ func _ready() -> void:
 	name = "AutoBattleManager"
 	LogManager.info("AutoBattleManager", "自動戰鬥管理器初始化")
 
+	# 初始化自動戰鬥計時器
+	setup_auto_battle_timer()
+
 	# 連接事件處理器
 	connect_event_handlers()
 
 	# 初始化統計數據
 	reset_automation_statistics()
 
+# 設置自動戰鬥計時器
+func setup_auto_battle_timer() -> void:
+	auto_battle_timer = Timer.new()
+	auto_battle_timer.wait_time = battle_frequency
+	auto_battle_timer.timeout.connect(_on_auto_battle_timer_timeout)
+	auto_battle_timer.one_shot = false
+	add_child(auto_battle_timer)
+	LogManager.debug("AutoBattleManager", "自動戰鬥計時器已設置", {"frequency": battle_frequency})
+
 func connect_event_handlers() -> void:
 	EventBus.connect_safe("battle_completed", _on_battle_completed)
 	EventBus.connect_safe("city_conquered", _on_city_conquered)
 	EventBus.connect_safe("game_state_changed", _on_game_state_changed)
+	EventBus.connect_safe("skill_selection_completed", _on_skill_selection_completed)
 	LogManager.debug("AutoBattleManager", "事件處理器連接完成")
 
 # === 初始化和配置 ===
@@ -67,6 +87,13 @@ func initialize(player_data_ref: Dictionary, config: Dictionary) -> bool:
 				"min_gold_reserve": 1000,
 				"min_troops_reserve": 100,
 				"auto_upgrade_threshold": 5000
+			},
+			"idle_progression": {
+				"base_battle_frequency": 5.0,
+				"max_battle_frequency": 30.0,
+				"frequency_scaling_factor": 1.15,
+				"difficulty_scaling_factor": 1.15,
+				"target_win_rate": 0.75
 			},
 			"offline_progression": {
 				"max_offline_hours": 24,
@@ -372,17 +399,139 @@ func should_auto_upgrade_equipment(current_player_data: Dictionary) -> bool:
 
 	return gold >= upgrade_threshold
 
+# === 難度縮放系統 ===
+
+# 計算指數難度縮放
+func _calculate_difficulty_scaling() -> float:
+	var config = automation_config.get("idle_progression", {})
+	var scaling_factor = config.get("difficulty_scaling_factor", 1.15)
+
+	# 基於戰鬥次數的指數增長
+	var base_scaling = pow(scaling_factor, battles_completed / 10.0)
+
+	# 基於城池數量的額外縮放
+	var current_player_data = GameCore.get_player_data()
+	var owned_cities = current_player_data.get("owned_cities", [])
+	var city_bonus = 1.0 + (owned_cities.size() * 0.1)
+
+	# 基於連續勝負的動態調整
+	var streak_modifier = _calculate_streak_modifier()
+
+	var final_scaling = base_scaling * city_bonus * streak_modifier
+
+	# 限制最大難度縮放
+	return clamp(final_scaling, 1.0, 10.0)
+
+# 計算連勝/連敗修正
+func _calculate_streak_modifier() -> float:
+	var config = automation_config.get("idle_progression", {})
+	var target_win_rate = config.get("target_win_rate", 0.75)
+
+	# 如果連勝太多，增加難度
+	if consecutive_victories > 5:
+		return 1.0 + (consecutive_victories - 5) * 0.1
+
+	# 如果連敗太多，降低難度
+	if consecutive_defeats > 3:
+		return max(0.5, 1.0 - (consecutive_defeats - 3) * 0.15)
+
+	return 1.0
+
+# 動態調整成功率以維持目標勝率
+func _adjust_success_rate_for_balance(base_rate: float) -> float:
+	var config = automation_config.get("idle_progression", {})
+	var target_win_rate = config.get("target_win_rate", 0.75)
+
+	# 計算當前勝率
+	var current_win_rate = _calculate_current_win_rate()
+
+	# 如果勝率偏離目標太遠，進行調整
+	var win_rate_difference = current_win_rate - target_win_rate
+
+	var adjustment = 0.0
+	if abs(win_rate_difference) > 0.1:  # 偏離超過10%才調整
+		adjustment = -win_rate_difference * 0.3  # 調整幅度
+
+	var adjusted_rate = base_rate + adjustment
+
+	LogManager.debug("AutoBattleManager", "勝率平衡調整", {
+		"current_win_rate": current_win_rate,
+		"target_win_rate": target_win_rate,
+		"adjustment": adjustment,
+		"base_rate": base_rate,
+		"adjusted_rate": adjusted_rate
+	})
+
+	return clamp(adjusted_rate, 0.1, 0.9)
+
+# 計算當前勝率
+func _calculate_current_win_rate() -> float:
+	var total_battles = automation_statistics.get("total_battles", 0)
+	var total_victories = automation_statistics.get("total_victories", 0)
+
+	if total_battles == 0:
+		return 0.75  # 默認假設勝率
+
+	return float(total_victories) / float(total_battles)
+
+# 計算動態獎勵縮放
+func _calculate_reward_scaling() -> float:
+	var difficulty_scaling = _calculate_difficulty_scaling()
+
+	# 獎勵隨難度增加，但有遞減收益
+	var reward_scaling = sqrt(difficulty_scaling)
+
+	return clamp(reward_scaling, 1.0, 3.0)
+
+# 計算敵方戰力縮放（用於戰鬥計算）
+func _calculate_enemy_power_scaling(base_power: float) -> float:
+	var difficulty_scaling = _calculate_difficulty_scaling()
+
+	# 敵方戰力隨難度指數增長
+	var scaled_power = base_power * difficulty_scaling
+
+	# 添加隨機變化避免過於固定
+	var random_factor = randf_range(0.9, 1.1)
+	scaled_power *= random_factor
+
+	LogManager.debug("AutoBattleManager", "敵方戰力縮放", {
+		"base_power": base_power,
+		"difficulty_scaling": difficulty_scaling,
+		"random_factor": random_factor,
+		"final_power": scaled_power
+	})
+
+	return scaled_power
+
 # === 計算方法 ===
 
-# 計算征服成功率
+# 計算征服成功率（加入指數難度調整）
 func calculate_conquest_success_rate(target: Dictionary, current_player_data: Dictionary) -> float:
 	var player_power = calculate_player_power_rating(current_player_data)
-	var city_defense = target.get("garrison_strength", 1000) + target.get("conquest_difficulty", 50)
+	var base_city_defense = target.get("garrison_strength", 1000) + target.get("conquest_difficulty", 50)
 
-	var power_ratio = float(player_power) / city_defense
+	# 指數難度縮放
+	var difficulty_scaling = _calculate_difficulty_scaling()
+	var scaled_city_defense = base_city_defense * difficulty_scaling
+
+	var power_ratio = float(player_power) / scaled_city_defense
 	var base_rate = 0.3 + (power_ratio - 1.0) * 0.4
 
-	return clamp(base_rate, 0.1, 0.9)
+	# 確保成功率在合理範圍內
+	var final_rate = clamp(base_rate, 0.1, 0.9)
+
+	# 動態調整目標勝率
+	final_rate = _adjust_success_rate_for_balance(final_rate)
+
+	LogManager.debug("AutoBattleManager", "成功率計算", {
+		"base_defense": base_city_defense,
+		"scaled_defense": scaled_city_defense,
+		"difficulty_scaling": difficulty_scaling,
+		"player_power": player_power,
+		"final_rate": final_rate
+	})
+
+	return final_rate
 
 # 計算玩家戰力評級
 func calculate_player_power_rating(current_player_data: Dictionary) -> float:
@@ -441,16 +590,29 @@ func calculate_conquest_efficiency(target: Dictionary, current_player_data: Dict
 
 	return value / max(total_cost, 1.0)
 
-# 計算預期獎勵
+# 計算預期獎勵（加入動態縮放）
 func calculate_expected_rewards(target: Dictionary) -> Dictionary:
 	var tier_multipliers = {"small": 1.0, "medium": 1.5, "major": 2.0, "capital": 3.0}
-	var multiplier = tier_multipliers.get(target.get("tier", "small"), 1.0)
+	var base_multiplier = tier_multipliers.get(target.get("tier", "small"), 1.0)
 
-	return {
-		"gold": int(2000 * multiplier),
-		"experience": int(500 * multiplier),
-		"reputation": int(100 * multiplier)
+	# 應用動態獎勵縮放
+	var reward_scaling = _calculate_reward_scaling()
+	var final_multiplier = base_multiplier * reward_scaling
+
+	var base_rewards = {
+		"gold": int(2000 * final_multiplier),
+		"experience": int(500 * final_multiplier),
+		"reputation": int(100 * final_multiplier)
 	}
+
+	LogManager.debug("AutoBattleManager", "預期獎勵計算", {
+		"base_multiplier": base_multiplier,
+		"reward_scaling": reward_scaling,
+		"final_multiplier": final_multiplier,
+		"rewards": base_rewards
+	})
+
+	return base_rewards
 
 # === 離線進度系統 ===
 
@@ -459,7 +621,7 @@ func calculate_offline_hours(offline_start_time: float, current_time: float) -> 
 	var offline_seconds = current_time - offline_start_time
 	return offline_seconds / 3600.0
 
-# 計算離線進度
+# 計算離線進度（增強版，整合難度縮放）
 func calculate_offline_progress(current_player_data: Dictionary, offline_hours: float) -> Dictionary:
 	var config = automation_config.get("offline_progression", {})
 	var max_hours = config.get("max_offline_hours", 24)
@@ -474,18 +636,20 @@ func calculate_offline_progress(current_player_data: Dictionary, offline_hours: 
 
 	var efficiency_factor = full_efficiency_hours + diminished_hours * (1.0 - diminishing_rate)
 
-	# 計算戰鬥次數
-	var battles_per_hour = config.get("max_battle_attempts_per_hour", 6)
+	# 計算戰鬥次數（根據當前戰鬥頻率調整）
+	var battles_per_hour = _calculate_offline_battles_per_hour()
 	var total_battles = int(efficiency_factor * battles_per_hour)
 
-	# 模擬戰鬥結果
-	var successful_battles = int(total_battles * 0.7) # 假設70%勝率
+	# 使用當前勝率而非固定值
+	var current_win_rate = _calculate_current_win_rate()
+	var successful_battles = int(total_battles * current_win_rate)
 	var failed_battles = total_battles - successful_battles
 
-	# 計算獲得資源
-	var avg_gold_per_victory = 800
-	var avg_troops_per_victory = 40
-	var avg_experience_per_victory = 150
+	# 計算難度縮放下的獎勵
+	var reward_scaling = _calculate_reward_scaling()
+	var avg_gold_per_victory = int(800 * reward_scaling)
+	var avg_troops_per_victory = int(40 * reward_scaling)
+	var avg_experience_per_victory = int(150 * reward_scaling)
 
 	var resources_gained = {
 		"gold": successful_battles * avg_gold_per_victory,
@@ -493,19 +657,30 @@ func calculate_offline_progress(current_player_data: Dictionary, offline_hours: 
 		"experience": successful_battles * avg_experience_per_victory
 	}
 
-	# 計算損失
-	var avg_loss_per_defeat = 200
+	# 計算損失（失敗也有縮放）
+	var avg_loss_per_defeat = int(200 * sqrt(reward_scaling))
 	var resources_lost = {
 		"troops": failed_battles * avg_loss_per_defeat
 	}
 
-	var cities_conquered = max(int(successful_battles / 10), 0) # 每10場勝利征服1座城池
+	# 城池征服計算（考慮難度增加）
+	var cities_conquered = _calculate_offline_cities_conquered(successful_battles, current_player_data)
+
+	# 模擬離線期間的進展
+	var progression_simulation = _simulate_offline_progression(
+		total_battles,
+		successful_battles,
+		cities_conquered
+	)
 
 	LogManager.info("AutoBattleManager", "離線進度計算完成", {
 		"offline_hours": offline_hours,
 		"effective_hours": effective_hours,
 		"battles_fought": total_battles,
-		"cities_conquered": cities_conquered
+		"win_rate": current_win_rate,
+		"reward_scaling": reward_scaling,
+		"cities_conquered": cities_conquered,
+		"progression": progression_simulation
 	})
 
 	return {
@@ -515,8 +690,149 @@ func calculate_offline_progress(current_player_data: Dictionary, offline_hours: 
 		"resources_gained": resources_gained,
 		"resources_lost": resources_lost,
 		"cities_conquered": cities_conquered,
-		"experience_gained": resources_gained.experience
+		"experience_gained": resources_gained.experience,
+		"win_rate_achieved": current_win_rate,
+		"difficulty_scaling": _calculate_difficulty_scaling(),
+		"progression_events": progression_simulation
 	}
+
+# 計算離線期間的戰鬥頻率
+func _calculate_offline_battles_per_hour() -> float:
+	var config = automation_config.get("offline_progression", {})
+	var base_battles_per_hour = config.get("max_battle_attempts_per_hour", 6)
+
+	# 離線效率通常比在線低一些
+	var offline_efficiency = 0.7
+
+	return base_battles_per_hour * offline_efficiency
+
+# 計算離線城池征服數量
+func _calculate_offline_cities_conquered(successful_battles: int, current_player_data: Dictionary) -> int:
+	var owned_cities = current_player_data.get("owned_cities", [])
+	var current_city_count = owned_cities.size()
+
+	# 隨著城池增加，征服新城池變難
+	var conquest_difficulty_multiplier = 1.0 + (current_city_count * 0.2)
+	var battles_per_city = int(10 * conquest_difficulty_multiplier)
+
+	var potential_cities = int(successful_battles / battles_per_city)
+
+	# 限制不能超過總城池數量
+	var total_cities = 16  # 總共16座城池
+	var max_conquerable = total_cities - current_city_count
+
+	return min(potential_cities, max_conquerable)
+
+# 模擬離線期間的進展事件
+func _simulate_offline_progression(total_battles: int, successful_battles: int, cities_conquered: int) -> Array:
+	var events = []
+
+	# 重要里程碑事件
+	if total_battles >= 100:
+		events.append("⭐ 離線期間進行了 %d 場戰鬥！" % total_battles)
+
+	if successful_battles >= 50:
+		events.append("🏆 取得了 %d 場勝利！" % successful_battles)
+
+	if cities_conquered > 0:
+		events.append("🏰 成功征服了 %d 座城池！" % cities_conquered)
+
+	# 隨機事件模擬
+	var random_events = _simulate_offline_random_events(total_battles)
+	events.append_array(random_events)
+
+	return events
+
+# 模擬離線期間的隨機事件
+func _simulate_offline_random_events(battles_fought: int) -> Array:
+	var events = []
+	var event_probability = 0.3  # 30%概率每10場戰鬥觸發一個事件
+
+	var potential_events = int(battles_fought / 10)
+
+	for i in range(potential_events):
+		if randf() < event_probability:
+			var random_events = [
+				"💰 發現了藏寶箱！",
+				"⚔️ 俘獲了傳說武器！",
+				"👥 招募了忠誠武將！",
+				"📜 學會了新的戰術！",
+				"🌟 觸發了天命事件！"
+			]
+			events.append(random_events[randi() % random_events.size()])
+
+	return events
+
+# 應用離線進度到玩家數據
+func apply_offline_progress(progress: Dictionary, current_player_data: Dictionary) -> void:
+	if not current_player_data:
+		LogManager.error("AutoBattleManager", "無法應用離線進度：玩家數據無效")
+		return
+
+	var resources_gained = progress.get("resources_gained", {})
+	var resources_lost = progress.get("resources_lost", {})
+	var cities_conquered = progress.get("cities_conquered", 0)
+
+	# 應用資源變化
+	if resources_gained.has("gold"):
+		current_player_data.resources.gold += resources_gained.gold
+		EventBus.emit_safe("resources_changed", ["gold", resources_gained.gold])
+
+	if resources_gained.has("troops"):
+		var net_troops = resources_gained.troops - resources_lost.get("troops", 0)
+		current_player_data.resources.troops += net_troops
+		EventBus.emit_safe("resources_changed", ["troops", net_troops])
+
+	if resources_gained.has("experience"):
+		current_player_data.experience += resources_gained.experience
+		EventBus.emit_safe("experience_gained", [resources_gained.experience, "offline_battles"])
+
+	# 更新統計
+	automation_statistics.total_battles += progress.get("battles_fought", 0)
+	automation_statistics.total_victories += progress.get("successful_battles", 0)
+	automation_statistics.total_defeats += progress.get("failed_battles", 0)
+	automation_statistics.cities_conquered += cities_conquered
+
+	# 征服城池
+	if cities_conquered > 0:
+		_apply_offline_city_conquests(cities_conquered, current_player_data)
+
+	LogManager.info("AutoBattleManager", "離線進度已應用", {
+		"battles": progress.get("battles_fought", 0),
+		"cities": cities_conquered,
+		"gold_gained": resources_gained.get("gold", 0),
+		"experience_gained": resources_gained.get("experience", 0)
+	})
+
+	# 觸發離線進度完成事件
+	offline_progress_calculated.emit(progress, progress.get("offline_hours", 0.0))
+
+# 應用離線城池征服
+func _apply_offline_city_conquests(cities_count: int, current_player_data: Dictionary) -> void:
+	if not CityManager:
+		LogManager.error("AutoBattleManager", "無法征服城池：CityManager未找到")
+		return
+
+	var conquerable_cities = CityManager.get_conquerable_cities(current_player_data)
+	var cities_to_conquer = min(cities_count, conquerable_cities.size())
+
+	for i in range(cities_to_conquer):
+		if i < conquerable_cities.size():
+			var city = conquerable_cities[i]
+			var city_id = city.get("id", "")
+
+			if not city_id.is_empty():
+				# 執行城池征服
+				var conquest_result = CityManager.execute_city_conquest(city_id)
+
+				if conquest_result.get("success", false):
+					current_player_data.owned_cities.append(city_id)
+					EventBus.emit_safe("city_conquered", [city.get("name", ""), "player", {}])
+
+					LogManager.game_event("OfflineConquest", "離線征服城池", {
+						"city": city.get("name", ""),
+						"offline": true
+					})
 
 # === 戰鬥結果處理 ===
 
@@ -618,11 +934,174 @@ func reset_automation_statistics() -> void:
 		"automation_start_time": Time.get_unix_time_from_system()
 	}
 
+# === 放置遊戲核心自動戰鬥循環 ===
+
+# 自動戰鬥計時器觸發
+func _on_auto_battle_timer_timeout() -> void:
+	if not should_auto_battle():
+		return
+
+	LogManager.debug("AutoBattleManager", "自動戰鬥觸發")
+
+	# 執行自動戰鬥循環
+	execute_idle_battle_cycle()
+
+# 檢查是否應該進行自動戰鬥
+func should_auto_battle() -> bool:
+	# 基本檢查
+	if not is_auto_enabled or is_paused or not is_system_initialized:
+		return false
+
+	# 檢查遊戲狀態
+	if not GameStateManager:
+		return false
+
+	var current_state = GameStateManager.get_current_state()
+	if current_state != GameStateManager.GameState.GAME_RUNNING:
+		return false
+
+	# 檢查是否有活躍戰鬥
+	if active_battles.size() > 0:
+		LogManager.debug("AutoBattleManager", "有活躍戰鬥，跳過自動戰鬥")
+		return false
+
+	return true
+
+# 執行放置遊戲戰鬥循環
+func execute_idle_battle_cycle() -> void:
+	var current_player_data = GameCore.get_player_data()
+	if not current_player_data:
+		LogManager.error("AutoBattleManager", "無法獲取玩家數據")
+		return
+
+	# 選擇目標
+	var target_city = select_optimal_target()
+	if target_city.is_empty():
+		LogManager.debug("AutoBattleManager", "沒有可用目標，暫停自動戰鬥")
+		_handle_no_targets_available()
+		return
+
+	# 執行戰鬥
+	execute_auto_battle(target_city)
+
+	# 更新戰鬥頻率（難度遞增）
+	update_battle_frequency()
+
+	# 發送難度縮放事件
+	var scaling_factor = _calculate_difficulty_scaling()
+	EventBus.emit_safe("difficulty_scaling_applied", [scaling_factor, "battle_progression"])
+
+# 處理沒有可用目標的情況
+func _handle_no_targets_available() -> void:
+	# 檢查是否已征服所有城池
+	var current_player_data = GameCore.get_player_data()
+	var owned_cities = current_player_data.get("owned_cities", [])
+
+	if owned_cities.size() >= 16:  # 假設總共16座城池
+		LogManager.info("AutoBattleManager", "所有城池已征服，遊戲勝利！")
+		EventBus.emit_safe("game_victory")
+		pause_automation("game_completed")
+	else:
+		# 可能需要等待解鎖新目標
+		LogManager.debug("AutoBattleManager", "等待新目標解鎖")
+
+# 更新戰鬥頻率（實現指數增長難度）
+func update_battle_frequency() -> void:
+	var config = automation_config.get("idle_progression", {})
+	var scaling_factor = config.get("frequency_scaling_factor", 1.15)
+	var max_frequency = config.get("max_battle_frequency", 30.0)
+
+	# 根據戰鬥次數增加間隔時間
+	var new_frequency = battle_frequency * scaling_factor
+	new_frequency = min(new_frequency, max_frequency)
+
+	if new_frequency != battle_frequency:
+		battle_frequency = new_frequency
+		auto_battle_timer.wait_time = battle_frequency
+
+		LogManager.debug("AutoBattleManager", "戰鬥頻率已更新", {
+			"new_frequency": battle_frequency,
+			"battles_completed": battles_completed
+		})
+
+		# 發送戰鬥頻率更新事件
+		EventBus.emit_safe("battle_frequency_updated", [battle_frequency, battles_completed])
+
+# 開始自動戰鬥循環（技能選擇完成後調用）
+func start_idle_game_loop() -> void:
+	if not is_system_initialized:
+		LogManager.error("AutoBattleManager", "系統未初始化，無法開始遊戲循環")
+		return
+
+	is_auto_enabled = true
+	is_paused = false
+
+	# 重置統計
+	battles_completed = 0
+	consecutive_victories = 0
+	consecutive_defeats = 0
+
+	# 重置戰鬥頻率
+	var config = automation_config.get("idle_progression", {})
+	battle_frequency = config.get("base_battle_frequency", 5.0)
+	auto_battle_timer.wait_time = battle_frequency
+
+	# 開始計時器
+	auto_battle_timer.start()
+
+	LogManager.info("AutoBattleManager", "放置遊戲循環已開始", {
+		"initial_frequency": battle_frequency
+	})
+
+	# 發送放置遊戲循環開始事件
+	EventBus.emit_safe("idle_game_loop_started")
+
+	# 立即執行第一次戰鬥
+	call_deferred("execute_idle_battle_cycle")
+
+# 停止自動戰鬥循環
+func stop_idle_game_loop() -> void:
+	is_auto_enabled = false
+	auto_battle_timer.stop()
+	LogManager.info("AutoBattleManager", "放置遊戲循環已停止")
+
+	# 發送放置遊戲循環停止事件
+	EventBus.emit_safe("idle_game_loop_stopped")
+
 # === 事件處理器 ===
 
 func _on_battle_completed(result: Dictionary, victor: String, casualties: Dictionary) -> void:
 	if is_auto_enabled:
 		process_battle_result(result, player_data)
+
+		# 更新連續勝負統計
+		battles_completed += 1
+		if victor == "player":
+			consecutive_victories += 1
+			consecutive_defeats = 0
+			LogManager.game_event("AutoBattle", "自動戰鬥勝利", {
+				"victories_streak": consecutive_victories,
+				"total_battles": battles_completed
+			})
+		else:
+			consecutive_defeats += 1
+			consecutive_victories = 0
+			LogManager.game_event("AutoBattle", "自動戰鬥失敗", {
+				"defeats_streak": consecutive_defeats,
+				"total_battles": battles_completed
+			})
+
+# 技能選擇完成事件處理器
+func _on_skill_selection_completed() -> void:
+	LogManager.info("AutoBattleManager", "技能選擇已完成，準備開始自動戰鬥循環")
+
+	# 延遲啟動，給其他系統時間初始化
+	var timer = Timer.new()
+	timer.wait_time = 1.0
+	timer.one_shot = true
+	timer.timeout.connect(start_idle_game_loop)
+	add_child(timer)
+	timer.start()
 
 func _on_city_conquered(city_name: String, new_owner: String, spoils: Dictionary) -> void:
 	if new_owner == "player" and is_auto_enabled:
@@ -735,10 +1214,13 @@ func _process_battle_resolution(battle_record: Dictionary) -> void:
 		"duration": Time.get_unix_time_from_system() - battle_record.start_time
 	})
 
-# 計算戰鬥結果
+# 計算戰鬥結果（加入難度縮放）
 func _calculate_battle_outcome(attacker: Dictionary, defender: Dictionary, battle_plan: Dictionary) -> Dictionary:
 	var attacker_power = _calculate_total_combat_power(attacker, true)
-	var defender_power = _calculate_total_combat_power(defender, false)
+	var base_defender_power = _calculate_total_combat_power(defender, false)
+
+	# 應用敵方戰力縮放
+	var defender_power = _calculate_enemy_power_scaling(base_defender_power)
 
 	# 添加隨機因素
 	var random_factor = randf_range(0.8, 1.2)
@@ -753,7 +1235,7 @@ func _calculate_battle_outcome(attacker: Dictionary, defender: Dictionary, battl
 		victor = "player"
 		victor_remaining_power = attacker_power - defender_power
 
-		# 計算傷亡
+		# 計算傷亡（勝利時傷亡較少）
 		var attacker_losses = int(attacker.troops * randf_range(0.1, 0.3))
 		var defender_losses = defender.troops  # 全軍覆沒
 
@@ -778,19 +1260,29 @@ func _calculate_battle_outcome(attacker: Dictionary, defender: Dictionary, battl
 		"victor": victor,
 		"attacker_power": attacker_power,
 		"defender_power": defender_power,
+		"base_defender_power": base_defender_power,
+		"difficulty_scaling": defender_power / base_defender_power,
 		"remaining_power": victor_remaining_power,
 		"casualties": casualties,
 		"battle_duration": randf_range(2.0, 5.0),
 		"city_name": battle_plan.get("target_city_name", "")
 	}
 
-	# 如果勝利，計算戰利品
+	# 如果勝利，計算戰利品（應用縮放獎勵）
 	if victor == "player":
 		result["spoils"] = _calculate_victory_spoils(defender, battle_plan)
 		result["city_conquered"] = true
 	else:
 		result["spoils"] = {}
 		result["city_conquered"] = false
+
+	LogManager.debug("AutoBattleManager", "戰鬥結果計算", {
+		"victor": victor,
+		"attacker_power": attacker_power,
+		"base_defender_power": base_defender_power,
+		"scaled_defender_power": defender_power,
+		"difficulty_scaling": result.difficulty_scaling
+	})
 
 	return result
 

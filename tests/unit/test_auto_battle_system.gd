@@ -437,3 +437,304 @@ func test_invalid_automation_settings():
 	# 應該使用默認設定
 	auto_battle_manager.initialize(invalid_player_data, test_automation_config)
 	assert_bool(auto_battle_manager.is_initialized()).is_true()
+
+# === 新增：難度縮放系統測試 ===
+
+func test_difficulty_scaling_calculation():
+	# 測試難度縮放計算
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	# 模擬不同的戰鬥完成數
+	auto_battle_manager.battles_completed = 0
+	var initial_scaling = auto_battle_manager._calculate_difficulty_scaling()
+
+	auto_battle_manager.battles_completed = 50
+	var mid_scaling = auto_battle_manager._calculate_difficulty_scaling()
+
+	auto_battle_manager.battles_completed = 100
+	var high_scaling = auto_battle_manager._calculate_difficulty_scaling()
+
+	# 難度應該隨著戰鬥次數增加
+	assert_float(initial_scaling).is_less_equal(mid_scaling)
+	assert_float(mid_scaling).is_less_equal(high_scaling)
+
+	# 應該在合理範圍內
+	assert_float(initial_scaling).is_greater_equal(1.0)
+	assert_float(high_scaling).is_less_equal(10.0)
+
+func test_streak_modifier_impact():
+	# 測試連勝/連敗修正
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	# 測試連勝
+	auto_battle_manager.consecutive_victories = 10
+	auto_battle_manager.consecutive_defeats = 0
+	var victory_modifier = auto_battle_manager._calculate_streak_modifier()
+
+	# 測試連敗
+	auto_battle_manager.consecutive_victories = 0
+	auto_battle_manager.consecutive_defeats = 5
+	var defeat_modifier = auto_battle_manager._calculate_streak_modifier()
+
+	# 測試平衡狀態
+	auto_battle_manager.consecutive_victories = 2
+	auto_battle_manager.consecutive_defeats = 1
+	var balanced_modifier = auto_battle_manager._calculate_streak_modifier()
+
+	# 連勝應該增加難度，連敗應該降低難度
+	assert_float(victory_modifier).is_greater(balanced_modifier)
+	assert_float(defeat_modifier).is_less(balanced_modifier)
+
+func test_dynamic_success_rate_balancing():
+	# 測試動態成功率平衡
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	# 模擬高勝率情況
+	auto_battle_manager.automation_statistics = {
+		"total_battles": 100,
+		"total_victories": 90  # 90% 勝率
+	}
+
+	var base_rate = 0.8
+	var adjusted_high_rate = auto_battle_manager._adjust_success_rate_for_balance(base_rate)
+
+	# 模擬低勝率情況
+	auto_battle_manager.automation_statistics = {
+		"total_battles": 100,
+		"total_victories": 50  # 50% 勝率
+	}
+
+	var adjusted_low_rate = auto_battle_manager._adjust_success_rate_for_balance(base_rate)
+
+	# 高勝率時應該降低成功率，低勝率時應該提高成功率
+	assert_float(adjusted_high_rate).is_less(base_rate)
+	assert_float(adjusted_low_rate).is_greater_equal(base_rate)
+
+func test_reward_scaling_calculation():
+	# 測試獎勵縮放計算
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	auto_battle_manager.battles_completed = 0
+	var initial_rewards = auto_battle_manager._calculate_reward_scaling()
+
+	auto_battle_manager.battles_completed = 50
+	var scaled_rewards = auto_battle_manager._calculate_reward_scaling()
+
+	# 獎勵應該隨難度增加
+	assert_float(scaled_rewards).is_greater_equal(initial_rewards)
+
+	# 應該在合理範圍內
+	assert_float(initial_rewards).is_greater_equal(1.0)
+	assert_float(scaled_rewards).is_less_equal(3.0)
+
+func test_enemy_power_scaling():
+	# 測試敵方戰力縮放
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	var base_power = 1000.0
+	auto_battle_manager.battles_completed = 0
+	var initial_power = auto_battle_manager._calculate_enemy_power_scaling(base_power)
+
+	auto_battle_manager.battles_completed = 30
+	var scaled_power = auto_battle_manager._calculate_enemy_power_scaling(base_power)
+
+	# 敵方戰力應該隨難度增加
+	assert_float(scaled_power).is_greater_equal(initial_power)
+
+# === 新增：增強離線進度測試 ===
+
+func test_enhanced_offline_progression():
+	# 測試增強版離線進度
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	# 設置一些戰鬥歷史
+	auto_battle_manager.battles_completed = 25
+	auto_battle_manager.automation_statistics = {
+		"total_battles": 30,
+		"total_victories": 22
+	}
+
+	var offline_hours = 8.0
+	var progress = auto_battle_manager.calculate_offline_progress(test_player_data, offline_hours)
+
+	# 檢查新增的字段
+	assert_dict(progress).contains_key("win_rate_achieved")
+	assert_dict(progress).contains_key("difficulty_scaling")
+	assert_dict(progress).contains_key("progression_events")
+
+	# 勝率應該是合理的
+	var win_rate = progress.get("win_rate_achieved", 0.0)
+	assert_float(win_rate).is_greater(0.0)
+	assert_float(win_rate).is_less_equal(1.0)
+
+func test_offline_battles_per_hour():
+	# 測試離線戰鬥頻率計算
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	var battles_per_hour = auto_battle_manager._calculate_offline_battles_per_hour()
+
+	# 應該是合理的數值
+	assert_float(battles_per_hour).is_greater(0.0)
+	assert_float(battles_per_hour).is_less_equal(10.0)
+
+func test_offline_city_conquest_calculation():
+	# 測試離線城池征服計算
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	# 測試不同的勝利數量
+	var few_victories = auto_battle_manager._calculate_offline_cities_conquered(20, test_player_data)
+	var many_victories = auto_battle_manager._calculate_offline_cities_conquered(100, test_player_data)
+
+	# 更多勝利應該征服更多城池
+	assert_int(many_victories).is_greater_equal(few_victories)
+
+	# 不應該超過可征服的城池數量
+	var total_cities = 16
+	var owned_cities = test_player_data.get("owned_cities", []).size()
+	var max_conquerable = total_cities - owned_cities
+
+	assert_int(many_victories).is_less_equal(max_conquerable)
+
+func test_offline_random_events_simulation():
+	# 測試離線隨機事件模擬
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	var few_battles_events = auto_battle_manager._simulate_offline_random_events(5)
+	var many_battles_events = auto_battle_manager._simulate_offline_random_events(100)
+
+	# 更多戰鬥應該有更多機會觸發事件
+	assert_int(many_battles_events.size()).is_greater_equal(few_battles_events.size())
+
+func test_offline_progress_application():
+	# 測試離線進度應用
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	var initial_gold = test_player_data.resources.get("gold", 0)
+	var initial_troops = test_player_data.resources.get("troops", 0)
+	var initial_experience = test_player_data.get("experience", 0)
+
+	var mock_progress = {
+		"battles_fought": 50,
+		"successful_battles": 35,
+		"failed_battles": 15,
+		"resources_gained": {
+			"gold": 2000,
+			"troops": 300,
+			"experience": 800
+		},
+		"resources_lost": {
+			"troops": 100
+		},
+		"cities_conquered": 1,
+		"offline_hours": 8.0
+	}
+
+	auto_battle_manager.apply_offline_progress(mock_progress, test_player_data)
+
+	# 檢查資源是否正確更新
+	assert_int(test_player_data.resources.gold).is_equal(initial_gold + 2000)
+	assert_int(test_player_data.resources.troops).is_equal(initial_troops + 300 - 100)
+	assert_int(test_player_data.experience).is_equal(initial_experience + 800)
+
+# === 新增：放置遊戲循環測試 ===
+
+func test_idle_game_loop_startup():
+	# 測試放置遊戲循環啟動
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	# 模擬技能選擇完成
+	auto_battle_manager.start_idle_game_loop()
+
+	# 檢查自動化狀態
+	assert_bool(auto_battle_manager.is_auto_battle_enabled()).is_true()
+	assert_bool(auto_battle_manager.is_auto_paused()).is_false()
+
+	# 檢查計時器是否啟動
+	assert_object(auto_battle_manager.auto_battle_timer).is_not_null()
+
+func test_battle_frequency_update():
+	# 測試戰鬥頻率更新
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	var initial_frequency = auto_battle_manager.battle_frequency
+
+	# 模擬多次戰鬥
+	for i in range(10):
+		auto_battle_manager.update_battle_frequency()
+		auto_battle_manager.battles_completed += 1
+
+	var updated_frequency = auto_battle_manager.battle_frequency
+
+	# 頻率應該隨著戰鬥增加而增加（間隔變長）
+	assert_float(updated_frequency).is_greater_equal(initial_frequency)
+
+func test_auto_battle_execution_conditions():
+	# 測試自動戰鬥執行條件
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	# 正常情況下應該可以執行
+	assert_bool(auto_battle_manager.should_auto_battle()).is_true()
+
+	# 暫停時不應該執行
+	auto_battle_manager.pause_automation()
+	assert_bool(auto_battle_manager.should_auto_battle()).is_false()
+
+	# 恢復後應該可以執行
+	auto_battle_manager.resume_automation()
+	assert_bool(auto_battle_manager.should_auto_battle()).is_true()
+
+# === 新增：整合測試 ===
+
+func test_complete_battle_workflow():
+	# 測試完整戰鬥工作流程
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+	auto_battle_manager.available_cities = test_cities_data
+
+	# 選擇目標
+	var target = auto_battle_manager.select_optimal_target()
+	assert_dict(target).is_not_empty()
+
+	# 創建戰鬥計劃
+	var battle_plan = auto_battle_manager.create_battle_plan(target, test_player_data)
+	assert_dict(battle_plan).is_not_empty()
+
+	# 檢查可以發起戰鬥
+	var can_battle = auto_battle_manager.can_initiate_battle(test_player_data, target)
+	assert_bool(can_battle).is_true()
+
+func test_difficulty_progression_over_time():
+	# 測試隨時間變化的難度進展
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	var initial_city = test_cities_data[0].duplicate()
+	var initial_success_rate = auto_battle_manager.calculate_conquest_success_rate(initial_city, test_player_data)
+
+	# 模擬經過大量戰鬥
+	auto_battle_manager.battles_completed = 100
+	auto_battle_manager.automation_statistics = {
+		"total_battles": 120,
+		"total_victories": 90
+	}
+
+	var later_success_rate = auto_battle_manager.calculate_conquest_success_rate(initial_city, test_player_data)
+
+	# 由於難度縮放，後期成功率應該更低
+	assert_float(later_success_rate).is_less_equal(initial_success_rate)
+
+func test_resource_balance_over_progression():
+	# 測試進展過程中的資源平衡
+	auto_battle_manager.initialize(test_player_data, test_automation_config)
+
+	# 模擬不同進度階段的獎勵
+	auto_battle_manager.battles_completed = 0
+	var early_rewards = auto_battle_manager.calculate_expected_rewards(test_cities_data[0])
+
+	auto_battle_manager.battles_completed = 50
+	var mid_rewards = auto_battle_manager.calculate_expected_rewards(test_cities_data[0])
+
+	auto_battle_manager.battles_completed = 100
+	var late_rewards = auto_battle_manager.calculate_expected_rewards(test_cities_data[0])
+
+	# 獎勵應該隨著進度增加
+	assert_int(mid_rewards.gold).is_greater_equal(early_rewards.gold)
+	assert_int(late_rewards.gold).is_greater_equal(mid_rewards.gold)

@@ -13,6 +13,8 @@ signal game_state_changed(new_state: int, old_state: int)
 signal game_initialized()
 signal game_paused(paused: bool)
 signal main_game_started()
+signal game_victory()
+signal game_over(reason: String)
 signal turn_completed(turn_data: Dictionary)
 
 # 玩家相關事件
@@ -30,10 +32,23 @@ signal star_converted_to_attributes(stars_converted: int, attributes_gained: Dic
 signal battle_initiated(attacker: Dictionary, defender: Dictionary)
 signal battle_started(attacker: Dictionary, defender: Dictionary, city_name: String)
 signal battle_completed(result: Dictionary, victor: String, casualties: Dictionary)
+signal battle_damage_dealt(damage_data: Dictionary)
+signal battle_skill_activated(skill_data: Dictionary)
 signal city_siege_started(city_id: String, attacking_force: Dictionary)
 signal city_conquered(city_name: String, new_owner: String, spoils: Dictionary)
 signal general_captured(general_data: Dictionary, captor: String)
 signal general_recruited(general_data: Dictionary, recruiter: String)
+
+# 自動戰鬥系統事件
+signal auto_battle_started(target_city: Dictionary, battle_plan: Dictionary)
+signal auto_battle_completed(result: Dictionary, spoils: Dictionary)
+signal automation_paused(reason: String)
+signal automation_resumed()
+signal offline_progress_calculated(progress: Dictionary, offline_hours: float)
+signal idle_game_loop_started()
+signal idle_game_loop_stopped()
+signal battle_frequency_updated(new_frequency: float, battles_completed: int)
+signal difficulty_scaling_applied(scaling_factor: float, reason: String)
 
 # 資源管理事件
 signal resources_changed(resource_type: String, old_amount: int, new_amount: int)

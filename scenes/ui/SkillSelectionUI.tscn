@@ -71,6 +71,7 @@ horizontal_alignment = 1
 [node name="SkillCardContainer" type="VBoxContainer" parent="VBoxContainer/SkillsContainer"]
 layout_mode = 2
 size_flags_vertical = 3
+add_theme_constant_override/separation = 12
 
 [node name="SkillCard1" type="Panel" parent="VBoxContainer/SkillsContainer/SkillCardContainer"]
 layout_mode = 2

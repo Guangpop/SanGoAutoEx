@@ -21,6 +21,7 @@ extends Control
 	$VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard3
 ]
 
+@onready var skill_card_container = $VBoxContainer/SkillsContainer/SkillCardContainer
 @onready var skill_buttons = [
 	$VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard1/SkillCard1Button,
 	$VBoxContainer/SkillsContainer/SkillCardContainer/SkillCard2/SkillCard2Button,
@@ -166,6 +167,9 @@ func update_ui_state() -> void:
 
 # 更新技能卡片顯示
 func update_skill_cards() -> void:
+	# 重置所有卡片位置確保正確佈局
+	_reset_all_card_positions()
+
 	for i in range(skill_cards.size()):
 		var card = skill_cards[i]
 		var button = skill_buttons[i]
@@ -249,15 +253,41 @@ func _play_show_animation() -> void:
 	for i in range(skill_cards.size()):
 		var card = skill_cards[i]
 		if card.visible:
+			# 重置卡片到正確位置並設置初始動畫狀態
+			_reset_card_transform(card)
 			card.modulate = Color(1, 1, 1, 0)
-			card.position.y += 50
+			card.scale = Vector2(0.8, 0.8)
 
 			await get_tree().create_timer(0.1).timeout
 
 			var card_tween = create_tween()
 			card_tween.set_parallel(true)
 			card_tween.tween_property(card, "modulate", Color.WHITE, 0.2)
-			card_tween.tween_property(card, "position:y", card.position.y - 50, 0.2)
+			card_tween.tween_property(card, "scale", Vector2(1.0, 1.0), 0.2)
+
+# 重置卡片變換（避免與VBoxContainer佈局衝突）
+func _reset_card_transform(card: Control) -> void:
+	if not card:
+		return
+
+	# 重置所有變換屬性到默認值
+	card.position = Vector2.ZERO
+	card.scale = Vector2.ONE
+	card.rotation = 0.0
+	card.modulate = Color.WHITE
+
+	# 強制更新佈局
+	card.get_parent().queue_sort()
+
+# 重置所有卡片位置
+func _reset_all_card_positions() -> void:
+	for card in skill_cards:
+		if card:
+			_reset_card_transform(card)
+
+	# 強制更新容器佈局
+	if skill_card_container:
+		skill_card_container.queue_sort()
 
 # 播放隱藏動畫
 func _play_hide_animation() -> void:
