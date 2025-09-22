@@ -8,6 +8,7 @@ export_presets.cfg
 # Logs and Reports
 logs/
 reports/
+screenshots/
 *.log
 
 # System Files

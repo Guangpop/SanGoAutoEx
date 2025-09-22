@@ -29,7 +29,6 @@ extends Control
 ]
 
 @onready var skip_button = $VBoxContainer/BottomContainer/SkipButton
-@onready var continue_button = $VBoxContainer/BottomContainer/ContinueButton
 
 # 當前顯示的技能數據
 var current_skills: Array = []
@@ -102,7 +101,6 @@ func connect_ui_events() -> void:
 
 	# 連接底部按鈕
 	skip_button.pressed.connect(_on_skip_button_pressed)
-	continue_button.pressed.connect(_on_continue_button_pressed)
 
 # 初始化界面
 func initialize_ui() -> void:
@@ -155,15 +153,13 @@ func update_ui_state() -> void:
 
 	# 更新進度信息
 	round_label.text = "第 %d/%d 回合" % [state.current_round + 1, state.max_rounds]
-	stars_label.text = "⭐ %d" % state.remaining_stars
+	stars_label.text = "剩餘星星: ⭐ %d" % state.remaining_stars
 	selected_skills_label.text = "已選技能：%d" % state.selected_skills.size()
 
 	# 更新技能卡片
 	current_skills = state.available_skills
 	update_skill_cards()
 
-	# 更新按鈕狀態
-	continue_button.disabled = not SkillSelectionManager.is_completed()
 
 # 更新技能卡片顯示
 func update_skill_cards() -> void:
@@ -477,14 +473,6 @@ func _execute_auto_advance() -> void:
 		SkillSelectionManager.finish_skill_selection()
 		LogManager.info("SkillSelectionUI", "所有回合完成，結束技能選擇")
 
-func _on_continue_button_pressed() -> void:
-	LogManager.debug("SkillSelectionUI", "完成按鈕點擊")
-
-	if SkillSelectionManager.is_completed():
-		# 完成技能選擇
-		SkillSelectionManager.finish_skill_selection()
-	else:
-		LogManager.warn("SkillSelectionUI", "技能選擇未完成，無法繼續")
 
 # 播放選擇失敗動畫
 func _play_selection_failed_animation(skill_index: int) -> void:

@@ -214,8 +214,3 @@ size_flags_horizontal = 3
 text = "已選技能：0"
 horizontal_alignment = 1
 
-[node name="ContinueButton" type="Button" parent="VBoxContainer/BottomContainer"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "完成選擇"
-disabled = true

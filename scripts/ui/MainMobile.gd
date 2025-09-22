@@ -28,6 +28,9 @@ extends Control
 @onready var troops_label = $VBoxContainer/TopBar/TopBarContainer/Resources/Troops
 @onready var cities_label = $VBoxContainer/TopBar/TopBarContainer/Resources/Cities
 
+# 調試工具引用
+@onready var screenshot_button = $ScreenshotButton
+
 # TopBar 折疊式設計相關
 @onready var ability_stats_container = $VBoxContainer/TopBar/TopBarContainer/AbilityStats
 var topbar_expanded: bool = false
@@ -178,9 +181,13 @@ func initialize_ui() -> void:
 	# 設置初始UI狀態
 	update_player_info()
 
+	# 初始化調試工具
+	setup_debug_tools()
+
 	LogManager.info("MainMobile", "UI初始化完成", {
 		"player_info_updated": true,
-		"ui_ready": true
+		"ui_ready": true,
+		"debug_tools_ready": screenshot_button != null
 	})
 
 func update_player_info() -> void:
@@ -236,7 +243,17 @@ func update_player_info() -> void:
 		"year": player_data.game_year,
 		"attributes_updated": attributes.size(),
 		"resources_updated": resources.size(),
-		"ui_elements_valid": true
+		"ui_elements_valid": true,
+		"ability_stats_visible": ability_stats_container.visible if ability_stats_container else false,
+		"topbar_expanded": topbar_expanded,
+		"能力值": {
+			"武力": attributes.get("武力", 0),
+			"智力": attributes.get("智力", 0),
+			"統治": attributes.get("統治", 0),
+			"政治": attributes.get("政治", 0),
+			"魅力": attributes.get("魅力", 0),
+			"天命": attributes.get("天命", 0)
+		}
 	})
 
 # === TopBar 折疊式設計功能 ===
@@ -247,13 +264,13 @@ func setup_topbar_collapsible() -> void:
 		LogManager.warn("MainMobile", "TopBar節點未找到，無法設置折疊功能")
 		return
 
-	# 設置初始狀態為折疊
-	topbar_expanded = false
-	top_bar.custom_minimum_size.y = topbar_collapsed_height
+	# 設置初始狀態為展開 (確保能力值可見)
+	topbar_expanded = true
+	top_bar.custom_minimum_size.y = topbar_expanded_height
 
-	# 初始隱藏能力值面板
+	# 初始顯示能力值面板
 	if ability_stats_container:
-		ability_stats_container.visible = false
+		ability_stats_container.visible = true
 
 	# 增加觸控區域 - 讓PlayerInfo區域可點擊
 	var player_info_area = top_bar.get_node("TopBarContainer/PlayerInfo")
@@ -591,3 +608,48 @@ func _animate_resource_change(resource_type: String, amount: int) -> void:
 func _set_label_color(label: Label, color: Color) -> void:
 	if label:
 		label.add_theme_color_override("font_color", color)
+
+# === 調試工具方法 ===
+
+# 設置調試工具
+func setup_debug_tools() -> void:
+	LogManager.info("MainMobile", "初始化調試工具", {
+		"screenshot_button_available": screenshot_button != null
+	})
+
+	if screenshot_button:
+		LogManager.info("MainMobile", "截圖按鈕已就緒", {
+			"button_position": screenshot_button.position,
+			"button_visible": screenshot_button.visible
+		})
+	else:
+		LogManager.warn("MainMobile", "截圖按鈕未找到")
+
+# 公共方法：觸發截圖
+func capture_debug_screenshot() -> void:
+	if screenshot_button:
+		screenshot_button.capture_screenshot()
+		LogManager.info("MainMobile", "通過主界面觸發截圖")
+	else:
+		LogManager.warn("MainMobile", "無法觸發截圖：截圖按鈕未找到")
+
+# 公共方法：獲取截圖統計
+func get_debug_screenshot_stats() -> Dictionary:
+	if screenshot_button:
+		return screenshot_button.get_screenshot_stats()
+	else:
+		return {
+			"error": "截圖按鈕未找到",
+			"total_screenshots": 0,
+			"directory": "unknown"
+		}
+
+# 公共方法：設置截圖按鈕可見性
+func set_screenshot_button_visible(visible: bool) -> void:
+	if screenshot_button:
+		screenshot_button.visible = visible
+		LogManager.info("MainMobile", "截圖按鈕可見性已更改", {
+			"visible": visible
+		})
+	else:
+		LogManager.warn("MainMobile", "無法設置截圖按鈕可見性：按鈕未找到")

@@ -7,6 +7,7 @@
 [ext_resource type="Theme" path="res://assets/ui/main_theme.tres" id="5_main_theme"]
 [ext_resource type="PackedScene" path="res://scenes/ui/BattleUI.tscn" id="6_battle_ui"]
 [ext_resource type="Script" path="res://scripts/ui/BattleUI.gd" id="7_battle_ui_script"]
+[ext_resource type="PackedScene" path="res://scenes/ui/ScreenshotButton.tscn" id="8_screenshot_button"]
 
 [node name="MainMobile" type="Control"]
 layout_mode = 3
@@ -190,3 +191,5 @@ layout_mode = 2
 layout_mode = 2
 
 [node name="BattleUI" parent="." instance=ExtResource("6_battle_ui")]
+
+[node name="ScreenshotButton" parent="." instance=ExtResource("8_screenshot_button")]
