@@ -13,8 +13,8 @@ var ui_manager
 
 # UI節點引用
 @onready var top_bar = $SafeAreaContainer/VBoxContainer/TopBar
-@onready var map_viewport = $SafeAreaContainer/VBoxContainer/GameMainArea/MapArea
-@onready var map_area = $SafeAreaContainer/VBoxContainer/GameMainArea/MapArea/MapRoot
+@onready var map_viewport = $SafeAreaContainer/VBoxContainer/GameMainArea/MapContainer/MapArea
+@onready var map_area = $SafeAreaContainer/VBoxContainer/GameMainArea/MapContainer/MapArea/MapRoot
 @onready var game_event = $SafeAreaContainer/VBoxContainer/GameMainArea/GameEventOverlay/GameEvent
 @onready var event_content = $SafeAreaContainer/VBoxContainer/GameMainArea/GameEventOverlay/GameEvent/EventContent
 @onready var bottom_bar = $SafeAreaContainer/VBoxContainer/BottomBar
@@ -732,27 +732,155 @@ func _setup_ui_manager() -> void:
 
 ## 配置MapArea SubViewport
 func _configure_map_area() -> void:
-	if map_viewport:
-		# 確保SubViewport獲得正確尺寸
-		await get_tree().process_frame
-		map_viewport.size = get_viewport().get_visible_rect().size
-		map_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	if not map_viewport:
+		LogManager.error("MainMobile", "MapArea配置失敗 - SubViewport節點不存在")
+		return
 
-		LogManager.debug("MainMobile", "MapArea SubViewport已配置", {
-			"size": map_viewport.size,
-			"render_mode": "UPDATE_ALWAYS"
+	# 等待UI完全佈局完成
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	# 獲取實際的容器尺寸（而不是整個視窗尺寸）
+	var game_main_area = $SafeAreaContainer/VBoxContainer/GameMainArea
+	if game_main_area:
+		var actual_size = game_main_area.size
+		map_viewport.size = actual_size
+
+		LogManager.info("MainMobile", "SubViewport尺寸設定", {
+			"container_size": actual_size,
+			"viewport_size": map_viewport.size,
+			"screen_size": get_viewport().get_visible_rect().size
 		})
 	else:
-		LogManager.error("MainMobile", "MapArea配置失敗 - SubViewport節點不存在")
+		# 降級到使用主視窗尺寸
+		map_viewport.size = get_viewport().get_visible_rect().size
+		LogManager.warning("MainMobile", "使用降級尺寸設定")
 
-	# 確保MapArea(MapRoot)節點也正確配置
-	if map_area:
-		LogManager.debug("MainMobile", "MapRoot節點已存在", {
-			"script_attached": map_area.has_script(),
+	# 配置SubViewport渲染設定
+	map_viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+	map_viewport.handle_input_locally = false  # 讓父容器處理輸入
+	map_viewport.snap_2d_transforms_to_pixel = true  # 像素對齊
+	map_viewport.snap_2d_vertices_to_pixel = true
+
+	# 添加尺寸變化回調
+	if not game_main_area.resized.is_connected(_on_game_main_area_resized):
+		game_main_area.resized.connect(_on_game_main_area_resized)
+
+	# 強制一次重新渲染
+	map_viewport.set_update_mode(SubViewport.UPDATE_ONCE)
+	await get_tree().process_frame
+	map_viewport.set_update_mode(SubViewport.UPDATE_ALWAYS)
+
+	LogManager.info("MainMobile", "MapArea SubViewport配置完成", {
+		"size": map_viewport.size,
+		"render_mode": "UPDATE_ALWAYS",
+		"input_handling": "parent_container",
+		"pixel_snapping": true
+	})
+
+	# 調用MapArea的調試功能來驗證配置
+	_debug_map_display()
+
+## 調試地圖顯示功能
+func _debug_map_display() -> void:
+	LogManager.info("MainMobile", "開始地圖顯示調試")
+
+	# 等待MapArea初始化完成
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	# 嘗試獲取MapArea節點
+	var subviewport = get_node_or_null("SafeAreaContainer/VBoxContainer/GameMainArea/MapContainer/MapArea")
+	if not subviewport:
+		LogManager.error("MainMobile", "無法找到SubViewport")
+		return
+
+	# 檢查SubViewport的子節點
+	var children = subviewport.get_children()
+	LogManager.info("MainMobile", "SubViewport子節點", {
+		"children_names": children.map(func(n): return n.name),
+		"children_count": children.size()
+	})
+
+	# 嘗試獲取第一個子節點作為MapArea
+	if children.size() > 0:
+		map_area = children[0]
+		LogManager.info("MainMobile", "使用第一個子節點作為MapArea", {
+			"node_name": map_area.name,
 			"node_type": map_area.get_class()
 		})
 	else:
+		LogManager.error("MainMobile", "SubViewport沒有子節點")
+		return
+
+	# 執行渲染管道調試
+	var debug_info = map_area.debug_rendering_pipeline()
+	LogManager.info("MainMobile", "渲染管道調試完成", debug_info)
+
+	# 驗證渲染狀態
+	var rendering_issues = map_area.validate_rendering_state()
+	if not rendering_issues.is_empty():
+		LogManager.warning("MainMobile", "發現渲染問題", {"issues": rendering_issues})
+
+		# 嘗試修復
+		LogManager.info("MainMobile", "嘗試修復渲染問題")
+		map_area.force_viewport_refresh()
+
+		# 重新驗證
+		rendering_issues = map_area.validate_rendering_state()
+		if rendering_issues.is_empty():
+			LogManager.info("MainMobile", "渲染問題已修復")
+		else:
+			LogManager.error("MainMobile", "渲染問題未能修復", {"remaining_issues": rendering_issues})
+	else:
+		LogManager.info("MainMobile", "渲染狀態正常")
+
+	# 驗證城池位置
+	var position_validation = map_area.validate_city_positions()
+	LogManager.info("MainMobile", "城池位置驗證完成", {
+		"visible_cities": position_validation.visible_cities,
+		"total_cities": position_validation.total_cities
+	})
+
+	# 如果沒有可見城池，添加測試繪製
+	if position_validation.visible_cities == 0:
+		LogManager.warning("MainMobile", "沒有可見城池，執行基本繪製測試")
+		map_area.test_basic_drawing()
+
+	# 添加調試標記
+	map_area.add_debug_markers()
+
+	LogManager.info("MainMobile", "地圖顯示調試完成")
+
+	# 確保MapArea(MapRoot)節點也正確配置
+	if map_area:
+		LogManager.debug("MainMobile", "MapRoot節點驗證", {
+			"script_attached": map_area.has_script(),
+			"node_type": map_area.get_class(),
+			"position": map_area.position,
+			"visible": map_area.visible
+		})
+
+		# 通知MapArea SubViewport尺寸已更新
+		if map_area.has_method("_on_viewport_size_changed"):
+			map_area._on_viewport_size_changed()
+	else:
 		LogManager.error("MainMobile", "MapRoot節點不存在")
+
+## 容器尺寸變化回調
+func _on_game_main_area_resized() -> void:
+	if map_viewport:
+		var game_main_area = $SafeAreaContainer/VBoxContainer/GameMainArea
+		var new_size = game_main_area.size
+		map_viewport.size = new_size
+
+		LogManager.debug("MainMobile", "SubViewport尺寸已更新", {
+			"new_size": new_size
+		})
+
+		# 通知MapArea尺寸變化
+		if map_area and map_area.has_method("_on_viewport_size_changed"):
+			map_area._on_viewport_size_changed()
 
 ## 獲取UIManager (公開接口)
 func get_ui_manager():

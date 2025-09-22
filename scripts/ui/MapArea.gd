@@ -87,9 +87,21 @@ func _ready() -> void:
 	name = "MapArea"
 	LogManager.info("MapArea", "地圖區域初始化開始")
 
-	# 獲取視窗大小
-	viewport_size = get_viewport().get_visible_rect().size
-	LogManager.debug("MapArea", "視窗尺寸", {"size": viewport_size})
+	# 等待父視口配置完成
+	await get_tree().process_frame
+	await get_tree().process_frame
+
+	# 獲取正確的視窗大小
+	var parent_viewport = get_viewport()
+	if parent_viewport is SubViewport:
+		viewport_size = parent_viewport.size
+	else:
+		viewport_size = parent_viewport.get_visible_rect().size
+
+	LogManager.debug("MapArea", "視窗尺寸", {
+		"size": viewport_size,
+		"viewport_type": parent_viewport.get_class()
+	})
 
 	# 等待數據系統初始化
 	await _wait_for_data_system()
@@ -554,6 +566,7 @@ func _create_city_circle(city_data: Dictionary) -> Node2D:
 
 	# 使用自定義繪製
 	var circle_drawer = CityCircleDrawer.new()
+	circle_drawer.name = "CityCircleDrawer"
 	circle_drawer.setup(city_data, CITY_NODE_SIZE, get_city_color(city_data), get_tier_color(city_data))
 	circle.add_child(circle_drawer)
 
@@ -804,6 +817,328 @@ func _get_city_id_by_name(city_name: String) -> String:
 		if city.get("name", "") == city_name:
 			return city.get("id", "")
 	return ""
+
+# =============================================================================
+# 調試和視口處理功能
+# =============================================================================
+
+## 視口尺寸變化處理（由MainMobile調用）
+func _on_viewport_size_changed() -> void:
+	# 更新視窗尺寸
+	var old_size = viewport_size
+	viewport_size = get_viewport().get_visible_rect().size
+
+	LogManager.info("MapArea", "視口尺寸變化", {
+		"old_size": old_size,
+		"new_size": viewport_size,
+		"size_changed": old_size != viewport_size
+	})
+
+	# 重新計算地圖變換
+	if not cities_data.is_empty():
+		calculate_map_transform()
+		_update_all_city_positions()
+		_update_connection_positions()
+		LogManager.debug("MapArea", "地圖佈局已重新計算")
+
+## 添加視覺調試功能
+func add_debug_markers() -> void:
+	# 創建視口邊界標記
+	var debug_container = Node2D.new()
+	debug_container.name = "DebugMarkers"
+	add_child(debug_container)
+
+	# 添加四個角落的標記點
+	var corners = [
+		Vector2(0, 0),  # 左上
+		Vector2(viewport_size.x, 0),  # 右上
+		Vector2(0, viewport_size.y),  # 左下
+		Vector2(viewport_size.x, viewport_size.y)  # 右下
+	]
+
+	for i in range(corners.size()):
+		var marker = Node2D.new()
+		marker.name = "Corner_%d" % i
+		marker.position = corners[i]
+		debug_container.add_child(marker)
+
+	LogManager.info("MapArea", "調試標記已添加", {
+		"viewport_size": viewport_size,
+		"corner_positions": corners
+	})
+
+## 驗證城池位置是否在可見範圍內
+func validate_city_positions() -> Dictionary:
+	var validation_result = {
+		"total_cities": cities_data.size(),
+		"visible_cities": 0,
+		"outside_cities": [],
+		"city_positions": {}
+	}
+
+	for city in cities_data:
+		var city_id = city.get("id", "")
+		var world_pos = Vector2(
+			city.get("position", {}).get("x", 0),
+			city.get("position", {}).get("y", 0)
+		)
+		var screen_pos = world_to_screen(world_pos)
+
+		validation_result.city_positions[city_id] = {
+			"world": world_pos,
+			"screen": screen_pos,
+			"name": city.get("name", "")
+		}
+
+		# 檢查是否在視窗範圍內（添加邊距）
+		var margin = 100
+		var is_visible = (
+			screen_pos.x >= -margin and screen_pos.x <= viewport_size.x + margin and
+			screen_pos.y >= -margin and screen_pos.y <= viewport_size.y + margin
+		)
+
+		if is_visible:
+			validation_result.visible_cities += 1
+		else:
+			validation_result.outside_cities.append({
+				"id": city_id,
+				"name": city.get("name", ""),
+				"screen_pos": screen_pos
+			})
+
+	LogManager.info("MapArea", "城池位置驗證完成", validation_result)
+	return validation_result
+
+## 強制重新繪製所有元素
+func force_redraw() -> void:
+	LogManager.info("MapArea", "強制重新繪製開始")
+
+	# 隱藏後重新顯示所有城池節點
+	for city_id in city_nodes:
+		var city_node = city_nodes[city_id]
+		if city_node:
+			city_node.visible = false
+			await get_tree().process_frame
+			city_node.visible = true
+			city_node.queue_redraw()
+
+	# 強制重新繪製連線
+	for connection in city_connections:
+		var line = connection.get("line")
+		if line:
+			line.queue_redraw()
+
+	# 強制整個節點重新繪製
+	queue_redraw()
+
+	LogManager.info("MapArea", "強制重新繪製完成")
+
+## 獲取調試信息
+func get_debug_info() -> Dictionary:
+	return {
+		"viewport_size": viewport_size,
+		"map_scale": map_scale,
+		"map_offset": map_offset,
+		"cities_count": cities_data.size(),
+		"nodes_count": city_nodes.size(),
+		"connections_count": city_connections.size(),
+		"selected_city": selected_city,
+		"node_position": position,
+		"node_visible": visible,
+		"node_scale": scale,
+		"node_modulate": modulate
+	}
+
+# =============================================================================
+# 渲染管道調試功能
+# =============================================================================
+
+var city_drawer: Node = null
+var connection_drawer: Node = null
+var world_bounds: Rect2
+
+## 渲染管道完整調試
+func debug_rendering_pipeline() -> Dictionary:
+	var debug_info = {
+		"viewport_info": get_viewport_debug_info(),
+		"node2d_info": get_node2d_debug_info(),
+		"drawing_info": get_drawing_debug_info(),
+		"transform_info": get_transform_debug_info()
+	}
+
+	LogManager.debug("MapArea", "Rendering pipeline debug", debug_info)
+	return debug_info
+
+## 獲取視口調試信息
+func get_viewport_debug_info() -> Dictionary:
+	var viewport = get_viewport()
+	if not viewport:
+		return {"error": "No viewport found"}
+
+	var viewport_info = {
+		"viewport_size": viewport.get_visible_rect().size,
+		"viewport_type": viewport.get_class(),
+		"is_subviewport": viewport is SubViewport
+	}
+
+	if viewport is SubViewport:
+		var subviewport = viewport as SubViewport
+		viewport_info.merge({
+			"render_target_update_mode": subviewport.render_target_update_mode,
+			"handle_input_locally": subviewport.handle_input_locally,
+			"snap_2d_transforms_to_pixel": subviewport.snap_2d_transforms_to_pixel,
+			"snap_2d_vertices_to_pixel": subviewport.snap_2d_vertices_to_pixel,
+			"size": subviewport.size
+		})
+
+	return viewport_info
+
+## 獲取Node2D調試信息
+func get_node2d_debug_info() -> Dictionary:
+	return {
+		"global_position": global_position,
+		"local_position": position,
+		"scale": scale,
+		"rotation": rotation,
+		"visible": visible,
+		"modulate": modulate,
+		"z_index": z_index,
+		"child_count": get_child_count(),
+		"parent": get_parent().name if get_parent() else "None"
+	}
+
+## 獲取繪製元素調試信息
+func get_drawing_debug_info() -> Dictionary:
+	var city_drawer_count = 0
+	var connection_drawer_count = 0
+
+	# 計算實際的繪製組件數量
+	for city_id in city_nodes:
+		var city_node = city_nodes[city_id]
+		var circle_node = city_node.get_node_or_null("CityCircle")
+		if circle_node:
+			var drawer = circle_node.get_node_or_null("CityCircleDrawer")
+			if drawer:
+				city_drawer_count += 1
+
+	for connection in city_connections:
+		var line = connection.get("line")
+		if line:
+			connection_drawer_count += 1
+
+	return {
+		"cities_count": cities_data.size(),
+		"connections_count": city_connections.size(),
+		"city_nodes_count": city_nodes.size(),
+		"city_drawer_count": city_drawer_count,
+		"connection_drawer_count": connection_drawer_count,
+		"canvas_layer_exists": get_node_or_null("CanvasLayer") != null
+	}
+
+## 獲取變換調試信息
+func get_transform_debug_info() -> Dictionary:
+	return {
+		"map_offset": map_offset,
+		"map_scale": map_scale,
+		"viewport_size": viewport_size,
+		"world_bounds": world_bounds if world_bounds != Rect2() else Rect2(),
+		"initial_map_scale": initial_map_scale,
+		"initial_map_offset": initial_map_offset
+	}
+
+## 強制視口刷新
+func force_viewport_refresh() -> void:
+	var viewport = get_viewport()
+	if viewport and viewport is SubViewport:
+		var subviewport = viewport as SubViewport
+		# 強制啟用渲染更新
+		subviewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
+		# 觸發尺寸更新
+		var current_size = subviewport.size
+		subviewport.size = current_size
+
+	# 強制重新繪製所有繪製組件
+	force_redraw()
+
+	# 強制城池節點重新繪製
+	for city_id in city_nodes:
+		var city_node = city_nodes[city_id]
+		if city_node:
+			var circle_drawer = city_node.get_node_or_null("CityCircle/CityCircleDrawer")
+			if circle_drawer and circle_drawer.has_method("queue_redraw"):
+				circle_drawer.queue_redraw()
+
+	# 強制連線重新繪製
+	for connection in city_connections:
+		var line = connection.get("line")
+		if line and line.has_method("queue_redraw"):
+			line.queue_redraw()
+
+	LogManager.debug("MapArea", "Forced viewport refresh completed")
+
+## 驗證渲染狀態
+func validate_rendering_state() -> Array:
+	var issues = []
+
+	# 檢查視口狀態
+	var viewport = get_viewport()
+	if not viewport:
+		issues.append("Viewport not found")
+	elif viewport is SubViewport:
+		var subviewport = viewport as SubViewport
+		if subviewport.render_target_update_mode == SubViewport.UPDATE_DISABLED:
+			issues.append("SubViewport render target update disabled")
+		if subviewport.size == Vector2.ZERO:
+			issues.append("SubViewport has zero size")
+
+	# 檢查Node2D狀態
+	if not visible:
+		issues.append("MapArea not visible")
+	if modulate.a < 0.1:
+		issues.append("MapArea nearly transparent")
+
+	# 檢查數據
+	if cities_data.is_empty():
+		issues.append("No cities data loaded")
+	if city_nodes.is_empty():
+		issues.append("No city nodes created")
+
+	# 檢查節點是否添加到場景樹
+	if not is_inside_tree():
+		issues.append("MapArea not in scene tree")
+
+	return issues
+
+## 測試繪製基本形狀
+func test_basic_drawing() -> void:
+	LogManager.info("MapArea", "開始基本繪製測試")
+
+	# 創建測試矩形 - 直接繪製到 MapArea
+	queue_redraw()  # 強制重新繪製
+
+	# 創建測試標籤
+	var test_label = Label.new()
+	test_label.name = "TestLabel"
+	test_label.text = "MAP TEST"
+	test_label.position = Vector2(200, 100)
+	test_label.add_theme_font_size_override("font_size", 24)
+	test_label.add_theme_color_override("font_color", Color.YELLOW)
+	add_child(test_label)
+
+	LogManager.info("MapArea", "基本繪製測試完成", {
+		"test_label_added": test_label.is_inside_tree(),
+		"children_count": get_child_count()
+	})
+
+# =============================================================================
+# 測試繪製功能
+# =============================================================================
+
+func _draw() -> void:
+	# 測試基本繪製功能
+	draw_circle(Vector2(100, 100), 50, Color.RED)
+	draw_circle(Vector2(200, 100), 30, Color.GREEN)
+	draw_circle(Vector2(300, 100), 40, Color.BLUE)
 
 # 繪製類已移至獨立文件：
 # - CityCircleDrawer.gd
